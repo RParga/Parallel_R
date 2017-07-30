@@ -22,12 +22,13 @@ if (length(args)==0)
         repetir = strtoi(args[3])
     }
 
-} 
+}
 
 experimento = function(replica)
 {
     pos = rep(0, dimension)
     mayor = 0
+    origen = 0
     for(t in 1:duration)
     {
 	posicion_cambio = sample(0:(dimension),1)
@@ -45,12 +46,16 @@ experimento = function(replica)
 	{
 	    d = md_origen(pos)
 	}
+	if(d==0)
+	{
+	    origen = origen + 1
+	}
 	if(d>mayor)
 	{
 	    mayor = d
 	}
     }
-    return(mayor)
+    return(origen)
 }
 
 cluster = makeCluster(detectCores()-1)
@@ -61,7 +66,7 @@ clusterExport(cluster, "euclideana")
 clusterExport(cluster, "manhattan")
 clusterExport(cluster, "experimento")
 clusterExport(cluster, "eucl")
-ptm = proc.time()
+ptm = proc.time() 
 for(dimension in 1:8)
 {
     clusterExport(cluster, "dimension")
@@ -72,12 +77,12 @@ for(dimension in 1:8)
 stopCluster(cluster)
 proc.time() - ptm
 if (eucl) {
-    png("p1er.png")
+    png("p1erT.png")
     boxplot(data.matrix(datos), use.cols=FALSE,
-    xlab="Dimensi\u{F3}n", ylab="Distancia m\u{E1}xima", main="Euclideana")
+    xlab="Dimensi\u{F3}n", ylab="N\u{FA}mero de veces que pasa por el origen", main="Euclideana")
 } else {
-    png("p1mr.png")
+    png("p1mrT.png")
     boxplot(data.matrix(datos), use.cols=FALSE,
-    xlab="Dimensi\u{F3}n", ylab="Distancia m\u{E1}xima", main="Manhattan")
+    xlab="Dimensi\u{F3}n", ylab="N\u{FA}mero de veces que pasa por el origen", main="Manhattan")
 }
 graphics.off()

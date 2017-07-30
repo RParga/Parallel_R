@@ -5,6 +5,7 @@ library(parallel)
 source("fndistancias.R")
 datos = data.frame()
 
+
 args = commandArgs(trailingOnly=TRUE)
 if (length(args)==0)
 {
@@ -23,6 +24,7 @@ if (length(args)==0)
     }
 
 } 
+
 
 experimento = function(replica)
 {
@@ -53,6 +55,7 @@ experimento = function(replica)
     return(mayor)
 }
 
+
 cluster = makeCluster(detectCores()-1)
 clusterExport(cluster, "duration")
 clusterExport(cluster, "ed_origen")
@@ -61,7 +64,6 @@ clusterExport(cluster, "euclideana")
 clusterExport(cluster, "manhattan")
 clusterExport(cluster, "experimento")
 clusterExport(cluster, "eucl")
-ptm = proc.time()
 for(dimension in 1:8)
 {
     clusterExport(cluster, "dimension")
@@ -70,7 +72,6 @@ for(dimension in 1:8)
     
 }
 stopCluster(cluster)
-proc.time() - ptm
 if (eucl) {
     png("p1er.png")
     boxplot(data.matrix(datos), use.cols=FALSE,
