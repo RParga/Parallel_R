@@ -1,0 +1,83 @@
+duration = 200
+repetir = 100
+eucl = TRUE
+library(parallel)
+source("fndistancias.R")
+datos = data.frame()
+
+args = commandArgs(trailingOnly=TRUE)
+if (length(args)==0)
+{
+    stop("At least one argument must be supplied (input file).\n", call.=FALSE)
+} else if (length(args)>0)
+{
+    a = args[1]
+    eucl = (a=="TRUE" || a=="true" || a=="True")
+    if (length(args)>1)
+    {
+        duration = strtoi(args[2])
+    }
+    if (length(args)>2)
+    {
+        repetir = strtoi(args[3])
+    }
+
+} 
+
+experimento = function(replica)
+{
+    pos = rep(0, dimension)
+    mayor = 0
+    for(t in 1:duration)
+    {
+	posicion_cambio = sample(0:(dimension),1)
+	cambio = 1
+	if(runif(1)<0.5)
+	{
+	    cambio=-1
+	}
+	pos[posicion_cambio] = pos[posicion_cambio] + cambio
+	if(eucl)
+	{
+	    d = ed_origen(pos)
+	}
+	else
+	{
+	    d = md_origen(pos)
+	}
+	if(d>mayor)
+	{
+	    mayor = d
+	}
+    }
+    return(mayor)
+}
+
+cluster = makeCluster(detectCores()-1)
+clusterExport(cluster, "duration")
+clusterExport(cluster, "ed_origen")
+clusterExport(cluster, "md_origen")
+clusterExport(cluster, "euclideana")
+clusterExport(cluster, "manhattan")
+clusterExport(cluster, "experimento")
+clusterExport(cluster, "eucl")
+ptm = proc.time()
+for(dimension in 1:8)
+{
+    clusterExport(cluster, "dimension")
+    resultado = parSapply(cluster, 1:repetir, experimento)
+    datos = rbind(datos, resultado)
+    
+}
+stopCluster(cluster)
+proc.time() - ptm
+if (eucl) {
+    png("p1er.png")
+    boxplot(data.matrix(datos), use.cols=FALSE,
+    xlab="Dimensi\u{F3}n", ylab="Distancia m\u{E1}xima", main="Euclideana")
+} else {
+    png("p1mr.png")
+    boxplot(data.matrix(datos), use.cols=FALSE,
+    xlab="Dimensi\u{F3}n", ylab="Distancia m\u{E1}xima", main="Manhattan")
+}
+graphics.off()
