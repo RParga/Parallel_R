@@ -1,21 +1,10 @@
-duration = 200
-repetir = 100
+
 library(parallel)
 datos = data.frame()
-
-args = commandArgs(trailingOnly=TRUE)
-if (length(args)<0)
-{
-    stop("At least one argument must be supplied (input file).\n", call.=FALSE)
-} else if (length(args)>0)
-{
-    duration = strtoi(args[1])
-    if (length(args)>1)
-    {
-        repetir = strtoi(args[2])
-    }
-
-}
+temp=c()
+dimensions = 1:8
+repetir = seq(50,200,50)
+durations = seq(100,300,50)
 
 experimento = function(replica)
 {
@@ -38,22 +27,105 @@ experimento = function(replica)
     return(origen)
 }
 
+
 cluster = makeCluster(detectCores()-1)
-clusterExport(cluster, "duration")
 clusterExport(cluster, "experimento")
-ptm = proc.time() 
-for(dimension in 1:8)
-{
-    clusterExport(cluster, "dimension")
-    r = rep (0,repetir)
-    resultado = parSapply(cluster, r, experimento)
-    datos = rbind(datos, resultado)
-    
+ptm = proc.time()
+
+for(repet in repetir){
+    for (dimension in dimensions) {
+    	clusterExport(cluster, "dimension")
+        for(duration in durations)
+	{
+ 	    clusterExport(cluster, "duration")	    
+	    r = rep (0,repet)
+    	    resultado = parSapply(cluster, r, experimento)
+	    for(i in 1:repet)
+	    {
+                datos = rbind(datos, c(repet,dimension,duration,resultado[i]))
+            	temp = c(temp,paste(repet,"_",dimension,"_",duration))
+	    }
+	}
+    }
 }
 stopCluster(cluster)
-proc.time() - ptm
-png("PasoPorOrigen.png")
-boxplot(data.matrix(datos), use.cols=FALSE,
-xlab="Dimensi\u{F3}n", ylab="N\u{FA}mero de veces que pasa por el origen", main="Paso por el origen vs dimensiones")
-    
+
+
+# renombre de las columnas
+names(datos) =c("iteration","dimension","duration","crxs")
+
+datos$iteration = as.factor(datos$iteration)
+datos$dimension = as.factor(datos$dimension)
+datos$duration = as.factor(datos$duration)
+datos$all = as.factor(temp)
+
+# modelo lineal
+linmod = lm(datos$crxs~datos$iteration+datos$dimension+datos$duration)
+residuales = resid(linmod)
+png("residuales.png")
+ghist = hist(residuales)
 graphics.off()
+den <- density(resid(linmod))
+
+
+
+muestra=datos[sample(nrow(datos),5000),]
+linmodM=lm(muestra$crxs~muestra$iteration+muestra$dimension+muestra$duration)
+residualesM=resid(linmodM)
+png("residualesMuestra.png")
+histogramaM=hist(residualesM)
+graphics.off()
+denM = density(resid(linmodM))
+
+ss<-shapiro.test(residualesM)
+print(ss)
+
+#Los datos no provienen de una distribución normal, aplicar pruebas no parametricas
+
+#Prueba de kruskal y Wallis para determiniar si hay diferencia significativa entre las medianas de las configuraciones
+#Una configuracion es una terna (repeticiones,dimension,duracion)
+kw<-kruskal.test(datos$crxs~datos$all,data=datos)
+print(kw)
+#Existe diferencia entre las configuraciones
+
+#Ahora revisemos cada factor por separado
+
+#Repeticiones
+kw<-kruskal.test(datos$crxs~datos$iteration,data=datos)
+print(kw)
+#No hay diferencia signifcativa entre los niveles del factor repeticiones; es decir, el número 
+#de cruces no depende del numero derepeticiones
+
+#Duracion
+kw<-kruskal.test(datos$crxs~datos$duration,data=datos)
+print(kw)
+#No hay diferencia signifcativa entre los niveles del factor duracion; es decir, el número 
+#de cruces no depende de la duración de la caminata
+
+#Diagrama de bigotes para duracion
+png("T1_boxplot_duracion.png")
+boxplot(datos$crxs~datos$duration,xlab="Duracion",ylab="Cruces con el origen")
+graphics.off()
+
+#Dimension
+kw<-kruskal.test(datos$crxs~datos$dimension,data=datos)
+print(kw)
+#Si hay diferencia signifcativa entre los niveles del factor dimensión; de acuerdo a lo anterior, el número
+#de cruces solo depende de la duración
+
+#Diagrama de bigotes para dimension
+png("T1_boxplot_dimension.png")
+boxplot(datos$crxs~datos$dimension,xlab="Dimension",ylab="Cruces con el origen")
+graphics.off()
+
+#Revisemos si todos los niveles son significativos
+
+  library(FSA)
+
+PT = dunnTest(datos$crxs~datos$dimension, method="bh") 
+PT = PT$res
+#Resultado de prueba Dunn, comparacion entre cada par de dimensiones
+print(PT)
+
+#Pares no significtaivos al 99.9% de confianza
+print(PT[PT$P.adj>=0.00001,]) #estos son estadisticamente equivalentes

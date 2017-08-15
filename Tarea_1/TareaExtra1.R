@@ -1,9 +1,11 @@
-duration = 200
-repetir = 100
 library(parallel)
 datos = data.frame()
+duration = 200
+repetir = 100
+
 dur = 0
 dime = 1
+
 args = commandArgs(trailingOnly=TRUE)
 if (length(args)<0)
 {
@@ -65,6 +67,3 @@ for(di in 1:8)
     datosf = cbind(datosf, result)
 }
     print(datosf)
-# png("TiempoDeEjecucion.png")
-# boxplot(data.matrix(datos), #use.cols=FALSE, xlab="Dimensi\u{F3}n", ylab="Tiempo", main="Paso por el origen vs dimensiones")
-# graphics.off()
