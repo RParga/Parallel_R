@@ -1,0 +1,102 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  para un artÃ­culo en LaTeX en espaÃ±ol.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[]{article}
+% Esto es para poder escribir acentos directamente:
+\usepackage[latin1]{inputenc}
+% Esto es para que el LaTeX sepa que el texto estÃ¡ en espaÃ±ol:
+\usepackage[spanish]{babel}
+%para cambiar los margenes del texto
+\usepackage[a4paper,left=3cm,right=2cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+% Paquetes de la AMS:
+%\usepackage{amsmath, amsthm, amsfonts,float}
+\graphicspath{ {../Tarea_1/} }
+
+
+%--------------------------------------------------------------------------
+\title{Reporte práctica uno: Movimiento Browniano}
+\author{José Anastacio Hernéndez Saldaña\\
+  \small Posgrado de Ingeniería de Sistemas\\
+  \small 1186622\\ 
+  \small jose.hernandezsld@uanl.edu.mx
+}
+
+\begin{document}
+
+\maketitle
+
+\abstract{Este es un reporte sobre la práctica uno de movimiento browninano que se realizó en la clase de Simulación de Sistemas, cómputo paralelo en R.}
+
+\section{Introducción}
+
+El Movimiento Browniano se refiere a una partícula que cambia su posición uniformemente al azar. Los movimientos pueden ser de diferentes tipos, pero en esta práctica nos limitamos a el caso sencillo donde una partícula se mueve en pasos discretos, es decir, cada paso mide lo mismo, y las únicas posibles direcciones de movimiento son las direcciones paralelas a los ejes cardinales del sistema de coordenadas en el cual se realiza el movimiento. Vamos a utilizar pasos unitarios (es decir, cada paso mide uno), teniendo como la posición inicial el origen. 
+\\\\
+Lo que se buscó obtener es analizar de una manera sistemática los efectos de la dimensión en el número de veces que la caminata pasa por el origen, verificando que el tamaño de la caminata y el número de repeticiones del experimento no causen un efecto significativo en el análisis.
+\section{Diseño del Experimento}
+Tomando como base el código de ejemplo en la \href{http://elisa.dyndns-web.com/teaching/comp/par/p1.html}{página del curso} donde se realiza una caminata aleatoria y calcular su distancia, se modificó para que registrara el número de veces que pasa por el origen durante la caminata, implementándose un paralelización de la experimentación. se harán variar los valores de número de repeticiones y la duración de la caminata para poder tener los datos necesarios y poder realizar el análisis estadístico.
+\\\\
+Se comenzó con un primer vistazo al comportamiento de la caminata variando las dimensiones de uno a ocho con 200 repeticiones y caminatas de 300 pasos de duracion obteniendo el resultado de la figura \ref{fig::figura1}
+\\\\
+\begin{figure}
+  \centering
+  \includegraphics[width=0.26\textheight,angle=-90]{PasoPorOrigen}
+  \caption{200 repeticiones y duración de 300}
+  \label{fig::figura1} 
+\end{figure}
+
+Para el experimento se variaron las dimensiones de una a ocho, repitiéndose el experimento 50, 100, 150 y 200 veces con duraciones de caminata de 100, 150, 200, 250 y 300 pasos. 
+
+Teniendo una vez la información necesaria, se realizo una prueba de normalidad a partir de una regresión lineal simple a los datos y revisando sus residuos, como se contaban con mas de 5,000 datos dentro de la población fue necesario hacer una muestra de 5000 y compararla con la distribucion de la poblacion, quedando el histograma de los residuos de las siguientes figuras \ref{fig::figura2}  \ref{fig::figura3}.
+\\\\
+\begin{figure}
+  \centering
+  \includegraphics[width=0.26\textheight,angle=-90]{residuales}
+  \caption{histograma de los residuales de la poblacion}
+  \label{fig::figura2} 
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.26\textheight,angle=-90]{residualesMuestra}
+  \caption{histograma de los residuales de la muestra}
+  \label{fig::figura3} 
+\end{figure}
+
+Los residuales aparentan no tener una distribucion normal, por lo que se hizo una prueba de Shapiro-Wilk a la muestra para corroborarlo.
+
+	Shapiro-Wilk normality test
+\\\\
+data:  residualesMuestra
+\\
+W = 0.6048, p-value $<$ 2.2e-16
+\\
+Como la prueba arrojo un valor de p muy cercano a cero, se rechaza la hipotesis nula de que la muestra de los residuales venga de una distribucion normal. por lo que no se podria realizar una análisis de varianza, sino tendria que recurrirse a pruebas no parametricas.
+\\\\
+Se aplico a la poblacion de los datos la prueba Kruskal-Wallis para poder saber si hay una relacion entre el numero de cruces y las repeticiones del experimento y la duracion de la caminata.
+
+	Kruskal-Wallis rank sum test
+\\\\
+data:  datos\$crxs by datos\$iteration
+\\
+Kruskal-Wallis chi-squared = 3.5127, df = 3, p-value = 0.3191
+\\\\
+
+	Kruskal-Wallis rank sum test
+\\\\
+data:  datos\$crxs by datos\$duration
+\\
+Kruskal-Wallis chi-squared = 5.6359, df = 4, p-value = 0.228
+\\\\
+
+Al revisar el valor de p por encima de un valor significativo de alfa, la hipotesis nula de que las medias de los factores de las iteracion y la duracion son iguales, por lo que no afectan el numero de cruces.
+
+\section{Conclusiones}
+
+Como se pudó observar desde el principio, el numero de cruces por el origen de una caminata aleatoria de movimiento browneano no se ve afectado por el largo de la caminata o el numero de repeticiones del experimento, y si se ve afectado por el numero de dimensiones en donde hace el movimiento.
+
+\end{document}

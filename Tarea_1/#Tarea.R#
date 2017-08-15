@@ -80,9 +80,7 @@ denM = density(resid(linmodM))
 ss<-shapiro.test(residualesM)
 print(ss)
 
-#Los datos no provienen de una distribución normal, aplicar pruebas no parametricas
-
-#Prueba de kruskal y Wallis para determiniar si hay diferencia significativa entre las medianas de las configuraciones
+COmo#Prueba de kruskal y Wallis para determiniar si hay diferencia significativa entre las medianas de las configuraciones
 #Una configuracion es una terna (repeticiones,dimension,duracion)
 kw<-kruskal.test(datos$crxs~datos$all,data=datos)
 print(kw)

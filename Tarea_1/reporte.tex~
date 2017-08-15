@@ -1,0 +1,44 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  para un artículo en LaTeX en español.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[]{article}
+% Esto es para poder escribir acentos directamente:
+\usepackage[latin1]{inputenc}
+% Esto es para que el LaTeX sepa que el texto está en español:
+\usepackage[spanish]{babel}
+%para cambiar los margenes del texto
+\usepackage[a4paper,left=3cm,right=2cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{hyperref}
+\usepackage{graphicx}
+%\usepackage{grffile}
+% Paquetes de la AMS:
+\usepackage{amsmath, amsthm, amsfonts,float}
+\graphicspath{ {images/} }
+
+
+%--------------------------------------------------------------------------
+\title{Proyecto Final Diseño de Experimentos}
+\author{José Anastacio Hernández Saldaña\\
+  \small Posgrado de Ingeniería de Sistemas\\
+  \small 1186622\\ 
+  \small jhernandez.sld@uanl.edu.mx
+}
+\begin{document}
+
+\maketitle
+
+\abstract{Este es un reporte de un diseño de expermiento para calibracion la calibracion de parametros para una metaherística GRASP de una problema de TSP Simetrico }
+
+\section{Introducción}
+
+
+\subsection{Conclusiones}
+
+Como pudimos ver en este diseño de experimento, el numero de iteraciones influye para reducir el gap entre el valor obtenido por la heuristica, a diferencia del valor de alpha que cualquier valor de los usados nos daba varianzas similares.
+
+
+
+
+\end{document}
