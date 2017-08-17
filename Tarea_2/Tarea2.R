@@ -1,8 +1,12 @@
 library(parallel)
-dim <- 10 
-num <-  dim^2
-actual <- matrix(round(runif(num)), nrow=dim, ncol=dim)
+dim = 10 
+num =  dim^2
+pv = 0.01
 suppressMessages(library("sna"))
+
+
+actual <- matrix(round( 0.49999+(pv)-runif(num)), nrow=dim, ncol=dim)
+print(actual)
 png("p2_t0.png")
 plot.sociomatrix(actual, diaglab=FALSE, main="Inicio")
 graphics.off()
@@ -19,7 +23,7 @@ cluster <- makeCluster(detectCores() - 1)
 clusterExport(cluster, "dim")
 clusterExport(cluster, "paso")
  
-for (iteracion in 1:9) {
+for (iteracion in 1:20) {
     clusterExport(cluster, "actual")
     siguiente <- parSapply(cluster, 1:num, paso)
     if (sum(siguiente) == 0) { # todos murieron
