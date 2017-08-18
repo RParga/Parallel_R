@@ -1,40 +1,63 @@
 library(parallel)
 dim = 10 
 num =  dim^2
-pv = 0.01
+pvl = seq(0.1,1,0.1)
+repet = 50
+mxd = 30
 suppressMessages(library("sna"))
+result = data.frame()
 
-
-actual <- matrix(round( 0.49999+(pv)-runif(num)), nrow=dim, ncol=dim)
-print(actual)
-png("p2_t0.png")
-plot.sociomatrix(actual, diaglab=FALSE, main="Inicio")
-graphics.off()
- 
-paso <- function(pos) {
+paso <- function(pos)
+{
     fila <- floor((pos - 1) / dim) + 1
     columna <- ((pos - 1) %% dim) + 1
     vecindad <-  actual[max(fila - 1, 1) : min(fila + 1, dim),
                         max(columna - 1, 1): min(columna + 1, dim)]
     return(1 * ((sum(vecindad) - actual[fila, columna]) == 3))
 }
- 
+
 cluster <- makeCluster(detectCores() - 1)
 clusterExport(cluster, "dim")
 clusterExport(cluster, "paso")
- 
-for (iteracion in 1:20) {
-    clusterExport(cluster, "actual")
-    siguiente <- parSapply(cluster, 1:num, paso)
-    if (sum(siguiente) == 0) { # todos murieron
-        print("Ya no queda nadie vivo.")
-        break;
+
+for(pv in pvl)
+{
+    rep = 1
+    res = data.frame()
+    while(rep <= repet)
+    {
+	actual <- matrix(round( 0.49999+(pv)-runif(num)), nrow=dim, ncol=dim)
+    	i=0;
+    	for (iteracion in 1:mxd)
+    	{
+	    i=i+1
+	    clusterExport(cluster, "actual")
+    	    siguiente <- parSapply(cluster, 1:num, paso)
+    	    if (all(siguiente == 0))
+	    { # todos murieron
+                #print("Ya no queda nadie vivo.")
+	        i=iteracion
+            	break;
+    	    }
+	    actual <- matrix(siguiente, nrow=dim, ncol=dim, byrow=TRUE)
+    	}
+	if(i<mxd)
+	{
+	    res = rbind(res, i)
+	    rep = rep+1
+    	}
     }
-    actual <- matrix(siguiente, nrow=dim, ncol=dim, byrow=TRUE)
-    salida = paste("p2_t", iteracion, ".png", sep="")
-    tiempo = paste("Paso", iteracion)
-    png(salida)
-    plot.sociomatrix(actual, diaglab=FALSE, main=tiempo)
-    graphics.off()
+    if(length(result) !=0)
+    {
+	result = cbind(result,res)
+    }
+    else
+    {
+	result = res #data.frame(res)
+    }
 }
+colnames(result) = pvl
 stopCluster(cluster)
+postscript('Tarea2.ps')
+boxplot(result)
+dev.off()
