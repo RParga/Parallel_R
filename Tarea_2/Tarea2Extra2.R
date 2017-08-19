@@ -1,11 +1,15 @@
 library('parallel')
 library('plyr')
 #suppressMessages(library("sna"))
-dim <- 10
-seeds = 6
+dim <- 100
+seeds = 20
 num <-  dim^2
-mxd = (num/seeds)*seeds**2	
-
+mxd = (num/seeds)	
+freqrep = 3
+probns = 1
+rl = rainbow(seeds+round(dim/freqrep))
+rl = sample(rl)
+print(rl)
 paso <- function(pos)
 {
     fila <- floor((pos - 1) / dim) + 1
@@ -33,7 +37,8 @@ paso <- function(pos)
     return(rs)
 }
 
-rotate <- function(x) t(apply(x, 2, rev))
+rotate = function(x) t(apply(x, 2, rev))
+
 
 vs = data.frame()
 actual <- matrix(rep(0,num), nrow=dim, ncol=dim)
@@ -42,16 +47,16 @@ sv = 0
 for(s in seedl)
 {
     sv = sv + 1
-    fil = floor((s - 1) / dim) + 1
-    col = ((s - 1) %% dim) + 1
-    actual[fil,col] = sv
-    vs = rbind(vs,c(sv,c(fil,col)))
+#    fil = floor((s - 1) / dim) + 1
+#    col = ((s - 1) %% dim) + 1
+    actual[s] = sv
+#    vs = rbind(vs,c(sv,c(fil,col)))
 }
 #print(actual)
 
 png("pb2_t0.png")
 #plot.sociomatrix(actual, diaglab=FALSE, main="Inicio",col=rainbow(seeds))
-image(rotate(actual), col=c("#FFFFFFFF",rainbow(seeds)), xaxt='n', yaxt='n')
+image(rotate(actual), col=c("#FFFFFFFF",rl[1:seeds]), xaxt='n', yaxt='n')
 graphics.off()
  
 cluster <- makeCluster(detectCores() - 1)
@@ -60,6 +65,18 @@ clusterExport(cluster, "paso")
 clusterExport(cluster, "duplicated")
  
 for (iteracion in 1:mxd) {
+
+    if(iteracion%%freqrep==0 && runif(1) < probns)
+    {
+	zl = which(actual==0)
+	ns = sample(zl,1)
+	#print(zl)
+	seeds = seeds +1
+	#rl = rbind(rl, rainbow(seeds)[1])
+	actual[ns] = seeds
+    }
+
+
     clusterExport(cluster, "actual")
     siguiente <- parSapply(cluster, 1:num, paso)    
     actual <- matrix(siguiente, nrow=dim, ncol=dim, byrow=TRUE)
@@ -70,13 +87,13 @@ for (iteracion in 1:mxd) {
         print("Ya no queda nadie vivo.")
 	png(salida)
 	#plot.sociomatrix(actual, diaglab=FALSE, main=tiempo)
-	image(rotate(actual), col=rainbow(seeds), xaxt='n', yaxt='n')
+	image(rotate(actual), col=rl[1:seeds], xaxt='n', yaxt='n')
 	graphics.off()
         break;
     }
     png(salida)
     #plot.sociomatrix(actual, diaglab=FALSE, main=tiempo)
-    image(rotate(actual), col=c("#FFFFFFFF",rainbow(seeds)), xaxt='n', yaxt='n')
+    image(rotate(actual), col=c("#FFFFFFFF",rl[1:seeds]), xaxt='n', yaxt='n')
     graphics.off()
 }
 #edg = actual[!duplicated(actual[1,])]
@@ -94,7 +111,7 @@ names(vc) = vcr$x
 #names(edgl) = vcr$x[!edg]
 
 png("DistribucionTamanios.png" )
-barplot(vc, ylim=c(0,((num/seeds)*seeds**0.5)), col=rainbow(seeds), main="Distribuciones de Tamaños" )
+barplot(vc, ylim=c(0,((num/seeds)*seeds**0.5)), col=rl, main="Distribuciones de Tamaños" )
 graphics.off()
 #png("DistribucionTamaniosNO.png" )
 #barplot(edg, ylim=c(0,((num/seeds)*seeds**0.5)), main="Distribuciones de Tamaños SO" )
