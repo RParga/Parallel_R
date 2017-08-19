@@ -3,9 +3,9 @@ dim <- 10
 num <-  dim^2
 actual <- matrix(round(runif(num)), nrow=dim, ncol=dim)
 suppressMessages(library("sna"))
-png("p2_t0.png")
+postscript("p2_t0.ps")
 plot.sociomatrix(actual, diaglab=FALSE, main="Inicio")
-graphics.off()
+dev.off()
  
 paso <- function(pos) {
     fila <- floor((pos - 1) / dim) + 1
@@ -27,10 +27,10 @@ for (iteracion in 1:9) {
         break;
     }
     actual <- matrix(siguiente, nrow=dim, ncol=dim, byrow=TRUE)
-    salida = paste("p2_t", iteracion, ".png", sep="")
+    salida = paste("p2_t", iteracion, ".ps", sep="")
     tiempo = paste("Paso", iteracion)
-    png(salida)
+    postscript(salida)
     plot.sociomatrix(actual, diaglab=FALSE, main=tiempo)
-    graphics.off()
+    dev.off()
 }
 stopCluster(cluster)
