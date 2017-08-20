@@ -1,13 +1,13 @@
 library('parallel')
 library('plyr')
-library('animation')
+#library('animation')
 #suppressMessages(library("sna"))
 dim <- 100
-seeds = 20
+seeds = 10
 num <-  dim^2
 mxd = (num/seeds)	
-freqrep = 3
-probns = 1
+freqrep = 1
+probns = 0.5
 rl = rainbow(seeds+round(dim/freqrep))
 rl = sample(rl)
 #print(rl)
@@ -55,7 +55,7 @@ for(s in seedl)
 }
 #print(actual)
 
-png("pb2_t0.png")
+png("pm2_t000.png")
 #plot.sociomatrix(actual, diaglab=FALSE, main="Inicio",col=rainbow(seeds))
 image(rotate(actual), col=c("#FFFFFFFF",rl[1:seeds]), xaxt='n', yaxt='n')
 graphics.off()
@@ -82,7 +82,7 @@ for (iteracion in 1:mxd) {
     siguiente <- parSapply(cluster, 1:num, paso)    
     actual <- matrix(siguiente, nrow=dim, ncol=dim, byrow=TRUE)
     #print(actual)
-    salida = paste("pb2_t", iteracion, ".png", sep="")
+    salida = paste("pm2_t", sprintf("%03d",iteracion), ".png", sep="")
     tiempo = paste("Paso", iteracion)
     if (all(siguiente>0)) { # todos murieron
         print("Ya no queda nadie vivo.")
@@ -111,7 +111,7 @@ names(vc) = vcr$x
 #edgl = vc[!edg]
 #names(edgl) = vcr$x[!edg]
 
-png("DistribucionTamanios.png" )
+png("DistribucionTamaniosTE2.png" )
 barplot(vc, ylim=c(0,((num/seeds)*seeds**0.5)), col=rl, main="Distribuciones de Tamaños" )
 graphics.off()
 #png("DistribucionTamaniosNO.png" )

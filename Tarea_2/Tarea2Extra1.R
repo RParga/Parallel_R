@@ -1,8 +1,8 @@
 library('parallel')
 library('plyr')
 #suppressMessages(library("sna"))
-dim <- 10
-seeds = 6
+dim <- 100
+seeds = 60
 num <-  dim^2
 mxd = (num/seeds)*seeds**2	
 
@@ -15,8 +15,8 @@ paso <- function(pos)
     {
         vecindad <-  actual[max(fila - 1, 1) : min(fila + 1, dim),
                         max(columna - 1, 1): min(columna + 1, dim)]
-    	#sel = vecindad[vecindad>0]
-	sel =  vecindad[!duplicated(vecindad)]
+    	sel = vecindad[vecindad>0]
+	#sel =  vecindad[!duplicated(vecindad)]
     	if(length(sel)>0)
     	{
 	    selv = sum(seq(1/(length(sel)+1),1,1/(length(sel)+1)) >runif(1))
@@ -49,7 +49,7 @@ for(s in seedl)
 }
 #print(actual)
 
-png("pb2_t0.png")
+png("pb2_t000.png")
 #plot.sociomatrix(actual, diaglab=FALSE, main="Inicio",col=rainbow(seeds))
 image(rotate(actual), col=c("#FFFFFFFF",rainbow(seeds)), xaxt='n', yaxt='n')
 graphics.off()
@@ -64,7 +64,7 @@ for (iteracion in 1:mxd) {
     siguiente <- parSapply(cluster, 1:num, paso)    
     actual <- matrix(siguiente, nrow=dim, ncol=dim, byrow=TRUE)
     #print(actual)
-    salida = paste("pb2_t", iteracion, ".png", sep="")
+    salida = paste("pb2_t", sprintf("%03d",iteracion), ".png", sep="")
     tiempo = paste("Paso", iteracion)
     if (all(siguiente>0)) { # todos murieron
         print("Ya no queda nadie vivo.")
@@ -93,7 +93,7 @@ names(vc) = vcr$x
 #edgl = vc[!edg]
 #names(edgl) = vcr$x[!edg]
 
-png("DistribucionTamanios.png" )
+png("DistribucionTamaniosTE1.png" )
 barplot(vc, ylim=c(0,((num/seeds)*seeds**0.5)), col=rainbow(seeds), main="Distribuciones de Tamaños" )
 graphics.off()
 #png("DistribucionTamaniosNO.png" )
