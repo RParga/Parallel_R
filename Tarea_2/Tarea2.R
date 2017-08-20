@@ -4,9 +4,10 @@ num =  dim^2
 pvl = seq(0.1,1,0.1)
 repet = 50
 mxd = 30
-suppressMessages(library("sna"))
+#suppressMessages(library("sna"))
 result = data.frame()
 
+rotate <- function(x) t(apply(x, 2, rev))
 paso <- function(pos)
 {
     fila <- floor((pos - 1) / dim) + 1
@@ -58,6 +59,8 @@ for(pv in pvl)
 }
 colnames(result) = pvl
 stopCluster(cluster)
-postscript('Tarea2.ps')
+#postscript('Tarea2.ps')
+png('Tarea2.png')
 boxplot(result)
-dev.off()
+#dev.off()
+graphics.off()

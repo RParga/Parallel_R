@@ -1,5 +1,6 @@
 library('parallel')
 library('plyr')
+library('animation')
 #suppressMessages(library("sna"))
 dim <- 100
 seeds = 20
@@ -9,7 +10,7 @@ freqrep = 3
 probns = 1
 rl = rainbow(seeds+round(dim/freqrep))
 rl = sample(rl)
-print(rl)
+#print(rl)
 paso <- function(pos)
 {
     fila <- floor((pos - 1) / dim) + 1
@@ -40,7 +41,7 @@ paso <- function(pos)
 rotate = function(x) t(apply(x, 2, rev))
 
 
-vs = data.frame()
+#vs = data.frame()
 actual <- matrix(rep(0,num), nrow=dim, ncol=dim)
 seedl = sample(1:num, seeds)
 sv = 0

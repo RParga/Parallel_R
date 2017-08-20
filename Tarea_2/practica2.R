@@ -2,9 +2,12 @@ library(parallel)
 dim <- 10 
 num <-  dim^2
 actual <- matrix(round(runif(num)), nrow=dim, ncol=dim)
-suppressMessages(library("sna"))
+rotate <- function(x) t(apply(x, 2, rev))
+
+#suppressMessages(library("sna"))
 png("p2_t0.png")
-plot.sociomatrix(actual, diaglab=FALSE, main="Inicio")
+#plot.sociomatrix(actual, diaglab=FALSE, main="Inicio")
+image(rotate(actual), col=c("#FFFFFFFF","#0000FFFF"), xaxt='n', yaxt='n')
 graphics.off()
  
 paso <- function(pos) {
@@ -30,7 +33,8 @@ for (iteracion in 1:9) {
     salida = paste("p2_t", iteracion, ".png", sep="")
     tiempo = paste("Paso", iteracion)
     png(salida)
-    plot.sociomatrix(actual, diaglab=FALSE, main=tiempo)
+    #plot.sociomatrix(actual, diaglab=FALSE, main=tiempo)
+    image(rotate(actual), col=c("#FFFFFFFF","#0000FFFF"), xaxt='n', yaxt='n')
     graphics.off()
 }
 stopCluster(cluster)
