@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2017.1.3)  20 AUG 2017 23:53
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2017.1.3)  20 AUG 2017 23:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**reporte2.tex
-(./reporte2.tex
+**latexReports/reporte2.tex
+(./latexReports/reporte2.tex
 LaTeX2e <2016/03/31>
 Babel <3.9r> and hyphenation patterns for 3 language(s) loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
@@ -217,10 +217,7 @@ File: pdftex.def 2016/07/10 v0.06j Graphics/color for pdfTeX
 \Gin@req@height=\dimen116
 \Gin@req@width=\dimen117
 )
-(./reporte2.aux
-LaTeX Info: Redefining \. on input line 23.
-LaTeX Info: Redefining \% on input line 23.
-)
+No file reporte2.aux.
 \openout1 = `reporte2.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 29.
@@ -239,7 +236,6 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 29.
 LaTeX Font Info:    ... okay on input line 29.
 LaTeX Info: Redefining \. on input line 29.
 LaTeX Info: Redefining \% on input line 29.
-
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -287,8 +283,6 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 29.
 LaTeX Info: Redefining \pageref on input line 29.
 LaTeX Info: Redefining \nameref on input line 29.
-
-(./reporte2.out) (./reporte2.out)
 \@outlinefile=\write3
 \openout3 = `reporte2.out'.
 
@@ -370,18 +364,38 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 43.
 
-<../Tarea_2/Tarea2.png, id=47, 481.8pt x 481.8pt>
-File: ../Tarea_2/Tarea2.png Graphic file (type png)
- <use ../Tarea_2/Tarea2.png>
-Package pdftex.def Info: ../Tarea_2/Tarea2.png used on input line 49.
-(pdftex.def)             Requested size: 182.71973pt x 182.7183pt.
 
-<../Tarea_2/Tarea2Infi.png, id=48, 481.8pt x 481.8pt>
-File: ../Tarea_2/Tarea2Infi.png Graphic file (type png)
+LaTeX Warning: Reference `fig::figura1' on page 1 undefined on input line 45.
 
-<use ../Tarea_2/Tarea2Infi.png>
-Package pdftex.def Info: ../Tarea_2/Tarea2Infi.png used on input line 56.
-(pdftex.def)             Requested size: 182.71973pt x 182.7183pt.
+
+LaTeX Warning: Reference `fig::figura2' on page 1 undefined on input line 45.
+
+
+! LaTeX Error: File `Tarea2' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.49 ...udegraphics[width=0.26\textheight]{Tarea2}
+                                                  
+? q
+OK, entering \batchmode...
+
+! LaTeX Error: File `Tarea2Infi' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.56 ...raphics[width=0.26\textheight]{Tarea2Infi}
+                                                  
+I could not locate the file with any of these extensions:
+.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPEG,.JBIG2,.JB2,.eps,.ep
+s
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
 Package babel Info: Redefining spanish shorthand <<
 (babel)             in language  on input line 62.
 Package babel Info: Redefining spanish shorthand >>
@@ -419,100 +433,140 @@ Package babel Info: Redefining spanish shorthand "!
 Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 67.
 Package babel Info: Redefining spanish shorthand <<
-(babel)             in language  on input line 70.
+(babel)             in language  on input line 67.
 Package babel Info: Redefining spanish shorthand >>
-(babel)             in language  on input line 70.
+(babel)             in language  on input line 67.
 Package babel Info: Redefining spanish shorthand "=
-(babel)             in language  on input line 70.
+(babel)             in language  on input line 67.
 Package babel Info: Redefining spanish shorthand "~
-(babel)             in language  on input line 70.
+(babel)             in language  on input line 67.
 Package babel Info: Redefining spanish shorthand "!
-(babel)             in language  on input line 70.
+(babel)             in language  on input line 67.
 Package babel Info: Redefining spanish shorthand "?
-(babel)             in language  on input line 70.
-Package babel Info: Redefining spanish shorthand <<
-(babel)             in language  on input line 70.
-Package babel Info: Redefining spanish shorthand >>
-(babel)             in language  on input line 70.
-Package babel Info: Redefining spanish shorthand "=
-(babel)             in language  on input line 70.
-Package babel Info: Redefining spanish shorthand "~
-(babel)             in language  on input line 70.
-Package babel Info: Redefining spanish shorthand "!
-(babel)             in language  on input line 70.
-Package babel Info: Redefining spanish shorthand "?
-(babel)             in language  on input line 70.
+(babel)             in language  on input line 67.
  [1
 
 {/usr/share/texlive/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}]
 Package babel Info: Redefining spanish shorthand <<
-(babel)             in language  on input line 70.
+(babel)             in language  on input line 67.
 Package babel Info: Redefining spanish shorthand >>
-(babel)             in language  on input line 70.
+(babel)             in language  on input line 67.
 Package babel Info: Redefining spanish shorthand "=
-(babel)             in language  on input line 70.
+(babel)             in language  on input line 67.
 Package babel Info: Redefining spanish shorthand "~
-(babel)             in language  on input line 70.
+(babel)             in language  on input line 67.
 Package babel Info: Redefining spanish shorthand "!
-(babel)             in language  on input line 70.
+(babel)             in language  on input line 67.
 Package babel Info: Redefining spanish shorthand "?
-(babel)             in language  on input line 70.
-Package babel Info: Redefining spanish shorthand <<
-(babel)             in language  on input line 70.
-Package babel Info: Redefining spanish shorthand >>
-(babel)             in language  on input line 70.
-Package babel Info: Redefining spanish shorthand "=
-(babel)             in language  on input line 70.
-Package babel Info: Redefining spanish shorthand "~
-(babel)             in language  on input line 70.
-Package babel Info: Redefining spanish shorthand "!
-(babel)             in language  on input line 70.
-Package babel Info: Redefining spanish shorthand "?
-(babel)             in language  on input line 70.
- [2 <../Tarea_2/Tarea2.png> <../Tarea_2/Tarea2Infi.png>]
-<../Tarea_2/TE1EEF.png, id=75, 481.8pt x 481.8pt>
-File: ../Tarea_2/TE1EEF.png Graphic file (type png)
- <use ../Tarea_2/TE1EEF.png>
-Package pdftex.def Info: ../Tarea_2/TE1EEF.png used on input line 75.
-(pdftex.def)             Requested size: 182.71973pt x 182.7183pt.
+(babel)             in language  on input line 67.
 
-<../Tarea_2/DistribucionTamaniosTEE1.png, id=76, 481.8pt x 481.8pt>
-File: ../Tarea_2/DistribucionTamaniosTEE1.png Graphic file (type png)
+LaTeX Warning: Reference `fig::figura3' on page 2 undefined on input line 71.
 
-<use ../Tarea_2/DistribucionTamaniosTEE1.png>
-Package pdftex.def Info: ../Tarea_2/DistribucionTamaniosTEE1.png used on input 
-line 81.
-(pdftex.def)             Requested size: 182.71973pt x 182.7183pt.
 
-<../Tarea_2/DistribucionTamaniosEqTE1.png, id=77, 481.8pt x 481.8pt>
-File: ../Tarea_2/DistribucionTamaniosEqTE1.png Graphic file (type png)
+LaTeX Warning: Reference `fig::figura4' on page 2 undefined on input line 71.
 
-<use ../Tarea_2/DistribucionTamaniosEqTE1.png>
-Package pdftex.def Info: ../Tarea_2/DistribucionTamaniosEqTE1.png used on input
- line 87.
-(pdftex.def)             Requested size: 182.71973pt x 182.7183pt.
 
-<../Tarea_2/TE1NEF.png, id=82, 481.8pt x 481.8pt>
-File: ../Tarea_2/TE1NEF.png Graphic file (type png)
- <use ../Tarea_2/TE1NEF.png>
-Package pdftex.def Info: ../Tarea_2/TE1NEF.png used on input line 97.
-(pdftex.def)             Requested size: 182.71973pt x 182.7183pt.
+LaTeX Warning: Reference `fig::figura5' on page 2 undefined on input line 71.
 
-<../Tarea_2/DistribucionTamaniosTEN1.png, id=83, 481.8pt x 481.8pt>
-File: ../Tarea_2/DistribucionTamaniosTEN1.png Graphic file (type png)
 
-<use ../Tarea_2/DistribucionTamaniosTEN1.png>
-Package pdftex.def Info: ../Tarea_2/DistribucionTamaniosTEN1.png used on input 
-line 103.
-(pdftex.def)             Requested size: 182.71973pt x 182.7183pt.
+! LaTeX Error: File `TE1EEF' not found.
 
-<../Tarea_2/DistribucionTamaniosNETE1.png, id=84, 481.8pt x 481.8pt>
-File: ../Tarea_2/DistribucionTamaniosNETE1.png Graphic file (type png)
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.75 ...udegraphics[width=0.26\textheight]{TE1EEF}
+                                                  
+I could not locate the file with any of these extensions:
+.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPEG,.JBIG2,.JB2,.eps,.ep
+s
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
 
-<use ../Tarea_2/DistribucionTamaniosNETE1.png>
-Package pdftex.def Info: ../Tarea_2/DistribucionTamaniosNETE1.png used on input
- line 109.
-(pdftex.def)             Requested size: 182.71973pt x 182.7183pt.
+
+! LaTeX Error: File `DistribucionTamaniosTEE1' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.81 ...0.26\textheight]{DistribucionTamaniosTEE1}
+                                                  
+I could not locate the file with any of these extensions:
+.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPEG,.JBIG2,.JB2,.eps,.ep
+s
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: File `DistribucionTamaniosEqTE1' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.87 ....26\textheight]{DistribucionTamaniosEqTE1}
+                                                  
+I could not locate the file with any of these extensions:
+.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPEG,.JBIG2,.JB2,.eps,.ep
+s
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+LaTeX Warning: Reference `fig::figura6' on page 2 undefined on input line 93.
+
+
+LaTeX Warning: Reference `fig::figura7' on page 2 undefined on input line 93.
+
+
+LaTeX Warning: Reference `fig::figura8' on page 2 undefined on input line 93.
+
+
+! LaTeX Error: File `TE1NEF' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.97 ...udegraphics[width=0.26\textheight]{TE1NEF}
+                                                  
+I could not locate the file with any of these extensions:
+.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPEG,.JBIG2,.JB2,.eps,.ep
+s
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: File `DistribucionTamaniosTEN1' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.103 ....26\textheight]{DistribucionTamaniosTEN1}
+                                                  
+I could not locate the file with any of these extensions:
+.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPEG,.JBIG2,.JB2,.eps,.ep
+s
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: File `DistribucionTamaniosNETE1' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.109 ...26\textheight]{DistribucionTamaniosNETE1}
+                                                  
+I could not locate the file with any of these extensions:
+.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPEG,.JBIG2,.JB2,.eps,.ep
+s
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
 Package babel Info: Redefining spanish shorthand <<
 (babel)             in language  on input line 115.
 Package babel Info: Redefining spanish shorthand >>
@@ -538,58 +592,6 @@ Package babel Info: Redefining spanish shorthand "!
 Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 117.
 Package babel Info: Redefining spanish shorthand <<
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand >>
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand "=
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand "~
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand "!
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand "?
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand <<
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand >>
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand "=
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand "~
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand "!
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand "?
-(babel)             in language  on input line 119.
- [3 <../Tarea_2/TE1EEF.png> <../Tarea_2/DistribucionTamaniosTEE1.png (PNG copy)
->]
-Package babel Info: Redefining spanish shorthand <<
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand >>
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand "=
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand "~
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand "!
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand "?
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand <<
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand >>
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand "=
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand "~
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand "!
-(babel)             in language  on input line 119.
-Package babel Info: Redefining spanish shorthand "?
-(babel)             in language  on input line 119.
- [4 <../Tarea_2/DistribucionTamaniosEqTE1.png> <../Tarea_2/TE1NEF.png> <../Tare
-a_2/DistribucionTamaniosTEN1.png (PNG copy)>]
-Package babel Info: Redefining spanish shorthand <<
 (babel)             in language  on input line 120.
 Package babel Info: Redefining spanish shorthand >>
 (babel)             in language  on input line 120.
@@ -601,100 +603,119 @@ Package babel Info: Redefining spanish shorthand "!
 (babel)             in language  on input line 120.
 Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 120.
- <../Tarea_2/TE2EEF.png, id=107, 481.8pt x 481.8pt>
-File: ../Tarea_2/TE2EEF.png Graphic file (type png)
 
-<use ../Tarea_2/TE2EEF.png>
-Package pdftex.def Info: ../Tarea_2/TE2EEF.png used on input line 128.
-(pdftex.def)             Requested size: 182.71973pt x 182.7183pt.
+LaTeX Warning: Reference `fig::figura9' on page 2 undefined on input line 124.
 
-<../Tarea_2/DistribucionTamaniosTEE2.png, id=108, 481.8pt x 481.8pt>
-File: ../Tarea_2/DistribucionTamaniosTEE2.png Graphic file (type png)
 
-<use ../Tarea_2/DistribucionTamaniosTEE2.png>
-Package pdftex.def Info: ../Tarea_2/DistribucionTamaniosTEE2.png used on input 
-line 134.
-(pdftex.def)             Requested size: 182.71973pt x 182.7183pt.
+LaTeX Warning: Reference `fig::figura10' on page 2 undefined on input line 124.
 
-<../Tarea_2/DistribucionTamaniosEqTE2.png, id=109, 481.8pt x 481.8pt>
-File: ../Tarea_2/DistribucionTamaniosEqTE2.png Graphic file (type png)
 
-<use ../Tarea_2/DistribucionTamaniosEqTE2.png>
-Package pdftex.def Info: ../Tarea_2/DistribucionTamaniosEqTE2.png used on input
- line 140.
-(pdftex.def)             Requested size: 182.71973pt x 182.7183pt.
-Package babel Info: Redefining spanish shorthand <<
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand >>
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand "=
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand "~
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand "!
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand "?
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand <<
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand >>
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand "=
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand "~
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand "!
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand "?
-(babel)             in language  on input line 147.
- [5 <../Tarea_2/DistribucionTamaniosNETE1.png> <../Tarea_2/TE2EEF.png>]
-Package babel Info: Redefining spanish shorthand <<
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand >>
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand "=
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand "~
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand "!
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand "?
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand <<
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand >>
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand "=
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand "~
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand "!
-(babel)             in language  on input line 147.
-Package babel Info: Redefining spanish shorthand "?
-(babel)             in language  on input line 147.
- [6 <../Tarea_2/DistribucionTamaniosTEE2.png (PNG copy)> <../Tarea_2/Distribuci
-onTamaniosEqTE2.png>]
-<../Tarea_2/TE2NEF.png, id=129, 481.8pt x 481.8pt>
-File: ../Tarea_2/TE2NEF.png Graphic file (type png)
- <use ../Tarea_2/TE2NEF.png>
-Package pdftex.def Info: ../Tarea_2/TE2NEF.png used on input line 150.
-(pdftex.def)             Requested size: 182.71973pt x 182.7183pt.
 
-<../Tarea_2/DistribucionTamaniosTEN2.png, id=130, 481.8pt x 481.8pt>
-File: ../Tarea_2/DistribucionTamaniosTEN2.png Graphic file (type png)
+LaTeX Warning: Reference `fig::figura11' on page 2 undefined on input line 124.
 
-<use ../Tarea_2/DistribucionTamaniosTEN2.png>
-Package pdftex.def Info: ../Tarea_2/DistribucionTamaniosTEN2.png used on input 
-line 156.
-(pdftex.def)             Requested size: 182.71973pt x 182.7183pt.
 
-<../Tarea_2/DistribucionTamaniosNETE2.png, id=131, 481.8pt x 481.8pt>
-File: ../Tarea_2/DistribucionTamaniosNETE2.png Graphic file (type png)
 
-<use ../Tarea_2/DistribucionTamaniosNETE2.png>
-Package pdftex.def Info: ../Tarea_2/DistribucionTamaniosNETE2.png used on input
- line 162.
-(pdftex.def)             Requested size: 182.71973pt x 182.7183pt.
+! LaTeX Error: File `TE2EEF' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.128 ...degraphics[width=0.26\textheight]{TE2EEF}
+                                                  
+I could not locate the file with any of these extensions:
+.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPEG,.JBIG2,.JB2,.eps,.ep
+s
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: File `DistribucionTamaniosTEE2' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.134 ....26\textheight]{DistribucionTamaniosTEE2}
+                                                  
+I could not locate the file with any of these extensions:
+.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPEG,.JBIG2,.JB2,.eps,.ep
+s
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: File `DistribucionTamaniosEqTE2' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.140 ...26\textheight]{DistribucionTamaniosEqTE2}
+                                                  
+I could not locate the file with any of these extensions:
+.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPEG,.JBIG2,.JB2,.eps,.ep
+s
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+LaTeX Warning: Reference `fig::figura12' on page 2 undefined on input line 146.
+
+
+
+LaTeX Warning: Reference `fig::figura13' on page 2 undefined on input line 146.
+
+
+
+LaTeX Warning: Reference `fig::figura13' on page 2 undefined on input line 146.
+
+
+
+! LaTeX Error: File `TE2NEF' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.150 ...degraphics[width=0.26\textheight]{TE2NEF}
+                                                  
+I could not locate the file with any of these extensions:
+.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPEG,.JBIG2,.JB2,.eps,.ep
+s
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: File `DistribucionTamaniosTEN2' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.156 ....26\textheight]{DistribucionTamaniosTEN2}
+                                                  
+I could not locate the file with any of these extensions:
+.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPEG,.JBIG2,.JB2,.eps,.ep
+s
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: File `DistribucionTamaniosNETE2' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.162 ...26\textheight]{DistribucionTamaniosNETE2}
+                                                  
+I could not locate the file with any of these extensions:
+.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPEG,.JBIG2,.JB2,.eps,.ep
+s
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
 Package babel Info: Redefining spanish shorthand <<
 (babel)             in language  on input line 167.
 Package babel Info: Redefining spanish shorthand >>
@@ -707,6 +728,31 @@ Package babel Info: Redefining spanish shorthand "!
 (babel)             in language  on input line 167.
 Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 167.
+Package babel Info: Redefining spanish shorthand <<
+(babel)             in language  on input line 171.
+Package babel Info: Redefining spanish shorthand >>
+(babel)             in language  on input line 171.
+Package babel Info: Redefining spanish shorthand "=
+(babel)             in language  on input line 171.
+Package babel Info: Redefining spanish shorthand "~
+(babel)             in language  on input line 171.
+Package babel Info: Redefining spanish shorthand "!
+(babel)             in language  on input line 171.
+Package babel Info: Redefining spanish shorthand "?
+(babel)             in language  on input line 171.
+Package babel Info: Redefining spanish shorthand <<
+(babel)             in language  on input line 171.
+Package babel Info: Redefining spanish shorthand >>
+(babel)             in language  on input line 171.
+Package babel Info: Redefining spanish shorthand "=
+(babel)             in language  on input line 171.
+Package babel Info: Redefining spanish shorthand "~
+(babel)             in language  on input line 171.
+Package babel Info: Redefining spanish shorthand "!
+(babel)             in language  on input line 171.
+Package babel Info: Redefining spanish shorthand "?
+(babel)             in language  on input line 171.
+ [2]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 172.
 Package babel Info: Redefining spanish shorthand <<
 (babel)             in language  on input line 172.
@@ -732,8 +778,7 @@ Package babel Info: Redefining spanish shorthand "!
 (babel)             in language  on input line 172.
 Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 172.
- [7 <../Tarea_2/TE2NEF.png> <../Tarea_2/DistribucionTamaniosTEN2.png (PNG copy)
->]
+ [3]
 Package babel Info: Redefining spanish shorthand <<
 (babel)             in language  on input line 172.
 Package babel Info: Redefining spanish shorthand >>
@@ -758,7 +803,7 @@ Package babel Info: Redefining spanish shorthand "!
 (babel)             in language  on input line 172.
 Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 172.
- [8 <../Tarea_2/DistribucionTamaniosNETE2.png>]
+ [4]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 172.
  (./reporte2.aux
 LaTeX Info: Redefining \. on input line 23.
@@ -766,18 +811,30 @@ LaTeX Info: Redefining \% on input line 23.
 )
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 172.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 172.
-Package rerunfilecheck Info: File `reporte2.out' has not changed.
-(rerunfilecheck)             Checksum: 14040913DDAA52B07F1E4E14E20BE894;720.
+
+Package rerunfilecheck Warning: File `reporte2.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `reporte2.out':
+(rerunfilecheck)             Before: <no file>
+(rerunfilecheck)             After:  14040913DDAA52B07F1E4E14E20BE894;720.
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 172.
  ) 
 Here is how much of TeX's memory you used:
- 6454 strings out of 494946
- 95440 string characters out of 6180982
- 190918 words of memory out of 5000000
- 9661 multiletter control sequences out of 15000+600000
+ 6390 strings out of 494946
+ 93183 string characters out of 6180982
+ 191413 words of memory out of 5000000
+ 9594 multiletter control sequences out of 15000+600000
  8807 words of font info for 31 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 29i,7n,32p,970b,384s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 29i,7n,32p,979b,384s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share
 /texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texliv
@@ -787,10 +844,10 @@ onts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/ty
 pe1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
 lic/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
 onts/cm/cmsy9.pfb>
-Output written on reporte2.pdf (8 pages, 204589 bytes).
+Output written on reporte2.pdf (4 pages, 110620 bytes).
 PDF statistics:
- 186 PDF objects out of 1000 (max. 8388607)
- 141 compressed objects within 2 object streams
- 33 named destinations out of 1000 (max. 500000)
- 151 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 95 PDF objects out of 1000 (max. 8388607)
+ 79 compressed objects within 1 object stream
+ 29 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

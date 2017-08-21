@@ -68,46 +68,46 @@ Para los puntos extras de la tarea, se simuló por medio de autómatas celulares e
 
 Se comenzo con $N$ poblaciones, pero hay una relacion entre el tamaño total de la matriz donde se simulan las poblaciones y el número $N$ de poblaciones, por lo que se escogio una matriz de $100 \times 100$ con numero de poblaciones de 100, 150, 200, 250 y 300, para que exista una competencia entre las poblaciones pero sin que esta competencia sea tal que los tamaños de las poblaciones sean uniformes, se espera que mientras aumente el numero de  poblaciones se disminuya el tamaño de las mismas.
 
-Se comenzo con el caso donde todas las poblaciones tienen la misma probabilidad al competir por una celula, para ejemplo de esto crearon animaciones como la que se encuentra el \href{https://github.com/ppGodel/Parallel_R/blob/master/Tarea_2/T1NE.gif}{repositorio git} y la figuras \ref{fig::figura3} y \ref{fig::figura4} para ilustrar la simulación. Al revisar los resultados se encontro que para las poblaciones centrales eran por lo regular pequeñas comparadas con las poblaciones que alcanzaban las orillas, ya que la distribucion inicial de las poblaciones, aunque fue al azar, creaba mas competencia por las regiones centrales.
+Se comenzo con el caso donde todas las poblaciones tienen la misma probabilidad al competir por una celula, para ejemplo de esto crearon animaciones como la que se encuentra el \href{https://github.com/ppGodel/Parallel_R/blob/master/Tarea_2/T1NE.gif}{repositorio git} y la figuras \ref{fig::figura3} y \ref{fig::figura4} para ilustrar la simulación. Al revisar los resultados  \ref{fig::figura5} se encontro que para las poblaciones centrales eran por lo regular pequeñas comparadas con las poblaciones que alcanzaban las orillas, ya que la distribucion inicial de las poblaciones, aunque fue al azar, creaba mas competencia por las regiones centrales.
 
 \begin{figure}
   \centering
   \includegraphics[width=0.26\textheight]{TE1EEF}
-  \caption{Estado final de uno de los experimentos}
+  \caption{Estado final de uno de los experimentos equiprobables del Extra 1}
   \label{fig::figura3} 
 \end{figure}
 \begin{figure}
   \centering
   \includegraphics[width=0.26\textheight]{DistribucionTamaniosTEE1}
-  \caption{Distribución de los tamaños para el mismo experimento}
+  \caption{Distribución de los tamaños para el experimento equiprobable del Extra 1}
   \label{fig::figura4} 
 \end{figure}
 \begin{figure}
   \centering
   \includegraphics[width=0.26\textheight]{DistribucionTamaniosEqTE1}
-  \caption{Distribución de tamaños de las poblaciones centrales de todos los experimentos}
+  \caption{Distribución de tamaños de las poblaciones centrales de todos los experimentos equiprobables del Extra 1}
   \label{fig::figura5} 
 \end{figure}
 
 
-Para el caso donde el numero de celdas vecinas que eran de una poblacion aumentaba la probabilidad de convertirse de ese tipo, se encontrar tamaños mayores. Támbien se crearon animaciones para el \href{https://github.com/ppGodel/Parallel_R/blob/master/Tarea_2/T1E.gif}{repositorio git} y figuras \ref{fig::figura6} y \ref{fig::figura7} y aunque se encontro que al igual del caso equiprobable, fueron mas pequeñas que las de las orillas, estas son mayores que las poblaciones del experimento equiprobable.
+Para el caso donde el numero de celdas vecinas que eran de una poblacion aumentaba la probabilidad de convertirse de ese tipo, se encontrar tamaños mayores. Támbien se crearon animaciones para el \href{https://github.com/ppGodel/Parallel_R/blob/master/Tarea_2/T1E.gif}{repositorio git} y figuras \ref{fig::figura6} y \ref{fig::figura7} y aunque se encontro que al igual del caso equiprobable, fueron mas pequeñas que las de las orillas, estas son mayores que las poblaciones del experimento equiprobable  \ref{fig::figura8}.
 
 \begin{figure}
   \centering
   \includegraphics[width=0.26\textheight]{TE1NEF}
-  \caption{Estado final de uno de los experimentos}
+  \caption{Estado final de uno de los experimentos no equiprobables del Extra 1}
   \label{fig::figura6} 
 \end{figure}
 \begin{figure}
   \centering
   \includegraphics[width=0.26\textheight]{DistribucionTamaniosTEN1}
-  \caption{Distribución de los tamaños para el mismo experimento}
+  \caption{Distribución de los tamaños para el mismo experimento no equiprobable del Extra 1}
   \label{fig::figura7} 
 \end{figure}
 \begin{figure}
   \centering
   \includegraphics[width=0.26\textheight]{DistribucionTamaniosNETE1}
-  \caption{Distribución de tamaños de las poblaciones centrales de todos los experimentos}
+  \caption{Distribución de tamaños de las poblaciones centrales de todos los experimentos no equiprobables del Extra 1}
   \label{fig::figura8} 
 \end{figure}
 
@@ -121,46 +121,46 @@ Para esta tarea se continuo con la simulacion por medio de autómatas celulares e
 
 Se utilizaron los mismos parametros que en el experimento anterior, solo que se manejo una probabilidad del 50\% para que en cada iteracion apareciera una nueva poblacion.
 
-Se comenzo con el caso donde todas las poblaciones tienen la misma probabilidad al competir por una celula, para ejemplo de esto crearon animaciones como la que se encuentra el \href{https://github.com/ppGodel/Parallel_R/blob/master/Tarea_2/T2E.gif}{repositorio git} y la figuras \ref{fig::figura9} y \ref{fig::figura10} para ilustrar la simulación. Al revisar los resultados se encontro que para las poblaciones centrales eran mas pequeñas que las encontradas en el caso donde no se agregaban poblaciones iniciales, esto debido a que al aparecer en un tiempo donde hay menos espacio para crecer, tendian a quedar pequeñas y rodeadas de otras poblaciones más viejas.
+Se comenzo con el caso donde todas las poblaciones tienen la misma probabilidad al competir por una celula, para ejemplo de esto crearon animaciones como la que se encuentra el \href{https://github.com/ppGodel/Parallel_R/blob/master/Tarea_2/T2E.gif}{repositorio git} y la figuras \ref{fig::figura9} y \ref{fig::figura10} para ilustrar la simulación. Al revisar los resultados  \ref{fig::figura11} se encontro que para las poblaciones centrales eran mas pequeñas que las encontradas en el caso donde no se agregaban poblaciones iniciales, esto debido a que al aparecer en un tiempo donde hay menos espacio para crecer, tendian a quedar pequeñas y rodeadas de otras poblaciones más viejas.
 
 \begin{figure}
   \centering
   \includegraphics[width=0.26\textheight]{TE2EEF}
-  \caption{Estado final de uno de los experimentos}
+  \caption{Estado final de uno de los experimentos equiprobables del Extra 2}
   \label{fig::figura9} 
 \end{figure}
 \begin{figure}
   \centering
   \includegraphics[width=0.26\textheight]{DistribucionTamaniosTEE2}
-  \caption{Distribución de los tamaños para el mismo experimento}
+  \caption{Distribución de los tamaños para el mismo experimento equiprobable del Extra 2}
   \label{fig::figura10} 
 \end{figure}
 \begin{figure}
   \centering
   \includegraphics[width=0.26\textheight]{DistribucionTamaniosEqTE2}
-  \caption{Distribución de tamaños de las poblaciones centrales de todos los experimentos}
+  \caption{Distribución de tamaños de las poblaciones centrales de todos los experimentos equiprobables del Extra 2}
   \label{fig::figura11} 
 \end{figure}
 
 
-Y de manera similas que en el extra enterior, para el caso donde el numero de celdas vecinas que eran de una población aumentaba la probabilidad de convertirse de ese tipo, se encontrar tamaños mayores. Támbien se crearon animaciones para el \href{https://github.com/ppGodel/Parallel_R/blob/master/Tarea_2/T2NE.gif}{repositorio git} y figuras \ref{fig::figura12} y \ref{fig::figura13} y aunque se encontro que al igual del caso equiprobable, fueron mas pequeñas que las de las orillas, estas son mayores que las poblaciones del experimento equiprobable, pero no mayores que las del experimento donde solo hay poblaciones iniciales.
+Y de manera similas que en el extra enterior, para el caso donde el numero de celdas vecinas que eran de una población aumentaba la probabilidad de convertirse de ese tipo, se encontrar tamaños mayores. Támbien se crearon animaciones para el \href{https://github.com/ppGodel/Parallel_R/blob/master/Tarea_2/T2NE.gif}{repositorio git} y figuras \ref{fig::figura12} y \ref{fig::figura13} y aunque se encontro que al igual del caso equiprobable, fueron mas pequeñas que las de las orillas, estas son mayores que las poblaciones del experimento equiprobable, pero no mayores que las del experimento donde solo hay poblaciones iniciales \ref{fig::figura14}.
 
 \begin{figure}
   \centering
   \includegraphics[width=0.26\textheight]{TE2NEF}
-  \caption{Estado final de uno de los experimentos}
+  \caption{Estado final de uno de los experimentos no equiprobables del Extra 2}
   \label{fig::figura12} 
 \end{figure}
 \begin{figure}
   \centering
   \includegraphics[width=0.26\textheight]{DistribucionTamaniosTEN2}
-  \caption{Distribución de los tamaños para el mismo experimento}
-  \label{fig::figura12} 
+  \caption{Distribución de los tamaños para el mismo experimento no equiprobable del Extra 2}
+  \label{fig::figura13} 
 \end{figure}
 \begin{figure}
   \centering
   \includegraphics[width=0.26\textheight]{DistribucionTamaniosNETE2}
-  \caption{Distribución de tamaños de las poblaciones centrales de todos los experimentos}
+  \caption{Distribución de tamaños de las poblaciones centrales de todos los experimentos no equiprobables del Extra 2}
   \label{fig::figura14} 
 \end{figure}
 
