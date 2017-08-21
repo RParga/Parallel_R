@@ -84,8 +84,10 @@ for (iteracion in 1:mxd) {
 #edg =c(edg, actual[!duplicated(actual[,1])])
 #edg =c(edg, actual[!duplicated(actual[,dim])])
 #edg = edg[!duplicated(edg)]
+write.csv(actual, file="mat.csv")
 
-vcr = count(as.vector(actual))
+vcr = count(unlist(actual))
+write.csv(vcr, file="tam.csv")
 vc = vcr$freq
 names(vc) = vcr$x
 

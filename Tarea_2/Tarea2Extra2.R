@@ -103,7 +103,7 @@ for (iteracion in 1:mxd) {
 #edg =c(edg, actual[!duplicated(actual[,dim])])
 #edg = edg[!duplicated(edg)]
 
-vcr = count(as.vector(actual))
+vcr = count(unlist(actual))
 vc = vcr$freq
 names(vc) = vcr$x
 

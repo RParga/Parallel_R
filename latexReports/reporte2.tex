@@ -1,0 +1,172 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  para un artÃ­culo en LaTeX en espaÃ±ol.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[]{article}
+% Esto es para poder escribir acentos directamente:
+\usepackage[latin1]{inputenc}
+% Esto es para que el LaTeX sepa que el texto estÃ¡ en espaÃ±ol:
+\usepackage[spanish]{babel}
+%para cambiar los margenes del texto
+\usepackage[a4paper,left=3cm,right=2cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+% Paquetes de la AMS:
+%\usepackage{amsmath, amsthm, amsfonts,float}
+\graphicspath{ {../Tarea_2/} }
+
+
+%--------------------------------------------------------------------------
+\title{Reporte práctica dos: Autómata celular}
+\author{José Anastacio Hernéndez Saldaña\\
+  \small Posgrado de Ingeniería de Sistemas\\
+  \small 1186622\\ 
+  \small jose.hernandezsld@uanl.edu.mx
+}
+
+\begin{document}
+
+\maketitle
+
+\abstract{Este es un reporte sobre la práctica dos sobre autómatas celulares que se realizó en la clase de Simulación de Sistemas, cómputo paralelo en R.}
+
+
+\section{Tarea: El juego de la vida}
+
+\subsection{Introducción}
+
+Los autómatas celulares son modelos matemaricos para reppresentar de sistemas complejos donde cada una de los elementos se rige por un numero de reglas y apartir de su interacción entre ellos se desea estudiar los efectos de estas interacciones. Para tarea de esta practica se estudiará un autómata celular muy conocido, el juego de la vida; desarrollado en 1970 por John Horton Conway.
+Las reglas del juego de la vida son sencillas, una celula esta viva el siguiente turno, si 3 de sus celulas vecinas estan vivas; en caso muere. usaremos matrices para representar la poblacion de celulas y cada elemento de la matriz sera una celula y sus elementos vecinos determinaran el estado de cada elemento, este juego no necesita interacción con algun jugador, lo unico que necesita es el primer modelo con el que se inicia el juego.
+\subsection{Diseño del Experimento}
+Tomando como base el código de ejemplo en la \href{http://elisa.dyndns-web.com/teaching/comp/par/p2.html}{página del curso}, se modifico para cambiar la probabilad de que una celula esta viva o muerta cuando se crea la matriz inicial con la que el juego comienza, llendo de un 5\% de que una celda comience viva hasta un 100\% incrementadose en intervalos de 5\%; la matriz utilizada tiene una dimension de $20 \times 20$.
+
+Para el experimento se hizieron 50 experimentos en cada valor de probabilidad, lo que queremos ver es si como afecta esta probabilidad incial con la duracion del juego. Al realizar el experimento pudimos observar que con los valores del 30\% al 45\% de comenzar vivias es cuando tenermos una mayor duracion del juego, dado que una celda necesita otras 3 celdas contiguas para seguir viva, de su total 8, es acorde que con una poblacion viva cercana del 37.5, es que hay suficientes vecinos para mantener por mas turnos la duracion del juego \ref{fig::figura1}. Aunque existen patrones en el juego que no terminan, no fueron tomados en cuenta para este experimento ya que la aparacion de estos patrones no es parte de lo que se esta tratado de investigar, aunque es interesante ver que la distribucion del numero de veces que aparece un patron sin fin, no esta relacionado con la duracion de los juegos que tienen fin. \ref{fig::figura2}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.26\textheight]{Tarea2}
+  \caption{Probabilidad inicial de vida y duracion}
+  \label{fig::figura1} 
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.26\textheight]{Tarea2Infi}
+  \caption{Cantidad de juegos sin fin y probabilidad inicial de vida}
+  \label{fig::figura2} 
+\end{figure}
+
+
+\section{Extra Uno: Crecimiento en una microestructura}
+
+\subsection{Introducción}
+Para los puntos extras de la tarea, se simuló por medio de autómatas celulares el crecimiento de una microestructura en un material, donde cada celula que no esta ocupada tiene una probabilidad $p_i$ de cambiar al tipo de una celda vecina, teniendo $i$ vecinos y teniendo la misma porbabilidad $p_i$ de mantenerse igual; esto en un casi equiprobable, tambien se observara para un caso no equiprobable, el objetivo esestudiar las distribuciones de los tamaños de las poblaciones centrales de celulas, es decir, las que no tocan las orllas.
+
+\subsection{Diseño del Experimento}
+
+Se comenzo con $N$ poblaciones, pero hay una relacion entre el tamaño total de la matriz donde se simulan las poblaciones y el número $N$ de poblaciones, por lo que se escogio una matriz de $100 \times 100$ con numero de poblaciones de 100, 150, 200, 250 y 300, para que exista una competencia entre las poblaciones pero sin que esta competencia sea tal que los tamaños de las poblaciones sean uniformes, se espera que mientras aumente el numero de  poblaciones se disminuya el tamaño de las mismas.
+
+Se comenzo con el caso donde todas las poblaciones tienen la misma probabilidad al competir por una celula, para ejemplo de esto crearon animaciones como la que se encuentra el \href{https://github.com/ppGodel/Parallel_R/blob/master/Tarea_2/T1NE.gif}{repositorio git} y la figuras \ref{fig::figura3} y \ref{fig::figura4} para ilustrar la simulación. Al revisar los resultados se encontro que para las poblaciones centrales eran por lo regular pequeñas comparadas con las poblaciones que alcanzaban las orillas, ya que la distribucion inicial de las poblaciones, aunque fue al azar, creaba mas competencia por las regiones centrales.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.26\textheight]{TE1EEF}
+  \caption{Estado final de uno de los experimentos}
+  \label{fig::figura3} 
+\end{figure}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.26\textheight]{DistribucionTamaniosTEE1}
+  \caption{Distribución de los tamaños para el mismo experimento}
+  \label{fig::figura4} 
+\end{figure}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.26\textheight]{DistribucionTamaniosEqTE1}
+  \caption{Distribución de tamaños de las poblaciones centrales de todos los experimentos}
+  \label{fig::figura5} 
+\end{figure}
+
+
+Para el caso donde el numero de celdas vecinas que eran de una poblacion aumentaba la probabilidad de convertirse de ese tipo, se encontrar tamaños mayores. Támbien se crearon animaciones para el \href{https://github.com/ppGodel/Parallel_R/blob/master/Tarea_2/T1E.gif}{repositorio git} y figuras \ref{fig::figura6} y \ref{fig::figura7} y aunque se encontro que al igual del caso equiprobable, fueron mas pequeñas que las de las orillas, estas son mayores que las poblaciones del experimento equiprobable.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.26\textheight]{TE1NEF}
+  \caption{Estado final de uno de los experimentos}
+  \label{fig::figura6} 
+\end{figure}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.26\textheight]{DistribucionTamaniosTEN1}
+  \caption{Distribución de los tamaños para el mismo experimento}
+  \label{fig::figura7} 
+\end{figure}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.26\textheight]{DistribucionTamaniosNETE1}
+  \caption{Distribución de tamaños de las poblaciones centrales de todos los experimentos}
+  \label{fig::figura8} 
+\end{figure}
+
+
+\section{Extra Dos: Crecimiento en una microestructura con poblaciones agregadas después}
+
+\subsection{Introducción}
+Para esta tarea se continuo con la simulacion por medio de autómatas celulares el crecimiento de una microestructura en un material, con las mismas situaciones que el extra pasado, solo agregando poblaciones despues de haber comenzado la simulacion para ver como afecta los tamaños de las poblaciones centrales.
+
+\subsection{Diseño del Experimento}
+
+Se utilizaron los mismos parametros que en el experimento anterior, solo que se manejo una probabilidad del 50\% para que en cada iteracion apareciera una nueva poblacion.
+
+Se comenzo con el caso donde todas las poblaciones tienen la misma probabilidad al competir por una celula, para ejemplo de esto crearon animaciones como la que se encuentra el \href{https://github.com/ppGodel/Parallel_R/blob/master/Tarea_2/T2E.gif}{repositorio git} y la figuras \ref{fig::figura9} y \ref{fig::figura10} para ilustrar la simulación. Al revisar los resultados se encontro que para las poblaciones centrales eran mas pequeñas que las encontradas en el caso donde no se agregaban poblaciones iniciales, esto debido a que al aparecer en un tiempo donde hay menos espacio para crecer, tendian a quedar pequeñas y rodeadas de otras poblaciones más viejas.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.26\textheight]{TE2EEF}
+  \caption{Estado final de uno de los experimentos}
+  \label{fig::figura9} 
+\end{figure}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.26\textheight]{DistribucionTamaniosTEE2}
+  \caption{Distribución de los tamaños para el mismo experimento}
+  \label{fig::figura10} 
+\end{figure}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.26\textheight]{DistribucionTamaniosEqTE2}
+  \caption{Distribución de tamaños de las poblaciones centrales de todos los experimentos}
+  \label{fig::figura11} 
+\end{figure}
+
+
+Y de manera similas que en el extra enterior, para el caso donde el numero de celdas vecinas que eran de una población aumentaba la probabilidad de convertirse de ese tipo, se encontrar tamaños mayores. Támbien se crearon animaciones para el \href{https://github.com/ppGodel/Parallel_R/blob/master/Tarea_2/T2NE.gif}{repositorio git} y figuras \ref{fig::figura12} y \ref{fig::figura13} y aunque se encontro que al igual del caso equiprobable, fueron mas pequeñas que las de las orillas, estas son mayores que las poblaciones del experimento equiprobable, pero no mayores que las del experimento donde solo hay poblaciones iniciales.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.26\textheight]{TE2NEF}
+  \caption{Estado final de uno de los experimentos}
+  \label{fig::figura12} 
+\end{figure}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.26\textheight]{DistribucionTamaniosTEN2}
+  \caption{Distribución de los tamaños para el mismo experimento}
+  \label{fig::figura12} 
+\end{figure}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.26\textheight]{DistribucionTamaniosNETE2}
+  \caption{Distribución de tamaños de las poblaciones centrales de todos los experimentos}
+  \label{fig::figura14} 
+\end{figure}
+
+\section{Conclusiones}
+
+Se aprendio lo util de la implementacion paralela para la simulación de autómatas celulares, lo cual facilito la practica, ademas que se puedo ver como el porcentaje de celulas ocupadas en un inicio en el juego de la vida agecta su duracion, aunque pareciera afectar de manera diferente a la aparicion de patrones sin fin.
+Por otro lado en la simulacion de la cristalizacion de materiales, se ve como las poblaciones centrales tienden a ser menores que las poblaciones que alcanzan las orillas y que en el caso de agregar poblaciones despues del estado inical, ademas que de que tienden a ser poblaciones que no alcanzan las orillas hacen más uniforme el tamaño de las poblaciones centrales.
+
+\end{document}

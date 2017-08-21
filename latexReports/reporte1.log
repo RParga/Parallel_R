@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2017.4.4)  15 AUG 2017 17:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2017.1.3)  20 AUG 2017 14:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**reporte.tex
-(./reporte.tex
+**reporte1.tex
+(./reporte1.tex
 LaTeX2e <2016/03/31>
 Babel <3.9r> and hyphenation patterns for 3 language(s) loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
@@ -217,11 +217,8 @@ File: pdftex.def 2016/07/10 v0.06j Graphics/color for pdfTeX
 \Gin@req@height=\dimen116
 \Gin@req@width=\dimen117
 )
-(./reporte.aux
-LaTeX Info: Redefining \. on input line 23.
-LaTeX Info: Redefining \% on input line 23.
-)
-\openout1 = `reporte.aux'.
+No file reporte1.aux.
+\openout1 = `reporte1.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 29.
 LaTeX Font Info:    ... okay on input line 29.
@@ -239,7 +236,6 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 29.
 LaTeX Font Info:    ... okay on input line 29.
 LaTeX Info: Redefining \. on input line 29.
 LaTeX Info: Redefining \% on input line 29.
-
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -287,10 +283,8 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 29.
 LaTeX Info: Redefining \pageref on input line 29.
 LaTeX Info: Redefining \nameref on input line 29.
-
-(./reporte.out) (./reporte.out)
 \@outlinefile=\write3
-\openout3 = `reporte.out'.
+\openout3 = `reporte1.out'.
 
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
@@ -358,7 +352,10 @@ Package babel Info: Redefining spanish shorthand "!
 (babel)             in language  on input line 40.
 Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 40.
-<../Tarea_1/PasoPorOrigen.png, id=18, 481.8pt x 481.8pt>
+
+LaTeX Warning: Reference `fig::figura1' on page 1 undefined on input line 43.
+
+<../Tarea_1/PasoPorOrigen.png, id=5, 481.8pt x 481.8pt>
 File: ../Tarea_1/PasoPorOrigen.png Graphic file (type png)
 
 <use ../Tarea_1/PasoPorOrigen.png>
@@ -374,7 +371,13 @@ Underfull \hbox (badness 10000) in paragraph at lines 41--51
 
  []
 
-<../Tarea_1/residuales.png, id=21, 481.8pt x 481.8pt>
+
+LaTeX Warning: Reference `fig::figura2' on page 1 undefined on input line 54.
+
+
+LaTeX Warning: Reference `fig::figura3' on page 1 undefined on input line 54.
+
+<../Tarea_1/residuales.png, id=6, 481.8pt x 481.8pt>
 File: ../Tarea_1/residuales.png Graphic file (type png)
 
 <use ../Tarea_1/residuales.png>
@@ -385,7 +388,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 54--62
 
  []
 
-<../Tarea_1/residualesMuestra.png, id=22, 481.8pt x 481.8pt>
+<../Tarea_1/residualesMuestra.png, id=7, 481.8pt x 481.8pt>
 File: ../Tarea_1/residualesMuestra.png Graphic file (type png)
 
 <use ../Tarea_1/residualesMuestra.png>
@@ -527,24 +530,37 @@ Package babel Info: Redefining spanish shorthand "?
 (babel)             in language  on input line 102.
 [3]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 102.
- (./reporte.aux
+ (./reporte1.aux
 LaTeX Info: Redefining \. on input line 23.
 LaTeX Info: Redefining \% on input line 23.
 )
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 102.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 102.
-Package rerunfilecheck Info: File `reporte.out' has not changed.
-(rerunfilecheck)             Checksum: 5F08D183249FD07BF3B946512AB9E19C;157.
+
+
+Package rerunfilecheck Warning: File `reporte1.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `reporte1.out':
+(rerunfilecheck)             Before: <no file>
+(rerunfilecheck)             After:  5F08D183249FD07BF3B946512AB9E19C;157.
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 102.
  ) 
 Here is how much of TeX's memory you used:
- 6357 strings out of 494946
- 93037 string characters out of 6180982
- 189683 words of memory out of 5000000
- 9598 multiletter control sequences out of 15000+600000
+ 6347 strings out of 494946
+ 92937 string characters out of 6180982
+ 189417 words of memory out of 5000000
+ 9594 multiletter control sequences out of 15000+600000
  8500 words of font info for 30 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 29i,7n,32p,581b,384s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 29i,7n,32p,582b,384s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share
 /texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texliv
@@ -552,10 +568,10 @@ e/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf
 -dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/f
 onts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/ty
 pe1/public/amsfonts/cm/cmr9.pfb>
-Output written on reporte.pdf (3 pages, 105855 bytes).
+Output written on reporte1.pdf (3 pages, 105668 bytes).
 PDF statistics:
- 77 PDF objects out of 1000 (max. 8388607)
- 58 compressed objects within 1 object stream
+ 64 PDF objects out of 1000 (max. 8388607)
+ 45 compressed objects within 1 object stream
  10 named destinations out of 1000 (max. 500000)
- 40 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
