@@ -17,7 +17,7 @@ desde <- 200
 hasta <-  20000
 original <- desde:hasta
 invertido <- hasta:desde
-replicas <- 30
+replicas <- 50
 suppressMessages(library(doParallel))
 suppressMessages(library(ggplot2))
 cores = detectCores() #- 1
