@@ -13,8 +13,8 @@ primo <- function(n) {
     return(TRUE)
 }
  
-desde <- 200
-hasta <-  20000
+desde <- 10000
+hasta <-  50000
 original <- desde:hasta
 invertido <- hasta:desde
 replicas <- 50
