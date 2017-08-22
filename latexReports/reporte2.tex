@@ -37,7 +37,7 @@
 
 \subsection{Introducción}
 
-Los autómatas celulares son modelos matemaricos para reppresentar de sistemas complejos donde cada una de los elementos se rige por un numero de reglas y apartir de su interacción entre ellos se desea estudiar los efectos de estas interacciones. Para tarea de esta practica se estudiará un autómata celular muy conocido, el juego de la vida; desarrollado en 1970 por John Horton Conway.
+Los autómatas celulares son modelos matemáticos para reppresentar de sistemas complejos donde cada una de los elementos se rige por un numero de reglas y apartir de su interacción entre ellos se desea estudiar los efectos de estas interacciones. Para tarea de esta practica se estudiará un autómata celular muy conocido, el juego de la vida; desarrollado en 1970 por John Horton Conway.
 Las reglas del juego de la vida son sencillas, una celula esta viva el siguiente turno, si 3 de sus celulas vecinas estan vivas; en caso muere. usaremos matrices para representar la poblacion de celulas y cada elemento de la matriz sera una celula y sus elementos vecinos determinaran el estado de cada elemento, este juego no necesita interacción con algun jugador, lo unico que necesita es el primer modelo con el que se inicia el juego.
 \subsection{Diseño del Experimento}
 Tomando como base el código de ejemplo en la \href{http://elisa.dyndns-web.com/teaching/comp/par/p2.html}{página del curso}, se modifico para cambiar la probabilad de que una celula esta viva o muerta cuando se crea la matriz inicial con la que el juego comienza, llendo de un 5\% de que una celda comience viva hasta un 100\% incrementadose en intervalos de 5\%; la matriz utilizada tiene una dimension de $20 \times 20$.
