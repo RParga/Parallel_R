@@ -25,12 +25,12 @@ cores = detectCores() #- 1
 datos = data.frame()
 for(core in 1:cores)
 {
-	registerDoParallel(makeCluster(detectCores() - 1))
-	#print(paste('nucleos: ', core))
-
 	ot <-  numeric()
 	it <-  numeric()
 	at <-  numeric()
+
+	registerDoParallel(makeCluster(cores))
+	#print(paste('nucleos: ', core))
 	for (r in 1:replicas)
 	{
 	    ot <- system.time(foreach(n = original, .combine=c) %dopar% primo(n))[3] # de menor a mayor
@@ -50,9 +50,6 @@ for(core in 1:cores)
 	    print(paste('ot: ', ot, 'it: ', it,'at: ', at))
 	}
 	
-	#summary(ot)
-	#summary(it)
-	#summary(at)
 }
 stopImplicitCluster()
 colnames(datos)= c('Tipo', 'Nucleos', 'Time')
