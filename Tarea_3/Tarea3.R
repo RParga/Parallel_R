@@ -41,6 +41,7 @@ invertido <- hasta:desde
 pares = seq(2, 2*hasta,2)
 impares = seq(1, 2*hasta+1,2)
 maxprimo = rep(maxp,hasta)
+medium = c(rbind(rep(maxp,floor(hasta/2)), rep(2,hasta) ))
 replicas <- 50
 type = TRUE
 cores = detectCores() #- 1
@@ -59,7 +60,7 @@ for(core in 1:cores)
 	}
 	else
 	{
-		cluster <- makeCluster(detectCores())
+		cluster <- makeCluster(cores)
 		clusterExport(cluster, "primo")
 	}
 	#print(paste('nucleos: ', core))
@@ -73,6 +74,7 @@ for(core in 1:cores)
 		    it <- system.time(sapply(invertido, primo))[3] # de mayor a menor
 		    at <- system.time(sapply(sample(original), primo))[3] # orden aleatorio
 		    xt <- system.time(sapply(maxprimo, primo))[3] # rep del maximoPrimo
+		    ht <- system.time(sapply(medium, primo))[3] # mitad pares, mitad maxprimo
 	    }
 	    else
 	    {
@@ -85,6 +87,7 @@ for(core in 1:cores)
 		    	it <- system.time(foreach(n = invertido, .combine=c) %dopar% primo(n))[3] # de mayor a menor
 			at <- system.time(foreach(n = sample(original), .combine=c) %dopar% primo(n))[3] # orden aleatorio
 			xt <- system.time(foreach(n = maxprimo, .combine=c) %dopar% primo(n))[3] # de menor a mayor
+		    	ht <- system.time(foreach(n = medium, .combine=c) %dopar% primo(n))[3] # mitad pares, mitad maxprimo
 		    }
 		    else
 		    {
@@ -94,6 +97,7 @@ for(core in 1:cores)
 			it = system.time(parSapply(cluster, invertido, primo))[3]
 			at = system.time(parSapply(cluster, sample(original), primo))[3]
 			xt = system.time(parSapply(cluster, maxprimo, primo))[3]
+		    	ht = system.time(parSapply(cluster, medium, primo))[3]# mitad pares, mitad maxprimo
 		    }
 	    }
 	    if(length(datos)==0)
@@ -109,6 +113,7 @@ for(core in 1:cores)
 	    datos = rbind(datos,c('Pares', core, pt))
 	    datos = rbind(datos,c('Impares', core, mt))
 	    datos = rbind(datos,c('MaxPrimo', core, xt))
+	    datos = rbind(datos,c('Medium', core, ht))
 	    print(paste('ot: ', ot, 'it: ', it,'at: ', at, 'pt: ', pt, 'mt: ', mt, 'xt: ', xt))
 	}
 	#if(type)
