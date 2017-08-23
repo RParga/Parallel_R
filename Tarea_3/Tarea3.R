@@ -1,6 +1,6 @@
 suppressMessages(library(doParallel))
 suppressMessages(library(ggplot2))
-
+library(parallel)
 primo <- function(n) {
     if (n == 1 || n == 2) {
         return(TRUE)
@@ -33,7 +33,7 @@ primax= function(n)
 
  
 desde <- 5
-hasta <-  20000
+hasta <-  50000
 maxp = primax(hasta)
 
 original <- desde:hasta
@@ -42,9 +42,11 @@ pares = seq(2, 2*hasta,2)
 impares = seq(1, 2*hasta+1,2)
 maxprimo = rep(maxp,hasta)
 medium = c(rbind(rep(maxp,floor(hasta/2)), rep(2,hasta) ))
-replicas <- 50
-type = TRUE
+replicas <- 60
+type = FALSE
 cores = detectCores() #- 1
+name= paste(desde,"_",hasta,"R",replicas,"C",cores, sep="" )
+
 #datos = data.frame( Tipo= character(),Nucleos= numeric(0), Time= double(0))
 datos = data.frame()
 for(core in 1:cores)
@@ -130,15 +132,15 @@ stopImplicitCluster()
 colnames(datos)= c('Tipo', 'Nucleos', 'Time')
 print(typeof(datos))
 datos = as.data.frame(datos)
-write.csv(datos, file="datos.csv")
+write.csv(datos, file=paste("datos", name, ".csv"))
 #ggplot(data = datos[which(datos$Time<0.6),], aes(x=factor(Nucleos), y=Time)) + geom_boxplot(aes(fill=Tipo))
-png("boxplotComplete.png")
+png(paste("boxplotComplete",name,".png", sep=""), width = 960, height = 960, units = "px", pointsize = 12)
 ggplot(data = datos, aes(x=factor(Nucleos), y=as.numeric(paste(Time)))) + labs( x="Núcleos", y="Tiempo" ) + geom_boxplot(aes(fill=Tipo))
 graphics.off()
-png("boxplotbyType.png")
+png(paste("boxplotbyType",name,".png", sep=""), width = 960, height = 960, units = "px", pointsize = 12, bg = "white")
 ggplot(data = datos, aes(x=factor(Nucleos), y=as.numeric(paste(Time)))) + labs( x="Núcleos", y="Tiempo" ) + geom_boxplot(aes(fill=Tipo)) + facet_wrap( ~ Tipo, scales="free")
 graphics.off()
-png("boxplotbyNucleos.png")
+png(paste("boxplotbyNucleos",name,".png", sep=""), width = 960, height = 960, units = "px", pointsize = 12)
 ggplot(data = datos, aes(x=factor(Nucleos), y=as.numeric(paste(Time)))) + labs( x="Núcleos", y="Tiempo" ) + geom_boxplot(aes(fill=Tipo)) + facet_wrap( ~ factor(Nucleos), scales="free")
 graphics.off()
 
