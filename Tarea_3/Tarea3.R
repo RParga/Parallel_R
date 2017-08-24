@@ -9,7 +9,7 @@ primo <- function(n) {
         return(FALSE)
     }
     for (i in seq(3, max(3, ceiling(sqrt(n))), 2)) {
-        if ((n %% i) == 0) {
+        if (n>i && (n %% i) == 0) {
             return(FALSE)
         }
     }
@@ -33,15 +33,15 @@ primax= function(n)
 
  
 desde <- 5
-hasta <-  50000
+hasta <-  500000
 maxp = primax(hasta)
 
 original <- desde:hasta
 invertido <- hasta:desde
-pares = seq(2, 2*hasta,2)
-impares = seq(1, 2*hasta+1,2)
-maxprimo = rep(maxp,hasta)
-medium = c(rbind(rep(maxp,floor(hasta/2)), rep(2,hasta) ))
+pares = seq(2, 2*(hasta-desde),2)
+impares = seq(1, 2*(hasta-desde),2)
+maxprimo = rep(maxp,(hasta-desde))
+medium = c(rbind(rep(maxp,floor((hasta-desde)/2)), rep(2,(hasta-desde)/2 ) ))
 replicas <- 60
 type = FALSE
 cores = detectCores() #- 1
