@@ -51,7 +51,7 @@ name= paste(desde,"_",hasta,"R",replicas,"C",cores, sep="" )
 
 datos = data.frame()
 
-for(core in 0:cores)
+for(core in 1:cores)
 {
 	#pt <-  numeric()
 	#ot <-  numeric()
@@ -61,37 +61,20 @@ for(core in 0:cores)
 	hat <-  numeric()
 	hdt <-  numeric()
 	hit <-  numeric()
-	if(core > 0)
-    	{	cluster = makeCluster(core)
-		registerDoParallel(cluster, cores = core)
-	}
+	cluster = makeCluster(core)
+	registerDoParallel(cluster, cores = core)
 	print(paste('nucleos: ', core))
 	for (r in 1:replicas)
 	{
-		if(core == 0)
-	    	{
-			#pt <- system.time(sapply(pares, primo))[3] # pares
-			#mt <- system.time(sapply(impares, primo))[3] # impares
-			#ot <- system.time(sapply(original, primo))[3] # de menor a mayor
-			#it <- system.time(sapply(invertido, primo))[3] # de mayor a menor
-			#at <- system.time(sapply(sample(original), primo))[3] # orden aleatorio
-			#xt <- system.time(sapply(maxprimo, primo))[3] # rep del maximoPrimo
-			hat <- system.time(sapply(mediuma, primo))[3] # mitad pares, mitad maxprimo
-			hdt <- system.time(sapply(mediumd, primo))[3] # mitad pares, mitad maxprimo
-			hit <- system.time(sapply(mediumi, primo))[3] # mitad pares, mitad maxprimo
-	    	}
-	    	else
-		{
-			#pt <- system.time(foreach(n = pares, .combine=c) %dopar% primo(n))[3] # de menor a mayor
-			#mt <- system.time(foreach(n = impares, .combine=c) %dopar% primo(n))[3] # de menor a mayor
-			#ot <- system.time(foreach(n = original, .combine=c) %dopar% primo(n))[3] # de menor a mayor
-			#it <- system.time(foreach(n = invertido, .combine=c) %dopar% primo(n))[3] # de mayor a menor
-			#at <- system.time(foreach(n = sample(original), .combine=c) %dopar% primo(n))[3] # orden aleatorio
-			#xt <- system.time(foreach(n = maxprimo, .combine=c) %dopar% primo(n))[3] # de menor a mayor
-			hat <- system.time(foreach(n = mediuma, .combine=c) %dopar% primo(n))[3] # mitad pares, mitad maxprimo
-			hdt <- system.time(foreach(n = mediumd, .combine=c) %dopar% primo(n))[3]# mitad pares, mitad maxprimo
-			hit <- system.time(foreach(n = mediumi, .combine=c) %dopar% primo(n))[3] # mitad pares, mitad maxprimo		    
-		}
+		#pt <- system.time(foreach(n = pares, .combine=c) %dopar% primo(n))[3] # de menor a mayor
+		#mt <- system.time(foreach(n = impares, .combine=c) %dopar% primo(n))[3] # de menor a mayor
+		#ot <- system.time(foreach(n = original, .combine=c) %dopar% primo(n))[3] # de menor a mayor
+		#it <- system.time(foreach(n = invertido, .combine=c) %dopar% primo(n))[3] # de mayor a menor
+		#at <- system.time(foreach(n = sample(original), .combine=c) %dopar% primo(n))[3] # orden aleatorio
+		#xt <- system.time(foreach(n = maxprimo, .combine=c) %dopar% primo(n))[3] # de menor a mayor
+		hat <- system.time(foreach(n = mediuma, .combine=c) %dopar% primo(n))[3] # mitad pares, mitad maxprimo
+		hdt <- system.time(foreach(n = mediumd, .combine=c) %dopar% primo(n))[3]# mitad pares, mitad maxprimo
+		hit <- system.time(foreach(n = mediumi, .combine=c) %dopar% primo(n))[3] # mitad pares, mitad maxprimo		    
 		if(length(datos)==0)
 		{
 			#datos = c('Ordenado',  core, ot)
@@ -113,13 +96,10 @@ for(core in 0:cores)
 		#print(paste('ot: ', ot, 'it: ', it,'at: ', at, 'pt: ', pt, 'mt: ', mt, 'xt: ', xt, 'hit: ', hit, 'hat: ', hat, 'hdt: ', hdt))
 		print(paste('hit: ', hit, 'hat: ', hat, 'hdt: ', hdt))
 	}	
-	if(core > 0)
-    	{
-		stopImplicitCluster()	
-		stopCluster(cluster)
-	}
+	stopImplicitCluster()	
+	stopCluster(cluster)
 }
-stopImplicitCluster()
+
 colnames(datos)= c('Tipo', 'Nucleos', 'Time')
 print(typeof(datos))
 datos = as.data.frame(datos)

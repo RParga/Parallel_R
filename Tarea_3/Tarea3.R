@@ -45,7 +45,7 @@ mediumi = c(rbind(rep(maxp,floor((hasta-desde)/2)), rep(2,(hasta-desde)/2 ) ))
 mediuma = c(rep(2,(hasta-desde)/2 ),rep(maxp,floor((hasta-desde)/2)))
 mediumd = c(rep(maxp,floor((hasta-desde)/2)), rep(2,(hasta-desde)/2 ))
 replicas <- 10
-type = TRUE
+type = FALSE
 cores = detectCores() #- 1
 name= paste(desde,"_",hasta,"R",replicas,"C",cores, sep="" )
 
@@ -112,9 +112,9 @@ for(core in 0:cores)
 				#it = system.time(parSapply(cluster, invertido, primo))[3]
 				#at = system.time(parSapply(cluster, sample(original), primo))[3]
 				#xt = system.time(parSapply(cluster, maxprimo, primo))[3]
-		    		hat <- system.time(parSapply(cluster, medium, primo))[3] # mitad pares, mitad maxprimo
-		    		hdt <- system.time(parSapply(cluster, medium, primo))[3]# mitad pares, mitad maxprimo
-		    		hit <- system.time(parSapply(cluster, medium, primo))[3] # mitad pares, mitad maxprimo
+		    		hat <- system.time(parSapply(cluster, mediuma, primo))[3] # mitad pares, mitad maxprimo
+		    		hdt <- system.time(parSapply(cluster, mediumd, primo))[3]# mitad pares, mitad maxprimo
+		    		hit <- system.time(parSapply(cluster, mediumi, primo))[3] # mitad pares, mitad maxprimo
 		    }
 	    }
 	    if(length(datos)==0)
