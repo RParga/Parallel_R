@@ -1,5 +1,5 @@
 fname = "datos50000_550000R40C8"
-equation = "datos$Time~Nucleos"
+equation = "datos$Time~datos$Nucleos"
 alfa=0.0005
 args = commandArgs(trailingOnly=TRUE)
 if (length(args)<0)
@@ -17,7 +17,12 @@ if (length(args)<0)
 
 }
 
-datos = read.csv(file = paste(fname, ".csv", sep=""))
+datosR = read.csv(file = paste("images/",fname, ".csv", sep=""))
+datosN = datosR[which(datosR$Nucleos>2),]
+datosi = datosN[which(datosN$Tipo=="Impares"),]
+datosp = datosN[which(datosN$Tipo=="Pares"),]
+
+datos = datosp
 linmod = lm(equation, data=datos)
 residuales = resid(linmod)
 png(file=paste("residuales_", fname,".png", sep=""))
@@ -40,6 +45,7 @@ if(ss$p.value<alfa) # si el p.value es menor a alfa, los residuales **NO** sigue
     {
                                         #Existe diferencia entre las varianzas, no son todas iguales, revisar cada factor para encontrar la diferencia
         print("Existe diferencia entre las varianzas, no son todas iguales, revisar cada factor para encontrar la diferencia")
+        boxplot(equiaton)
         
     } else{
                                         #NO existe diferencia entre las varianzas, son todas iguales
