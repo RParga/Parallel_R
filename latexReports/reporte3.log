@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2017.1.3)  27 AUG 2017 22:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2017.1.3)  27 AUG 2017 23:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -664,7 +664,7 @@ Here is how much of TeX's memory you used:
  9616 multiletter control sequences out of 15000+600000
  8807 words of font info for 31 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 29i,8n,32p,1083b,445s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 29i,8n,32p,1261b,445s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share
 /texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texli
@@ -677,7 +677,7 @@ msfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7
 .pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></u
 sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb>
-Output written on reporte3.pdf (7 pages, 270641 bytes).
+Output written on reporte3.pdf (7 pages, 270669 bytes).
 PDF statistics:
  159 PDF objects out of 1000 (max. 8388607)
  131 compressed objects within 2 object streams
