@@ -34,3 +34,4 @@ vignettes/*.pdf
 
 #Temporary emacs files
 *.R~
+*.r~
