@@ -96,7 +96,6 @@ for(core in 1:cores)
 		#print(paste('ot: ', ot, 'it: ', it,'at: ', at, 'pt: ', pt, 'mt: ', mt, 'xt: ', xt, 'hit: ', hit, 'hat: ', hat, 'hdt: ', hdt))
 		print(paste('hit: ', hit, 'hat: ', hat, 'hdt: ', hdt))
 	}	
-	stopImplicitCluster()	
 	stopCluster(cluster)
 }
 
