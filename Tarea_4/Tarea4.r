@@ -1,27 +1,14 @@
 suppressMessages(library(ggplot2))
 suppressMessages(library(parallel))
 
-n <- 40
+
+#n <- 40
 replicas = 200
 limite = -1 # grietas de que largo minimo queremos graficar
-zona <- matrix(rep(0, n * n), nrow = n, ncol = n)
-k <- 12
-x <- rep(0, k) # ocupamos almacenar las coordenadas x de las semillas
-y <- rep(0, k) # igual como las coordenadas y de las semillas
-
-#Este for "planta" las k semillas en posiciones libres. 
-for (semilla in 1:k) {
-    while (TRUE) { # hasta que hallamos una posicion vacia para la semilla
-        fila <- sample(1:n, 1)
-        columna <- sample(1:n, 1)
-        if (zona[fila, columna] == 0) {
-            zona[fila, columna] = semilla
-            x[semilla] <- columna
-            y[semilla] <- fila
-            break
-        }
-    }
-}
+#zona <- matrix(rep(0, n * n), nrow = n, ncol = n)
+#k <- 12
+ns = c(40,90,140,190,250)
+datos = data.frame()    
 
 #a una celda pos dada, le asigna el valor de region que le corresponde, deacuerdo a la semilla más cercana, para eso calcula todas las distancias y escoge la más cercana.
 celda <-  function(pos) {
@@ -44,34 +31,6 @@ celda <-  function(pos) {
         return(cercano)
     }
 }
- 
-#suppressMessages(library(doParallel))
-cluster = makeCluster(detectCores(logical=FALSE))
-clusterExport(cluster, "n")
-clusterExport(cluster, "celda")
-clusterExport(cluster, "zona")
-clusterExport(cluster, "k")
-clusterExport(cluster, "x")
-clusterExport(cluster, "y")
-#registerDoParallel()
-#celdas <- foreach(p = 1:(n * n), .combine=c) %dopar% celda(p)
-celdas = parSapply(cluster, 1:(n*n), celda)
-#stopImplicitCluster()
-stopCluster(cluster)
-voronoi <- matrix(celdas, nrow = n, ncol = n, byrow=TRUE)
-rotate <- function(x) t(apply(x, 2, rev))
-if(limite>0)
-{
-    png("p4s.png")
-    par(mar = c(0,0,0,0))
-    image(rotate(zona), col=rainbow(k+1), xaxt='n', yaxt='n')
-    graphics.off()
-    png("p4c.png")
-    par(mar = c(0,0,0,0))
-    image(rotate(voronoi), col=rainbow(k+1), xaxt='n', yaxt='n')
-    graphics.off()
-}
-
 
 #indica en que posicion de las orillas comienza la grieta.
 inicio <- function() {
@@ -94,18 +53,9 @@ inicio <- function() {
     return(c(xg, yg))
 }
 
-# me da las 8 posiciones de los posibles vecinos
-vp <- data.frame(numeric(), numeric()) # posiciones de posibles vecinos
-for (dx in -1:1) {
-    for (dy in -1:1) {
-        if (dx != 0 | dy != 0) { # descartar la posicion misma
-            vp <- rbind(vp, c(dx, dy))
-        }
-    }
-}
-names(vp) <- c("dx", "dy")
-vc <- dim(vp)[1]
- 
+
+rotate <- function(x) t(apply(x, 2, rev))
+
 propaga <- function(replica) {
     # probabilidad de propagacion interna
     prob <- 1
@@ -168,28 +118,99 @@ propaga <- function(replica) {
     }
     return(largo)
 }
-#for (r in 1:10) { # para pruebas sin paralelismo
-#    propaga(r)
-#}
-#suppressMessages(library(doParallel))
-#registerDoParallel(makeCluster(detectCores() - 1))
-#largos <- foreach(r = 1:200, .combine=c) %dopar% propaga(r)
 
-cluster = makeCluster(detectCores(logical=FALSE))
-clusterExport(cluster, "replicas")
-clusterExport(cluster, "propaga")
-clusterExport(cluster, "inicio")
-clusterExport(cluster, "voronoi")
-clusterExport(cluster, "vc")
-clusterExport(cluster, "vp")
-clusterExport(cluster, "n")
-clusterExport(cluster, "limite")
-largos = parSapply(cluster, 1:replicas, propaga)
-stopCluster(cluster)
-datos = cbind(1:replicas,largos)
+#suppressMessages(library(doParallel))
+for(n  in ns)
+{
+    ks= c(round(n/10), round(n/2), n, 2*n, round(n*n/2) , round((n**2-n) )
+    dat = data.frame()    
+    for(k in ks)
+    {        
+        zona <- matrix(rep(0, n * n), nrow = n, ncol = n)
+        x <- rep(0, k) # ocupamos almacenar las coordenadas x de las semillas
+        y <- rep(0, k) # igual como las coordenadas y de las semillas
+                                        #Este for "planta" las k semillas en posiciones libres. 
+        for (semilla in 1:k) {
+            while (TRUE) { # hasta que hallamos una posicion vacia para la semilla
+                fila <- sample(1:n, 1)
+                columna <- sample(1:n, 1)
+                if (zona[fila, columna] == 0) {
+                    zona[fila, columna] = semilla
+                    x[semilla] <- columna
+                    y[semilla] <- fila
+                    break
+                }
+            }
+        }
+        cluster = makeCluster(detectCores(logical=FALSE))
+        clusterExport(cluster, "n")
+        clusterExport(cluster, "celda")
+        clusterExport(cluster, "zona")
+        clusterExport(cluster, "k")
+        clusterExport(cluster, "x")
+        clusterExport(cluster, "y")
+        #registerDoParallel()
+        #celdas <- foreach(p = 1:(n * n), .combine=c) %dopar% celda(p)
+        celdas = parSapply(cluster, 1:(n*n), celda)
+        #stopImplicitCluster()
+        voronoi <- matrix(celdas, nrow = n, ncol = n, byrow=TRUE)
+        if(limite>0)
+        {
+            png("p4s.png")
+            par(mar = c(0,0,0,0))
+            image(rotate(zona), col=rainbow(k+1), xaxt='n', yaxt='n')
+            graphics.off()
+            png("p4c.png")
+            par(mar = c(0,0,0,0))
+            image(rotate(voronoi), col=rainbow(k+1), xaxt='n', yaxt='n')
+            graphics.off()
+        }
+        #me da las 8 posiciones de los posibles vecinos
+        vp <- data.frame(numeric(), numeric()) # posiciones de posibles vecinos
+        for (dx in -1:1) {
+            for (dy in -1:1) {
+                if (dx != 0 | dy != 0) { # descartar la posicion misma
+                    vp <- rbind(vp, c(dx, dy))
+                }
+            }
+        }
+        names(vp) <- c("dx", "dy")
+        vc <- dim(vp)[1]
+    
+
+        #for (r in 1:10)
+        #{ # para pruebas sin paralelismo
+        #    propaga(r)
+        #}
+        #suppressMessages(library(doParallel))
+        #registerDoParallel(makeCluster(detectCores() - 1))
+        #largos <- foreach(r = 1:200, .combine=c) %dopar% propaga(r)
+
+        #cluster = makeCluster(detectCores(logical=FALSE))
+        clusterExport(cluster, "replicas")
+        clusterExport(cluster, "propaga")
+        clusterExport(cluster, "inicio")
+        clusterExport(cluster, "voronoi")
+        clusterExport(cluster, "vc")
+        clusterExport(cluster, "vp")
+        clusterExport(cluster, "limite")
+
+        largos = parSapply(cluster, 1:replicas, propaga)
+        stopCluster(cluster)
+        dat = cbind(largos, rep(n,replicas), rep(k,replicas))
+        
+        if(length(datos)==0)
+        {
+            datos = dat
+        }
+        else
+        {
+            datos = rbind(datos, dat)
+        }
+    }
+    
+}
 datos = data.frame(datos)
-colnames(datos) = c("replicas","largos")
-summary(largos)
-barplot(largos)
+colnames(datos) = c("Largos","Dimension", "Semillas")
 write.csv(datos, file="datos.csv")
-ggplot(data = datos, aes(x=replicas, y=largos ) ) + labs( x="replicas", y="largos" ) + geom_violin(trim=FALSE)
+ggplot(data = datos, aes(x=factor(Semillas), y=Largos)) + labs( x="Dimensión", y="Largos" ) + geom_violin() + facet_wrap(~Dimension, scales="free") + geom_boxplot(width=0.1)
