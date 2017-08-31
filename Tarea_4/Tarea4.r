@@ -1,4 +1,9 @@
-n <-  40
+suppressMessages(library(ggplot2))
+suppressMessages(library(parallel))
+
+n <- 40
+replicas = 200
+limite = -1 # grietas de que largo minimo queremos graficar
 zona <- matrix(rep(0, n * n), nrow = n, ncol = n)
 k <- 12
 x <- rep(0, k) # ocupamos almacenar las coordenadas x de las semillas
@@ -40,22 +45,33 @@ celda <-  function(pos) {
     }
 }
  
-suppressMessages(library(doParallel))
-registerDoParallel(makeCluster(detectCores() - 1))
-celdas <- foreach(p = 1:(n * n), .combine=c) %dopar% celda(p)
-stopImplicitCluster()
+#suppressMessages(library(doParallel))
+cluster = makeCluster(detectCores(logical=FALSE))
+clusterExport(cluster, "n")
+clusterExport(cluster, "celda")
+clusterExport(cluster, "zona")
+clusterExport(cluster, "k")
+clusterExport(cluster, "x")
+clusterExport(cluster, "y")
+#registerDoParallel()
+#celdas <- foreach(p = 1:(n * n), .combine=c) %dopar% celda(p)
+celdas = parSapply(cluster, 1:(n*n), celda)
+#stopImplicitCluster()
+stopCluster(cluster)
 voronoi <- matrix(celdas, nrow = n, ncol = n, byrow=TRUE)
 rotate <- function(x) t(apply(x, 2, rev))
-png("p4s.png")
-par(mar = c(0,0,0,0))
-image(rotate(zona), col=rainbow(k+1), xaxt='n', yaxt='n')
-graphics.off()
-png("p4c.png")
-par(mar = c(0,0,0,0))
-image(rotate(voronoi), col=rainbow(k+1), xaxt='n', yaxt='n')
-graphics.off()
- 
-limite <- n # grietas de que largo minimo queremos graficar
+if(limite>0)
+{
+    png("p4s.png")
+    par(mar = c(0,0,0,0))
+    image(rotate(zona), col=rainbow(k+1), xaxt='n', yaxt='n')
+    graphics.off()
+    png("p4c.png")
+    par(mar = c(0,0,0,0))
+    image(rotate(voronoi), col=rainbow(k+1), xaxt='n', yaxt='n')
+    graphics.off()
+}
+
 
 #indica en que posicion de las orillas comienza la grieta.
 inicio <- function() {
@@ -144,7 +160,7 @@ propaga <- function(replica) {
             break # ya no se propaga
         }
     }
-    if (largo >= limite) {
+    if (limite>=0 && largo >= limite) {
         png(paste("p4g_", replica, ".png", sep=""))
         par(mar = c(0,0,0,0))
         image(rotate(grieta), col=rainbow(k+1), xaxt='n', yaxt='n')
@@ -155,8 +171,25 @@ propaga <- function(replica) {
 #for (r in 1:10) { # para pruebas sin paralelismo
 #    propaga(r)
 #}
-suppressMessages(library(doParallel))
-registerDoParallel(makeCluster(detectCores() - 1))
-largos <- foreach(r = 1:200, .combine=c) %dopar% propaga(r)
-stopImplicitCluster()
+#suppressMessages(library(doParallel))
+#registerDoParallel(makeCluster(detectCores() - 1))
+#largos <- foreach(r = 1:200, .combine=c) %dopar% propaga(r)
+
+cluster = makeCluster(detectCores(logical=FALSE))
+clusterExport(cluster, "replicas")
+clusterExport(cluster, "propaga")
+clusterExport(cluster, "inicio")
+clusterExport(cluster, "voronoi")
+clusterExport(cluster, "vc")
+clusterExport(cluster, "vp")
+clusterExport(cluster, "n")
+clusterExport(cluster, "limite")
+largos = parSapply(cluster, 1:replicas, propaga)
+stopCluster(cluster)
+datos = cbind(1:replicas,largos)
+datos = data.frame(datos)
+colnames(datos) = c("replicas","largos")
 summary(largos)
+barplot(largos)
+write.csv(datos, file="datos.csv")
+ggplot(data = datos, aes(x=replicas, y=largos ) ) + labs( x="replicas", y="largos" ) + geom_violin(trim=FALSE)
