@@ -4,7 +4,7 @@ suppressMessages(library(parallel))
 
 #n <- 40
 replicas = 200
-limite = -1 # grietas de que largo minimo queremos graficar
+limite = 0 # grietas de que largo minimo queremos graficar
 #zona <- matrix(rep(0, n * n), nrow = n, ncol = n)
 #k <- 12
 ns = c(40,90,140,190,250)
@@ -34,14 +34,13 @@ celda <-  function(pos) {
 
 paso <- function(pos)
 {
-    dim = n**2
-    fila <- floor((pos - 1) / dim) + 1
-    columna <- ((pos - 1) %% dim) + 1
-    rs = zona[fila,columna]    
-    if(rs==0)
+    fila <- floor((pos - 1) / n) + 1
+    columna <- ((pos - 1) %% n) + 1
+    cercano = zona[fila,columna]
+    if(cercano==0)
     {
-        vecindad <-  actual[max(fila - 1, 1) : min(fila + 1, dim),
-                        max(columna - 1, 1): min(columna + 1, dim)]
+        vecindad <-  zona[max(fila - 1, 1) : min(fila + 1, n),
+                        max(columna - 1, 1): min(columna + 1, n)]
     	sel = vecindad[vecindad>0]
 	#sel =  vecindad[!duplicated(vecindad)]
     	if(length(sel)>0)
@@ -49,7 +48,6 @@ paso <- function(pos)
             cercano=min(sel)
         }
         
-        #cercano <- NULL # sin valor por el momento
         #menor <- n * sqrt(2) # mayor posible para comenzar la busqueda
         #for (semilla in 1:k)
         #{
@@ -64,6 +62,7 @@ paso <- function(pos)
     }
     return(cercano)
 }
+
 
 #indica en que posicion de las orillas comienza la grieta.
 inicio <- function() {
@@ -143,7 +142,7 @@ propaga <- function(replica) {
             break # ya no se propaga
         }
     }
-    if (limite>=0 && largo >= limite) {
+    if (limite>0 && largo > limite) {
         png(paste("p4g_", replica, ".png", sep=""))
         par(mar = c(0,0,0,0))
         image(rotate(grieta), col=rainbow(k+1), xaxt='n', yaxt='n')
@@ -155,8 +154,9 @@ propaga <- function(replica) {
 #suppressMessages(library(doParallel))
 for(n  in ns)
 {
-    ks= c(round(n/10), round(n/2), n, 2*n, round(n*n/2) , round((n**2-n) )
+    ks = c(round(n/10), round(n/2), n, 2*n, round(n*n/2) , round((n**2-n)) )
     dat = data.frame()    
+    tst = FALSE
     for(k in ks)
     {        
         zona <- matrix(rep(0, n * n), nrow = n, ncol = n)
@@ -177,26 +177,51 @@ for(n  in ns)
         }
         cluster = makeCluster(detectCores(logical=FALSE))
         clusterExport(cluster, "n")
-        clusterExport(cluster, "celda")
+        clusterExport(cluster, "paso")
         clusterExport(cluster, "zona")
         clusterExport(cluster, "k")
         clusterExport(cluster, "x")
         clusterExport(cluster, "y")
+        clusterExport(cluster, "rotate")
         #registerDoParallel()
         #celdas <- foreach(p = 1:(n * n), .combine=c) %dopar% celda(p)
-        celdas = parSapply(cluster, 1:(n*n), celda)
-        #stopImplicitCluster()
-        voronoi <- matrix(celdas, nrow = n, ncol = n, byrow=TRUE)
-        if(limite>0)
+        j = 0        
+        while(any(zona==0))
         {
-            png("p4s.png")
+            clusterExport(cluster, "zona")
+            celdas = parSapply(cluster, 1:(n*n), paso)
+            zona = matrix(celdas, nrow=n, ncol=n, byrow=TRUE)
+            if(j%%3==0 && runif(1) < 0.99)
+            {
+                zl = which(zona==0)
+                ns = sample(zl,1)
+                #print(zl)
+                k = k +1
+                #rl = rbind(rl, rainbow(seeds)[1])
+                zona[ns] = k
+            }
+            if(tst)
+            {
+                j = j + 1
+                png(paste("vn_", n,"_k",k, "_j", j, ".png", sep=""))
+                par(mar = c(0,0,0,0))
+                image(rotate(zona), col=c("#FFFFFFFF",rainbow(k)), xaxt='n', yaxt='n')
+                graphics.off()
+            }            
+        }
+        tst=FALSE
+        #stopImplicitCluster()
+        voronoi <- zona
+        if(limite>=0)
+        {
+            png(paste("vn_", n,"_k",k, ".png", sep=""))
             par(mar = c(0,0,0,0))
-            image(rotate(zona), col=rainbow(k+1), xaxt='n', yaxt='n')
+            image(rotate(zona), col=rainbow(k), xaxt='n', yaxt='n')
             graphics.off()
-            png("p4c.png")
-            par(mar = c(0,0,0,0))
-            image(rotate(voronoi), col=rainbow(k+1), xaxt='n', yaxt='n')
-            graphics.off()
+            #png("p4c.png")
+            #par(mar = c(0,0,0,0))
+            #image(rotate(voronoi), col=rainbow(k+1), xaxt='n', yaxt='n')
+            #graphics.off()
         }
         #me da las 8 posiciones de los posibles vecinos
         vp <- data.frame(numeric(), numeric()) # posiciones de posibles vecinos
@@ -245,25 +270,26 @@ for(n  in ns)
 }
 datos = data.frame(datos)
 colnames(datos) = c("Largos","Dimension", "Semillas")
-.csv(datos, file="datos.csv")
+write.csv(datos, file="datosE2.csv")
+
 
 datos40 = datos[which( datosO$Dimension == 40),]
-png(paste("D40",".png", sep=""), width = 960, height = 960, units = "px", pointsize = 20)
+png(paste("D40E2",".png", sep=""), width = 960, height = 960, units = "px", pointsize = 20)
 ggplot(data = datos40, aes(x=factor(Semillas), y=Largos)) + labs( x="Número de regiones", y="Largos" ) + geom_violin() + facet_wrap(~Dimension, scales="free") + geom_boxplot(width=0.05) + theme(text = element_text(size=20))
 graphics.off()
 datos90 = datos[which( datosO$Dimension == 90),]
-png(paste("D90",".png", sep=""), width = 960, height = 960, units = "px", pointsize = 20)
+png(paste("D90E2",".png", sep=""), width = 960, height = 960, units = "px", pointsize = 20)
 ggplot(data = datos90, aes(x=factor(Semillas), y=Largos)) + labs( x="Número de regiones", y="Largos" ) + geom_violin() + facet_wrap(~Dimension, scales="free") + geom_boxplot(width=0.05) + theme(text = element_text(size=20))
 graphics.off()
 datos140 = datos[which( datosO$Dimension == 140),]
-png(paste("D140",".png", sep=""), width = 960, height = 960, units = "px", pointsize = 20)
+png(paste("D140E2",".png", sep=""), width = 960, height = 960, units = "px", pointsize = 20)
 ggplot(data = datos140, aes(x=factor(Semillas), y=Largos)) + labs( x="Número de regiones", y="Largos" ) + geom_violin() + facet_wrap(~Dimension, scales="free") + geom_boxplot(width=0.05) + theme(text = element_text(size=20))
 graphics.off()
-png(paste("D190",".png", sep=""), width = 960, height = 960, units = "px", pointsize = 20)
+png(paste("D190E2",".png", sep=""), width = 960, height = 960, units = "px", pointsize = 20)
 datos190 = datos[which( datosO$Dimension == 190),]
 ggplot(data = datos190, aes(x=factor(Semillas), y=Largos)) + labs( x="Número de regiones", y="Largos" ) + geom_violin() + facet_wrap(~Dimension, scales="free") + geom_boxplot(width=0.05) + theme(text = element_text(size=20))
 graphics.off()
-datos250 = datos[which( datosO$Dimension == 250,]
-png(paste("D250",".png", sep=""), width = 960, height = 960, units = "px", pointsize = 20)
+datos250 = datos[which( datosO$Dimension == 250),]
+png(paste("D250E2",".png", sep=""), width = 960, height = 960, units = "px", pointsize = 20)
 ggplot(data = datos250, aes(x=factor(Semillas), y=Largos)) + labs( x="Número de regiones", y="Largos" ) + geom_violin() + facet_wrap(~Dimension, scales="free") + geom_boxplot(width=0.05) + theme(text = element_text(size=20))
 graphics.off()
