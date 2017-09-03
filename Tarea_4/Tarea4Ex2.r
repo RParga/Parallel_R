@@ -191,7 +191,7 @@ for(n  in ns)
             clusterExport(cluster, "zona")
             celdas = parSapply(cluster, 1:(n*n), paso)
             zona = matrix(celdas, nrow=n, ncol=n, byrow=TRUE)
-            if(j%%3==0 && runif(1) < 0.99)
+            if(j%%3==0 && runif(1) < 0.99 && any(zona==0))
             {
                 zl = which(zona==0)
                 ns = sample(zl,1)
@@ -200,9 +200,9 @@ for(n  in ns)
                 #rl = rbind(rl, rainbow(seeds)[1])
                 zona[ns] = k
             }
+            j = j + 1
             if(tst)
             {
-                j = j + 1
                 png(paste("vn_", n,"_k",k, "_j", j, ".png", sep=""))
                 par(mar = c(0,0,0,0))
                 image(rotate(zona), col=c("#FFFFFFFF",rainbow(k)), xaxt='n', yaxt='n')
@@ -273,23 +273,23 @@ colnames(datos) = c("Largos","Dimension", "Semillas")
 write.csv(datos, file="datosE2.csv")
 
 
-datos40 = datos[which( datosO$Dimension == 40),]
+datos40 = datos[which( datos$Dimension == 40),]
 png(paste("D40E2",".png", sep=""), width = 960, height = 960, units = "px", pointsize = 20)
-ggplot(data = datos40, aes(x=factor(Semillas), y=Largos)) + labs( x="Número de regiones", y="Largos" ) + geom_violin() + facet_wrap(~Dimension, scales="free") + geom_boxplot(width=0.05) + theme(text = element_text(size=20))
+ggplot(data = datos40, aes(x=factor(Semillas), y=Largos)) + labs( x="Número de regiones", y="Largos" ) + geom_violin() + facet_wrap(~Dimension, scales="free") + geom_boxplot(width=0.05) + theme(text = element_text(size=20)) + ylim=(0,500)
 graphics.off()
-datos90 = datos[which( datosO$Dimension == 90),]
+datos90 = datos[which( datos$Dimension == 90),]
 png(paste("D90E2",".png", sep=""), width = 960, height = 960, units = "px", pointsize = 20)
-ggplot(data = datos90, aes(x=factor(Semillas), y=Largos)) + labs( x="Número de regiones", y="Largos" ) + geom_violin() + facet_wrap(~Dimension, scales="free") + geom_boxplot(width=0.05) + theme(text = element_text(size=20))
+ggplot(data = datos90, aes(x=factor(Semillas), y=Largos)) + labs( x="Número de regiones", y="Largos" ) + geom_violin() + facet_wrap(~Dimension, scales="free") + geom_boxplot(width=0.05) + theme(text = element_text(size=20)) + ylim=(0,600)
 graphics.off()
-datos140 = datos[which( datosO$Dimension == 140),]
+datos140 = datos[which( datos$Dimension == 140),]
 png(paste("D140E2",".png", sep=""), width = 960, height = 960, units = "px", pointsize = 20)
-ggplot(data = datos140, aes(x=factor(Semillas), y=Largos)) + labs( x="Número de regiones", y="Largos" ) + geom_violin() + facet_wrap(~Dimension, scales="free") + geom_boxplot(width=0.05) + theme(text = element_text(size=20))
+ggplot(data = datos140, aes(x=factor(Semillas), y=Largos)) + labs( x="Número de regiones", y="Largos" ) + geom_violin() + facet_wrap(~Dimension, scales="free") + geom_boxplot(width=0.05) + theme(text = element_text(size=20)) + ylim=(0,850)
 graphics.off()
 png(paste("D190E2",".png", sep=""), width = 960, height = 960, units = "px", pointsize = 20)
-datos190 = datos[which( datosO$Dimension == 190),]
-ggplot(data = datos190, aes(x=factor(Semillas), y=Largos)) + labs( x="Número de regiones", y="Largos" ) + geom_violin() + facet_wrap(~Dimension, scales="free") + geom_boxplot(width=0.05) + theme(text = element_text(size=20))
+datos190 = datos[which( datos$Dimension == 190),]
+ggplot(data = datos190, aes(x=factor(Semillas), y=Largos)) + labs( x="Número de regiones", y="Largos" ) + geom_violin() + facet_wrap(~Dimension, scales="free") + geom_boxplot(width=0.05) + theme(text = element_text(size=20)) + ylim=(0,900)
 graphics.off()
-datos250 = datos[which( datosO$Dimension == 250),]
+datos250 = datos[which( datos$Dimension == 250,]
 png(paste("D250E2",".png", sep=""), width = 960, height = 960, units = "px", pointsize = 20)
-ggplot(data = datos250, aes(x=factor(Semillas), y=Largos)) + labs( x="Número de regiones", y="Largos" ) + geom_violin() + facet_wrap(~Dimension, scales="free") + geom_boxplot(width=0.05) + theme(text = element_text(size=20))
+ggplot(data = datos250, aes(x=factor(Semillas), y=Largos)) + labs( x="Número de regiones", y="Largos" ) + geom_violin() + facet_wrap(~Dimension, scales="free") + geom_boxplot(width=0.05) + theme(text = element_text(size=20))+ ylim=(0,1200)
 graphics.off()
