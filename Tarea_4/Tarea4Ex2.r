@@ -63,7 +63,6 @@ paso <- function(pos)
     return(cercano)
 }
 
-
 #indica en que posicion de las orillas comienza la grieta.
 inicio <- function() {
     direccion <- sample(1:4, 1)
@@ -142,7 +141,7 @@ propaga <- function(replica) {
             break # ya no se propaga
         }
     }
-    if (limite>0 && largo > limite) {
+    if (limite>0 && largo >= limite) {
         png(paste("p4g_", replica, ".png", sep=""))
         par(mar = c(0,0,0,0))
         image(rotate(grieta), col=rainbow(k+1), xaxt='n', yaxt='n')

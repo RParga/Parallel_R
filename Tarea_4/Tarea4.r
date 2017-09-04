@@ -4,7 +4,7 @@ suppressMessages(library(parallel))
 
 #n <- 40
 replicas = 200
-limite = -1 # grietas de que largo minimo queremos graficar
+limite = 0 # grietas de que largo minimo queremos graficar
 #zona <- matrix(rep(0, n * n), nrow = n, ncol = n)
 #k <- 12
 ns = c(40,90,140,190,250)
@@ -34,14 +34,13 @@ celda <-  function(pos) {
 
 paso <- function(pos)
 {
-    dim = n**2
-    fila <- floor((pos - 1) / dim) + 1
-    columna <- ((pos - 1) %% dim) + 1
-    rs = zona[fila,columna]    
-    if(rs==0)
+    fila <- floor((pos - 1) / n) + 1
+    columna <- ((pos - 1) %% n) + 1
+    cercano = zona[fila,columna]
+    if(cercano==0)
     {
-        vecindad <-  actual[max(fila - 1, 1) : min(fila + 1, dim),
-                        max(columna - 1, 1): min(columna + 1, dim)]
+        vecindad <-  zona[max(fila - 1, 1) : min(fila + 1, n),
+                        max(columna - 1, 1): min(columna + 1, n)]
     	sel = vecindad[vecindad>0]
 	#sel =  vecindad[!duplicated(vecindad)]
     	if(length(sel)>0)
@@ -49,7 +48,6 @@ paso <- function(pos)
             cercano=min(sel)
         }
         
-        #cercano <- NULL # sin valor por el momento
         #menor <- n * sqrt(2) # mayor posible para comenzar la busqueda
         #for (semilla in 1:k)
         #{
@@ -143,7 +141,7 @@ propaga <- function(replica) {
             break # ya no se propaga
         }
     }
-    if (limite>=0 && largo >= limite) {
+    if (limite>0 && largo >= limite) {
         png(paste("p4g_", replica, ".png", sep=""))
         par(mar = c(0,0,0,0))
         image(rotate(grieta), col=rainbow(k+1), xaxt='n', yaxt='n')
