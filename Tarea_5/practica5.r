@@ -3,6 +3,9 @@ final <- -inicio
 paso <- 0.25
 x <- seq(inicio, final, paso)
 f <- function(x) { return(1 / (exp(x) + exp(-x))) }
+png("fx.png")
+plot(x, f(x), type="l")
+graphics.off()
 png("p5f.png") # dibujamos f(x) para ver como es
 #plot(x,  (2/pi) * (1/(exp(x)+exp(-x))))
 #lines(x,  (2/pi) * (1/(exp(x)+exp(-x))), type="l")
