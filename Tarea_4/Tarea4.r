@@ -185,16 +185,21 @@ for(n  in ns)
         celdas = parSapply(cluster, 1:(n*n), celda)
         #stopImplicitCluster()
         voronoi <- matrix(celdas, nrow = n, ncol = n, byrow=TRUE)
-        if(limite>0)
+        if(limite>=0)
         {
-            png("p4s.png")
+            
+            png(paste("vn_", n,"_k",k, ".png", sep=""))
             par(mar = c(0,0,0,0))
-            image(rotate(zona), col=rainbow(k+1), xaxt='n', yaxt='n')
+            image(rotate(voronoi), col=rainbow(k), xaxt='n', yaxt='n')
             graphics.off()
-            png("p4c.png")
-            par(mar = c(0,0,0,0))
-            image(rotate(voronoi), col=rainbow(k+1), xaxt='n', yaxt='n')
-            graphics.off()
+            #png("p4s.png")
+            #par(mar = c(0,0,0,0))
+            #image(rotate(zona), col=rainbow(k+1), xaxt='n', yaxt='n')
+            #graphics.off()
+            #png("p4c.png")
+            #par(mar = c(0,0,0,0))
+            #image(rotate(voronoi), col=rainbow(k+1), xaxt='n', yaxt='n')
+            #graphics.off()
         }
         #me da las 8 posiciones de los posibles vecinos
         vp <- data.frame(numeric(), numeric()) # posiciones de posibles vecinos

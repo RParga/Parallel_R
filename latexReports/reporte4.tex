@@ -6,16 +6,18 @@
 \documentclass[]{article}
 % Esto es para poder escribir acentos directamente:
 \usepackage[latin1]{inputenc}
-% Esto es para que el LaTeX sepa que el texto estÃ¡ en espaÃ±ol:
+% Esto es para que el LaTeX sepa que el texto esta en español:
 \usepackage[spanish]{babel}
 %para cambiar los margenes del texto
 \usepackage[a4paper,left=3cm,right=2cm,top=2.5cm,bottom=2.5cm]{geometry}
 \usepackage{hyperref}
+%para las imagenes
 \usepackage{graphicx}
 % Paquetes de la AMS:
 %\usepackage{amsmath, amsthm, amsfonts,float}
-\graphicspath{ {../Tarea_3/images/} }
-
+\graphicspath{ {../Tarea_4/images/} }
+% para agrupar imagenes
+\usepackage{subcaption}
 
 %--------------------------------------------------------------------------
 \title{Reporte práctica cuatro: Diagramas de Voronoi}
@@ -32,151 +34,156 @@
 \abstract{Este es un reporte sobre la práctica cuatro con respecto al tema de Diagramas de Voronoi que se realizó en la clase de Simulación de Sistemas, cómputo paralelo en R.}
 
 
-\section{Tarea: Análisis en el número de regiones y la longitud de grietas en una simulación de cristalizacion de materiales.}
+\section{Tarea: Análisis en el número de regiones y la longitud de grietas en una simulación de cristalización de materiales.}\label{Tarea}
 
-Los Diagramas de Voronoi son espacios en ${\rm I\!R}^n$, aunque comúnmente se utilizan en ${\rm I\!R}^2$, tal que dados unos puntos, que llamaremos semilla, dentro de ese espacio se crean regiones a partir de las mediatrices de los segmentos de union entre los puntos semilla. Las intersecciones de las mediatrices determinan el perimetro de un poligono alrededor del punto semilla, para todo punto dentro del poligono el punto semilla mas cercano a ellos, es el punto semilla dentro del poligono.
+Los Diagramas de Voronoi son espacios en ${\rm I\!R}^n$, aunque comúnmente se utilizan en ${\rm I\!R}^2$, tal que dados unos puntos, que llamaremos semilla, dentro de ese espacio se crean regiones a partir de las mediatrices de los segmentos de unión entre los puntos semilla. Las intersecciones de las mediatrices determinan el perímetro de un polígono alrededor del punto semilla, para todo punto dentro del polígono el punto semilla más cercano a ellos es el punto semilla que está dentro del polígono, como los que se muestran en la figura \ref{fig::figura1}.
 
-Se utilizara este tipo de espacios para simular la estructura de un material crsitalizado, y estudiar la longitd de las grietas generadas a la orilla del espacio o pieza, esto a partir de que es mas facil que la grita se extienda si comenzo por una orilla de 2 zonas cristalizadas a si comenzo en medio de una zona cristalizada y tiene que atravezar su área para alcanzar una orilla y propagarse, afectandole un valor de probabilidad de continuar o terminar.
-
-\subsection{Diseño del Experimento}
-
-Para el experimento se tomó como base el código de la \href{http://elisa.dyndns-web.com/teaching/comp/par/p4.html}{página del curso}, donde donde se definió un área de tamaño $n$, la cantidad $k$ de semillas, zonas o regiones a utlizar en el diagrama de Voronoi, despues de colocar las semillas uniformemente al azar para poder definir las regiones y obtener nuesto diagrama para simular el material cristalizado. Despues se procedia a escoger un punto aleatorio en la orilla del diagrama para comenzar ahi la grita, y decidiendo crecer la grita en uno si habia una celda orilla contigua, es decir una celda en el perimetro de la region;  o con un valor procentual $p$ de continuar por en medio del material si no habia una orilla contigua, este valor de $p$ fue constante a 0.99 y cada vez que avanzaba por una celda de en medio de la region, este valor se modificaba en $p^2$ para ir haciendo mas dificil el avanze de la grieta por en medio de un region.
-
-Para comenzar la experimentación, se utilizó una computadora con las siguientes especificaciones, Procesador Intel Core i7-4790 CPU @ 3.6Ghz $\times$ 8 y Memoria RAM de 24 GB. Utilizando solamente los cuatro núcleos fisicos disponibles. Como se estudió el efecto de la cantidad de regiones y la dimension del diagrama en la longitud de las grietas, se escogieron los siguentes valores para su estudio: para las diemsiones se utilizaron los valores: 40,90,140,190,250, de tal manera que no fueran multiplos enteros entre ellos, y para el numero de regiones se utilizaron los siguientes valores: $frac{n}{10}$, $frac{n}{2}$, $n$, $2n$ $frac{n^2}{2}$ y $n^2-n$ de tal manera que vamos de casos donde hay pocas regiones a muchisimas regiones, aumentando la cantidad de celdas orilla.
-
-
-
-\begin{figure}
+\begin{figure}[h!]
+  \begin{subfigure}{\linewidth}
   \centering
-  \includegraphics[width=0.6\textheight]{boxplotComplete50000_100000R30C7}
-  \caption{Tiempos alcanzados por cada tarea y cada núcleos en los primeros experimentos}
+    \includegraphics[width=0.3\linewidth]{vn_40_k40_1}
+    \includegraphics[width=0.3\linewidth]{vn_90_k9_1}
+    \includegraphics[width=0.3\linewidth]{vn_140_k280_1}
+  \end{subfigure}
+  \caption{Ejemplos de Diagramas de Voronoi}
   \label{fig::figura1} 
 \end{figure}
+  
+Se utilizarán este tipo de espacios para simular la estructura de un material cristalizado, y estudiar la longitud de las grietas generadas en la orilla del espacio o pieza, esto a partir de que es más fácil que la grieta se extienda si comenzó por una orilla de 2 zonas cristalizadas o si comenzó en medio de una zona cristalizada y tiene que atravesar su área para alcanzar una orilla y propagarse, afectándole un valor de probabilidad de continuar o terminar, esta simulación será en un caso discreto.
 
+\subsection{Diseño del Experimento.}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.6\textheight]{boxplotbyNucleos50000_100000R30C7}
-  \caption{Tiempos alcanzados por cada tarea dividido por núcleo}
+Para el experimento se tomó como base el código de la \href{http://elisa.dyndns-web.com/teaching/comp/par/p4.html}{página del curso}, donde se definió un área de tamaño $n$, la cantidad $k$ de semillas, zonas o regiones a utilizar en el diagrama de Voronoi, después de colocar las semillas uniformemente al azar para poder definir las regiones y obtener nuestro diagrama para simular el material cristalizado. Después se procedía a escoger un punto aleatorio en la orilla del diagrama para comenzar ahí la grieta, y decidiendo crecer la grieta en uno si había una celda orilla contigua, es decir una celda en el perímetro de la región;  o con un valor porcentual $p$ de continuar por en medio del material si no había una orilla contigua, este valor de $p$ fue constante a 0.99 y cada vez que avanzaba por una celda de en medio de la región, este valor se modificaba en $p^2$ para ir haciendo más difícil el avance de la grieta por en medio de una región.
+
+Para comenzar la experimentación, se utilizó una computadora con las siguientes especificaciones, Procesador Intel Core i7-4790 CPU @ 3.6Ghz $\times$ 8 y Memoria RAM de 24 GB. Utilizando solamente los cuatro núcleos físicos disponibles. Como se estudió el efecto de la cantidad de regiones y la dimensión del diagrama en la longitud de las grietas, se escogieron los siguientes valores para su estudio: para las dimensiones se utilizaron los valores: 40, 90, 140, 190, 250, de tal manera que no fueran múltiplos enteros entre ellos, y para el número de regiones se utilizaron los siguientes valores: $\frac{n}{10}$, $\frac{n}{2}$, $n$, $2n$, $\frac{n^2}{2}$ y $n^2-n$ de tal manera que tuvimos casos donde hay pocas regiones a muchísimas regiones, aumentando la cantidad de celdas orilla.
+
+\subsection{Resultados.}
+
+Los resultados de el experimento los podemos ver en las figuras \ref{fig::figura2}, \ref{fig::figura3} y \ref{fig::figura4}. Se pudo apreciar que conforme aumentaba la dimensión o la cantidad de regiones, aumentaba el largo de las caminatas, esto debido a que al aumentar la dimensión, las rupturas pueden ser más largas, y al aumentar las regiones, aumenta la cantidad de celdas orilla, favoreciendo que la grieta crezca.
+
+\begin{figure}[h!]  
+\captionsetup{width=0.8\textwidth}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=0.45\textwidth]{D40}
+    \includegraphics[width=0.45\textwidth]{D90}
+  \end{subfigure}
+  \caption{Distribuciones de los largos de la grieta de acuerdo a la dimensiones 40 y 90 y cantidad de regiones.}
   \label{fig::figura2} 
 \end{figure}
 
-\subsection{Resultados}
-  
-Los resultados obtenidos de esa experimentación son los mostrados en la figura  \ref{fig::figura1}. De donde se pudieron observar los siguiente puntos.
-\begin{enumerate}
-\item El tiempo requerido para terminar la tarea para un procesador que llamaba y que no llamaba a la librería fue mayor para el código que mandaba llamar a la librera parallel, esto debido al tiempo de procesamiento que toma el intentar paralelizar el código y que no es necesario porque solo hay 1 núcleo, mientras el código que no mandaba llamar a la librería comenzaba a laborar de inmediato, por lo que tenemos esa diferencia en los tiempos. Esta medición, sirvió también para tener como cota superior de lo que podríamos aceptar para utilizar la paralelización. Aquí cabe mencionar que se probó el código de la librería doPararllel para R, que también se utiliza para paralelizar tareas, pero por alguna razón esta implementación daba mayores tiempos que la opción iterativa de un núcleo, por lo que se descarto para ser utilizada en esta practica.
-\item Para los implementaciones paralelas de más de dos núcleos, tenemos que sí hay una mejora en el tiempo de procesamiento de las tareas.
-\item Se alcanzo el menor tiempo de procesamiento con cuatro núcleos utilizados, después de esto, los tiempos eran mayores que el tiempo obtenido por cuatro núcleos.
- \item Con respecto al tiempo entre los tipos de tareas, tenemos que no se ven diferencias significativas entre los tipos esto lo podemos observar en la figura \ref{fig::figura2}, es decir, independientemente de la tarea asignada, en la mayoría de los casos, terminaban al mismo tiempo, esto hace pensar que las tareas, es decir, las series de números, tenían la misma estructura y al dividirse entre los núcleos cada núcleo tenia carga similar.
-\end{enumerate}
-
-\section{Extra Uno: Argumentar causas en los tiempos de ejecución debido a los núcleos asignados}
-
-Como se pudo apreciar en el experimento anterior, hay una diferencia significativa al paralelizar con dos o más núcleos, esto debido a que al haber más núcleos disponibles las actividades se reparten entre los núcleos y se reduce el tiempo de procesamiento, sin embargo entre las tareas no hubo diferencias ¿por qué sucedió esto? pareciera que la estructura de la serie es las misma para las tres.
-
-\subsection{Diseño del Experimento}
-
-La primer hipótesis que se plantea es que la estructura de las tres series es la misma, y que al dividirse las tarea se distribuye de la misma manera entre los núcleos. en las tres series, la mitad de los valores eran divisibles entre dos y tardaban una comparación en saber que no eran primos, de la mitad restante, cerca de la tercera parte es divisible entre 3, tardando solo 2 comparaciones, etc. Esto hace que la tarea se realice en menos tiempo, pero también hace que las diferencias entre los núcleos sea homogéneas.
-
-Lo que se planteo fue cambiar la serie para cambiar la estructura, en este caso se pensaron los siguientes casos.
-
-\begin{enumerate}
-\item Pares: Se utilizó un conjunto de $n$ números pares, esperando que sea el que menos tiempo toma ya que todos los elementos los procesará con una sola operación.
-\item Impares: Se utilizo un conjunto con $n$ números impares, esperando que demore más que los casos secuenciales
-\item Máximo primo: se utilizó un conjunto donde se incluye el mayor número primo menor a el mayor numero utilizado $M$. este conjunto debería ser el que tome más tiempo de todos, ya que cada operación realiza tarda $\sqrt{\frac{M}{2}}$ operaciones.
-
-  Los siguientes casos se utilizaron para indagar el funcionamiento de la paralelizacion, es decir, saber si se asignan las tareas en función del primer procesador que termine una tarea o si se divide la cola en partes iguales entre los procesadores y cada procesador trabaja con su propia linea de espera.
-  
-\item Medio ascendente: este conjunto consta de la mitad de los $n$ elementos como números pares, y la mitad otra son repeticiones del máximo primo.
-\item Medio descendente: este conjunto es similar al anterior, solo que los primeros elementos son los máximo primo y la segunda mitad, números pares.  
-\item Medio intercalado: este conjunto contiene de igual manera, mitad de números pares y mitad de números máximo primo, pero de manera intercalada.
-\item Medio intercalado 2: este conjunto contiene de igual manera, una mitad de números pares y la otra mitad de repeticiones del número máximo primo, pero en cuatro partes, primera cuarta parte de números máximo primo, la segunda cuarta parte de números pares, la tercera cuarta parte de máximo primo y la ultima parte de números pares.
-\end{enumerate}
-
-Para este experimento también se hicieron 30 replicas para cada núcleo, el intervalo usado fue el mismo de 50,000 a 100,000, solo que para las series de pares y impares, se necesitan 25,000 números pares y otros tantos impares, por lo que se tomaron del intervalo de 100,000 a 150,000, y el Máximo Primo utilizado fue el más cercano a 150,000, así que todos las series eran de 50,000 elementos.
-
-\subsection{Resultados}
-
-En estos resultados se mantuvo lo que se pudo apreciar en la primera experimentación, la paralelizacion de cuatro núcleos dio tiempos menores, y las series de números sucesivos ordenados ascendente, descendente y aleatorios se comportaron de manera similar al primer experimento.
-
-Las estructura añadida de números pares, dio como se esperaba, una cota inferior, aunque hubo un resultado que fue interesante, como todos los números de la serie requieren de una cantidad constante de pasos para ser clasificados y esta cantidad de pasos es muy pequeña, se vieron mejores resultados con un solo núcleo que con la paralelizacion de cinco o mas núcleos, seguramente debido al tiempo que se toma en paralelizar las tareas afecta al resultado final.
-
-Las series de impares y de máximo primo, como también se esperaba dieron una  cota media y alta de lo que se podía esperar. La serie de máximo primo que contaba con un numero constante de operaciones pero para cada actividad, pero mucho mayor a las demás, se puedó apreciar el efecto del paralelismo en esta tarea, donde  también, al ser asignados más de cuatro núcleos, no se mostraba una mejora en el tiempo, estos resultados se pueden apreciar en la figura \ref{fig::figura3}.
-
-\begin{figure}
-  \centering
-  \includegraphics[width=0.6\textheight]{boxplotComplete3}
-  \caption{Tiempos alcanzados para las tareas de pares, impares y máximo primo }
+\begin{figure}[h!]
+\captionsetup{width=0.8\textwidth}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=0.45\textwidth]{D140}
+    \includegraphics[width=0.45\textwidth]{D190}
+  \end{subfigure}
+  \caption{Distribuciones de los largos de la grieta de acuerdo a la dimensiones 140 y 190 y cantidad de regiones.}
   \label{fig::figura3} 
 \end{figure}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.6\textheight]{boxplotComplete2}
-  \caption{Tiempos alcanzados para las tareas de mitades }
+\begin{figure}[h!]
+\captionsetup{width=0.8\textwidth}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=0.45\textwidth]{D250}
+  \end{subfigure}
+  \caption{Distribuciones de los largos de la grieta de acuerdo a la dimensión 250 y cantidad de regiones.}
   \label{fig::figura4} 
 \end{figure}
 
+Se pudo observar que aunque existen grietas que llegan a tener longitudes muy largas, para diagramas con $n$ o menos regiones, exceptuando el caso de 40, las medianas eran similares y pequeñas; por otro lado, para los diagramas con cantidades grandes de regiones, se pudo ver que había una similitud en las varianzas y medias de los valores $\frac{n^2}{2}$ y $n^2-n$, ya que en ambos casos, casi la totalidad de las celdas eran celdas orilla, por lo que la grieta se movía libremente. 
 
-Los resultados más interesantes de este experimento fueron los que se encontraron para las series que sirvieron para ver el funcionamiento de la paralelizacion y la cola de espera que se genera para cada núcleo del procesador, estos resultados se aprecian en la figura \ref{fig::figura4}.
-
-Aquí se puede apreciar que el tiempo que demora en realizar una tarea que toma la misma cantidad de operaciones, sí se ve afecta por el número de núcleos, los casos medio ascendente y descendente, siempre tomaron tiempos similares al ser trabajados en cada uno de los núcleos, pero los dos casos intercalados mostraron siempre un tiempo de ejecución menor en comparación con los 2 anteriores, el caso mas evidente fue para dos núcleos donde el tiempo que demoró en completar los medios ascendentes y descendente son muy similares a su tiempo de un solo núcleo, es decir, si la tarea se dividió en dos mitades, una mitad con los números primos y otra con los pares, el tiempo que demoraba era el tiempo que tarda en procesar $\frac{n}{32}$ Máximo primos y este tiempo es muy similar al de un núcleo ya que tiempo de procesar pares es muy pequeño, como se vio con el ejemplo de pares, por lo que seguramente la librería parallel parte el arreglo entre el número de núcleos asignados a la tarea. De no se asi, se esperaría que los cuatro dieran resultados muy similares, ya que asignaria a un núcleo libre el siguiente de la fila, intercalando los valores entre los núcleos y reduciendo el tiempo de ejecución de la tarea para dos núcleos.
-
-Para los cuatro casos, se vio también que se dio su mejor comportamiento con cuatro núcleos asignados, y para los casos siguientes no se vio mejora, al igual que en los experimentos anteriores.
-
-
-\section{Extra Dos: Pruebas estadísticas a las series sucesivas}
-
-Aquí se hizo una prueba de hipótesis para los resultados del experimento de la tarea, donde se establece que las varianzas de los resultados obtenidos por las series de números sucesivos ordenados de manera ascendente, descendente y aleatoria son iguales en cada núcleo para más de dos núcleos.
-
-Para poder realizar el análisis de varianza ANOVA, se necesita cumplir los supuestos de la independencia de las observaciones, tener distribución de residuales normal y tener homogeneidad de las varianzas.
-
-Se cuenta con la independencia de los observaciones, dado la forma en que se realizo el experimento, es decir ningún experimento dependía de la ejecución u orden del anterior, ya que no hay memoria de los resultados ni tampoco entre núcleos, ya que cada uno genera una cola diferente.
-
-Para comprobar que la distribución de residuales viene de una distribución normal se realizo una prueba de Shapiro-Wilk para cada núcleo, teniendo los resultados en la tabla \ref{table:1}
-
-\begin{table}[h!]
-\centering
-\begin{tabular}{c c}  
- Núcleos & Valor $p$ \\ [0.5ex] 
- \hline \hline
- 2 & 6.504e-14 \\
- 3 & 6.736e-13 \\
- 4 & 1.968e-11 \\
- 5 & 3.277e-09 \\
- 6 & 2.523e-06 \\
- 7 & 4.778e-08 \\
- \hline
-\end{tabular}
-\caption{Tabla de valores $p$ de la prueba Shapiro-Wilk para cada núcleo con las 3 serie de ordenamientos}
-\label{table:1}
-\end{table}
   
-Como se puede apreciar para un valor de $\alpha = 0.0005$, debemos desechar la hipótesis nula de que los datos vienen de una distribución normal. Por lo tanto se procedió a la prueba paramétrica de Kruskal-Wallis para comprobar que no había varianzas entre los ordenamientos en cada nivel, los resultados se pueden ver en la siguiente tabla \ref{table:2}
 
-\begin{table}[h!]
-\centering
-\begin{tabular}{c c c c}  
- Núcleos & Valor $\chi^2$ & Grados de libertad & Valor $p$  \\ [0.5ex] 
- \hline\hline
- 2 & 62.663 & 2 & 2.471e-14 \\
- 3 & 13.079 & 2 & 0.001445 \\
- 4 & 1.0875 & 2 & 0.5806 \\
- 5 & 3.4505 & 2 & 0.1781 \\
- 6 & 3.7433 & 2 & 0.1539 \\
- 7 & 1.959  & 2 & 0.3755 \\
- \hline
-\end{tabular}
-\caption{Tabla de valores de la prueba Kruskal-Wallis para cada núcleo con las 3 serie de ordenamientos}
-\label{table:2}
-\end{table}
-
-Con los resultados de la prueba, podemos ver con un valor de $\alpha = 0.0005$, que solo para dos núcleos, hay diferencias en las varianzas y de tres núcleos en adelante, se puede aceptar que las varianzas son iguales para cada ordenamiento, que era lo que se observó en los resultados de la tarea.
+%\section{Extra Uno: Argumentar causas en los tiempos de ejecución debido a los núcleos asignados}
 
 
-\section{Conclusiones}
+%\subsection{Diseño del Experimento}
 
-En esta práctica se trabajo el efecto del paralelismo de tareas desde la teoría de colas, en como su uso reduce el tiempo de procesamiento de las taras. Por otra parte se pudo observar que hay estructuras en las tareas que pueden afectar el tiempo de ejecución de la Tarea en función de su estructura y el número de núcleos del procesador asignados para la tarea y se puedo conocer la manera en como funciona la librería parallel para poder utilizarla de manera que se pueda aprovechar su paralelizacion.
+%\subsection{Resultados}
 
+\section{Extra Dos: Análisis en el número de regiones y la longitud de grietas en un diagrama donde hay crecimiento de regiones en función del tiempo de aparición de la semilla.}
+En este reto se cambió un poco la manera en que se forman las regiones, mientras que en el caso Voronoi se manejaba el valor equidistante, ahora se comenzó con $k$ semillas iniciales, que van creciendo o cristalizándose en las celdas contiguas, y cada tres crecimientos, una nueva semilla aparece en un área que aún no ha sido alcanzada por alguna semilla, y a partir de entonces comienza a crecer también, como se puede apreciar en la figura \ref{fig::figura5}.
+
+\begin{figure}[h!]
+  \begin{subfigure}{\linewidth}
+  \centering
+    \includegraphics[width=0.3\linewidth]{vn_40_k43}
+    \includegraphics[width=0.3\linewidth]{vn_90_k94}
+    \includegraphics[width=0.3\linewidth]{vn_190_k386}
+  \end{subfigure}
+  \caption{Ejemplos de diagramas de crecimiento.}
+  \label{fig::figura5} 
+\end{figure}
+
+\subsection{Diseño del Experimento.}
+
+Para este experimento se tomaron los mismos parámetros utilizados anteriormente, para las dimensiones se utilizaron los valores: 40, 90, 140, 190 y 250; y para el número de regiones se utilizaron los valores: $\frac{n}{10}$, $\frac{n}{2}$, $n$, $2n$, $\frac{n^2}{2}$ y $n^2-n$ y se realizaron en el mismo equipo.
+
+\subsection{Resultados.}
+
+Los resultados del experimento los podemos ver del lado derecho en las figuras \ref{fig::figura6}, \ref{fig::figura7}, \ref{fig::figura8}, \ref{fig::figura9} y \ref{fig::figura10}.
+
+\begin{figure}[h!]  
+\captionsetup{width=0.8\textwidth}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=0.45\textwidth]{D40}
+    \includegraphics[width=0.45\textwidth]{D40E2}
+  \end{subfigure}
+  \caption{Distribuciones de los largos de la grieta de acuerdo a la dimensiones 40 y cantidad de regiones.}
+  \label{fig::figura6} 
+\end{figure}
+
+\begin{figure}[h!]
+\captionsetup{width=0.8\textwidth}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=0.45\textwidth]{D90}
+    \includegraphics[width=0.45\textwidth]{D90E2}
+  \end{subfigure}
+  \caption{Distribuciones de los largos de la grieta de acuerdo a la dimensiones 90 y cantidad de regiones.}
+  \label{fig::figura7} 
+\end{figure}
+
+\begin{figure}[h!]
+\captionsetup{width=0.8\textwidth}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=0.45\textwidth]{D140}
+    \includegraphics[width=0.45\textwidth]{D140E2}
+  \end{subfigure}
+  \caption{Distribuciones de los largos de la grieta de acuerdo a la dimensión 140 y cantidad de regiones.}
+  \label{fig::figura8} 
+\end{figure}
+
+\begin{figure}[h!]
+\captionsetup{width=0.8\textwidth}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=0.45\textwidth]{D190}
+    \includegraphics[width=0.45\textwidth]{D190E2}
+  \end{subfigure}
+  \caption{Distribuciones de los largos de la grieta de acuerdo a la dimensión 190 y cantidad de regiones.}
+  \label{fig::figura9} 
+\end{figure}
+
+\begin{figure}[h!]
+\captionsetup{width=0.8\textwidth}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=0.45\textwidth]{D250}
+    \includegraphics[width=0.45\textwidth]{D250E2}
+  \end{subfigure}
+  \caption{Distribuciones de los largos de la grieta de acuerdo a la dimensión 250 y cantidad de regiones.}
+  \label{fig::figura10} 
+\end{figure}
+
+Se pudieron apreciar las mismas observaciones que las realizadas en la sección \ref{Tarea}, con la diferencia que para los valores iniciales de regiones menores a $n$ el aumento en el cantidad de regiones, hizo que creciera un poco la longitud de la grieta y subiendo la mediana del largo, y de igual manera, parecieran similares los valores de las varianzas en ellos; por otro lado, para las cantidades de regiones mayores como  $\frac{n^2}{2}$ y $n^2-n$, eran muy similares al experimento anterior, ya que la falta de espacio para colocar nuevas semillas las hacía similares al tener casi el mismo valor, además de que más semillas no contribuían a que hubiera una mayor cantidad de celdas orilla, y por lo tanto no favorecía más al largo de la grieta.
+\\
+\\
+\section{Conclusiones.}
+En esta práctica se trabajó una manera de utilizar el paralelismo para la creación de regiones y diagramas de Voronoi, para una mejor simulación de la cristalización de materiales o zonas en crecimiento, se estudió la relación que existe entre la cantidad de celdas orillas y el tamaño del diagrama, en el caso discreto en la simulación de la grieta. 
 \end{document}
