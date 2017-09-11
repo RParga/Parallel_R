@@ -1,5 +1,6 @@
 suppressMessages(library(distr))
 suppressMessages(library(parallel))
+library(plyr)
 
 desde <- 3
 hasta <- 7
@@ -52,10 +53,13 @@ colnames(datos) = c('Tam', 'Rep', 'Gap', 'Time')
 write.csv(datos, "datos.csv")
 datos = as.data.frame(datos)
 
+txtl = ddply(datos, .(Tam), summarize, median=median(Gap))
+
 options(scipen=5)
 png(paste("bxplt_Gap_Tam.png",sep=""), width = 1500, height = 1125, units = "px", pointsize = 20)
 par(mar=c(6,6,4,2),cex.axis=1.5, cex.lab=1.8, cex.main=1.5)
-boxplot(datos$Gap ~ as.factor(datos$Tam),xlab="Tamaño Muestra", ylab="Porcentaje de separación al valor exacto de la integral")
+boxplot(datos$Gap ~ as.factor(datos$Tam),xlab="Tamaño Muestra", ylab="Porcentaje de separación")
+text(txtl$Tam, txtl$median+0.001, txtl$median)
 graphics.off()
 png(paste("bxplt_Time_Tam.png",sep=""), width = 1500, height = 1125, units = "px", pointsize = 20)
 par(mar=c(6,6,4,2),cex.axis=1.5, cex.lab=1.8, cex.main=1.5)
