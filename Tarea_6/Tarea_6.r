@@ -22,6 +22,32 @@ clusterExport(cluster, "v")
 clusterExport(cluster, "pi")
 #assign = parSapply(cluster, 1:n, asignacion)
 
+procesaContagio  <- function(x)
+{
+    a1 <- agentes[x, ]
+    if (a1$estado == 1) { # desde los infectados
+        for (j in 1:n) {
+            if (!contagios[j]) { # aun sin contagio
+                a2 <- agentes[j, ]
+                if (a2$estado == "S") { # hacia los susceptibles
+                    dx <- as.numeric(a1$x) - as.numeric(a2$x)
+                    dy <- as.numeric(a1$y) - as.numeric(a2$y)
+                    d <- sqrt(as.numeric(dx)^2 + as.numeric(dy)^2)
+                    #    print(a1)
+                    #    print(i)
+                    #    print(a2)
+                    #    print(j)
+                    if (d < r) { # umbral
+                        p <- (r - d) / r
+                        if (runif(1) < p) {
+                            contagios[j] <- TRUE
+                        }
+                    }
+                }
+            }
+        }
+}
+
 for (tiempo in 1:tmax) {
     infectados <- dim(agentes[agentes$estado == "I",])[1]
     epidemia <- c(epidemia, infectados)
