@@ -27,54 +27,26 @@ cercanos= data.frame(i=numeric(),x=numeric(),y=numeric(), estado=numeric())
 for(i in 1:puntos){
     ap = cbind(i,ordatos[i,])
     if(nrow(cercanos) > 0){
-        #print("len 0")
-        #print(cercanos)
         cercanos= cercanos[which(cercanos$x>(ap$x-umbral)),]
-        #print(cercanos)
         d = sqrt((rep(ap$x, nrow(cercanos))-cercanos$x)**2)+((rep(ap$y,nrow(cercanos))-cercanos$y)**2)
-        print("umbral")
-        print(ap)
-        #print(length(which(d<umbral)))
-        #print(nrow(cercanos))
-        print(d[which(d<umbral)])
-        print(cercanos[which(d<umbral),])
         if(length(which(d<umbral)) > 0){
-            li = cercanos[which(d<umbral),]$i            
+            li = cercanos[which(d<umbral),]            
             if(ap$estado == 1){
-                if( length(which(ordatos[li,]$estado==0)) > 0){
-                    #print("cambio de estado A")
-                    #print(li)
-                    #print(ordatos[li,])                    
-                    #print("which")
-                    cl =  cercanos[which(cercanos$i==li),]
-                    #print(cl)
-                    #print(length(which(cl$estado == 0)) )
-                    #$print(cercanos[which(cercanos[li,]$estado==0)])
-                    #print(ap)
-                    aux = cl[which(cl$estado == 0),]
-                    #print("assig")
-                    #print(ordatos[aux[which(aux$estado==0)]$i,])
-                    ordatos[aux[which(aux$estado==0)]$i,]$estado = 0.5
-                    #print(ordatos[li,])
+                if( length(which(li$estado==0))  > 0){
+                    aux = li[which(li$estado == 0),]
+                    ordatos[aux$i,]$estado = 0.5
                 }
             }
             if(ap$estado == 0) {
-                if(length(which(ordatos[li,]$estado == 1 )) >0){
-                    #print("cambio de estado B")
-                    #print(ordatos[li,])
-                    #print(ap)
+                if( length(which(li$estado==1))  >0){
                     ordatos[ap$i,]$estado = 2
-                    #print(ordatos[ap$i,])
                 }
             }
         }
         
         
     }
-    #print(ap)
-    #print((cercanos))
     cercanos = rbind(cercanos,ap)
-    #print(i)
 }
 
 salida <- paste("p6_t", "F", ".png", sep="")

@@ -3,6 +3,13 @@ n <- 50
 pi <- 0.05
 pr <- 0.02
 v <- l / 30
+
+
+r <- 0.1
+tmax <- 100
+digitos <- floor(log(tmax, 10)) + 1
+
+inic = proc.time()
 agentes <- data.frame(x = double(), y = double(), dx = double(), dy = double(), estado  = character())
 for (i in 1:n) {
     e <- "S"
@@ -15,12 +22,17 @@ for (i in 1:n) {
     levels(agentes$estado) <- c("S", "I", "R")
 }
 epidemia <- integer()
-r <- 0.1
-tmax <- 100
-digitos <- floor(log(tmax, 10)) + 1
+inmunes <- integer()
+saludables <- integer()
+
 for (tiempo in 1:tmax) {
     infectados <- dim(agentes[agentes$estado == "I",])[1]
     epidemia <- c(epidemia, infectados)
+    recuperados <- nrow(agentes[agentes$estado == "R",])
+    inmunes <- c(inmunes, recuperados)
+    sanos <- nrow(agentes[agentes$estado == "S",])
+    saludables <- c(saludables, sanos)
+
     if (infectados == 0) {
         break
     }
@@ -93,6 +105,10 @@ for (tiempo in 1:tmax) {
     }
     graphics.off()
 }
+print(proc.time()-inic)
 png("p6e.png", width=600, height=300)
-plot(1:length(epidemia), 100 * epidemia / n, xlab="Tiempo", ylab="Porcentahe de infectados")
+plot(1:length(epidemia), 100 * epidemia / n, pch=16 , col="firebrick2", ylim=c(0,100), xlab="Tiempo", ylab="Porcentaje")
+points(1:length(inmunes), 100 *inmunes / n, pch=17, col="goldenrod")
+points(1:length(saludables), 100 *saludables / n, pch=15, col="chartreuse3")
+
 graphics.off()
