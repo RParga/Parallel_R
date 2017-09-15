@@ -1,4 +1,4 @@
-suppressMessages(library(parallel))
+#suppressMessages(library(parallel))
 
 l <- 1.5
 n <- 50
@@ -9,7 +9,7 @@ r <- 0.1
 tmax <- 100
 
 data = c(0, 1, 3)
-pc = 0.2
+pc = pi
 pv = 0
 probs = c(1 - (pc +pv), pc, pv)
 impr = TRUE
@@ -124,7 +124,7 @@ for (tiempo in 1:tmax) {
 }
 
 print(proc.time()- inic)
-png("p6e.png", width=600, height=300)
+png("p6ldb.png", width=1800, height=900)
 plot(1:length(epidemia), 100 * epidemia / n, pch=16 , col="firebrick2", ylim=c(0,100), xlab="Tiempo", ylab="Porcentaje")
 points(1:length(inmunes), 100 *inmunes / n, pch=17, col="goldenrod")
 points(1:length(saludables), 100 *saludables / n, pch=15, col="chartreuse3")
