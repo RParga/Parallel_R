@@ -1,5 +1,5 @@
 suppressMessages(library(parallel))
-
+suppressMessages(library(snow))
 l <- 1.5
 n <- 50
 pi <- 0.05
@@ -8,65 +8,45 @@ v <- l / 30
 r <- 0.1
 tmax <- 100
 impr = FALSE
+replicas = 30
 digitos <- floor(log(tmax, 10)) + 1
 
-cluster = makeCluster(detectCores(logical=FALSE))
 exper = data.frame(rep = numeric(), time=numeric(), pi = numeric(), mi = numeric()  )
 
 contagiosFunc <- function(i){
     a1 <- agentes[i, ]
-    cont = FALSE
+    cont = a1$estado
     if (a1$estado == 0) { # desde los sanos
         for (j in 1:n) {
             a2 <- agentes[j, ]
             if (a2$estado == 1) { # hacia los infectados
                 dx <- a1$x - a2$x
                 dy <- a1$y - a2$y
-                d <- sqrt(dx^2 + dy^2)
+                d <- sqrt(dx**2 + dy**2)
                 if (d < r) { # umbral
-                    p <- (r - d) / r
+                    cont=1
+                    p <- (r - d)/ r
                     if (runif(1) < p) {
-                        cont = TRUE
+                        cont = 1
+                        break
                     }
                 }
             }            
+        }
+    }    
+    if(a1$estado == 1) {        
+        if (runif(1) < pr) {
+            cont = 2 # recupera
         }
     }
     return(cont)
 
 }
 
-moveFunc <- function(i) { # posibles contagios
-    a1 = agentes[i,]
-                                        #print(contagios[i])
-    if (contagios[i]) {
-                                        #print("ns")
-                                        #print(a1$estado)
-        a1$estado <- 1
-    } else if (a1$estado == 1) { # ya estaba infectado
-        if (runif(1) < pr) {
-            a1$estado <- 2 # recupera
-        }
-    }
-    a1$x <- a1$x + a1$dx
-    a1$y <- a1$y + a1$dy
-    if (a1$x > l) {
-        a1$x <- a1$x - l
-    }
-    if (a1$y > l) {
-        a1$y <- a1$y - l
-    }
-    if (a1$x < 0) {
-        a1$x <- a1$x + l
-    }
-    if (a1$y < 0) {
-        a1$y <- a1$y + l
-    }
-    agentes[i, ] <- a1   
-}
 
 
-for(r in 1:replicas){
+
+for(rep in 1:replicas){
 #inic = proc.time()
 #agentes <- data.frame(x = double(), y = double(), dx = double(), dy = double(), estado  = character())
 data = c(0, 1, 3)
@@ -74,8 +54,7 @@ pc = pi
 pv = 0
 probs = c(1 - (pc +pv), pc, pv)
 inic = proc.time()
-agentes <- data.frame(x = runif(n,0,l), y = runif(n,0,l), dx = runif(n, -v, v), dy = runif(n, -v, v), estado  = sample(data, n, replace=TRUE, probs)  )
-
+agentes <<- data.frame(x = runif(n,0,l), y = runif(n,0,l), dx = runif(n, -v, v), dy = runif(n, -v, v), estado  = sample(data, n, replace=TRUE, probs)  )
 epidemia <- integer()
 inmunes <- integer()
 saludables <- integer()
@@ -102,11 +81,25 @@ for (tiempo in 1:tmax) {
     clusterExport(cluster, "pr")
     clusterExport(cluster, "agentes")
                                         #clusterExport(cluster, "contagios")
+    #print(agentes$estado)
     contagios = parSapply(cluster, 1:n, contagiosFunc)
-                                        #print(contagios)
-    clusterExport(cluster, "contagios")
-    
-    contagios = parSapply(cluster, 1:n, moveFunc)
+    print(contagios)
+
+    agentes$estado <- contagios
+    agentes$x <- agentes$x + agentes$dx 
+    agentes$y <- agentes$y + agentes$dy
+    if( any(agentes$x > l) ){
+        agentes[which(agentes$x > l),]$x <- agentes[which(agentes$x > l),]$x - l
+    }
+    if( any(agentes$x < 0) ){
+        agentes[which(agentes$x < 0),]$x <- agentes[which(agentes$x < 0),]$x + l
+    }
+    if( any(agentes$y > l) ){
+        agentes[which(agentes$y > l),]$y <- agentes[which(agentes$y > l),]$y - l
+    }
+    if( any(agentes$y < 0) ){
+        agentes[which(agentes$y < 0),]$y <- agentes[which(agentes$y < 0),]$y + l
+    }
     
     aS <- agentes[agentes$estado == 0,]
     aI <- agentes[agentes$estado == 1,]
@@ -132,14 +125,15 @@ for (tiempo in 1:tmax) {
         graphics.off()
     }
 }
-    exper = rbind(exper, c(r,proc.time()- inic, pi, max(epidemia)))
-    png(paste("p6epar", r, ".png",sep=""), width=1800, height=900)
+    exper = rbind(exper, c(rep,(proc.time()- inic)[3], pi, max(epidemia)/n*100) )
+    png(paste("images/p6epar", rep, ".png",sep=""), width=1800, height=900)
     plot(1:length(epidemia), 100 * epidemia / n, pch=16 , col="firebrick2", ylim=c(0,100), xlab="Tiempo", ylab="Porcentaje")
     points(1:length(inmunes), 100 *inmunes / n, pch=17, col="goldenrod")
     points(1:length(saludables), 100 *saludables / n, pch=15, col="chartreuse3")
 
     graphics.off()
 }
-write.csv("datosep.csv")
+colnames(exper) = c("rep", "time", "pi", "mi")
+write.csv(exper,"datosep.csv")
 print(exper)
 

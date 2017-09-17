@@ -1,0 +1,172 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  para un artículo en LaTeX en español.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[]{article}
+% Esto es para poder escribir acentos directamente:
+\usepackage[latin1]{inputenc}
+% Esto es para que el LaTeX sepa que el texto estÃ¡ en espaÃ±ol:
+\usepackage[spanish]{babel}
+%para cambiar los margenes del texto
+\usepackage[a4paper,left=3cm,right=2cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{hyperref}
+\usepackage{graphicx}
+% Paquetes de la AMS:
+%\usepackage{amsmath, amsthm, amsfonts,float}
+\graphicspath{ {../Tarea_5/images/} }
+
+
+%--------------------------------------------------------------------------
+\title{Reporte práctica cinco: Método Monte-Carlo}
+\author{José Anastacio Hernández Saldaña\\
+  \small Posgrado de Ingeniería de Sistemas\\
+  \small 1186622\\ 
+  \small jose.hernandezsld@uanl.edu.mx
+}
+
+\begin{document}
+
+\maketitle
+
+\abstract{Este es un reporte sobre la práctica cinco con respecto al
+  tema sobre el método Monte-Carlo que se realizó en la clase de
+  Simulación de Sistemas, cómputo paralelo en R.}
+
+
+\section{Tarea: Examinar el efecto del tamaño de la muestra en el método Monte-Carlo con la precisión y el tiempo de ejecución}
+
+El método Monte-Carlo es un método estadístico numérico usado para
+aproximar expresiones matemáticas complejas y computacionalmente
+costosas de manera eficiente. Consiste en usar un espacio delimitado donde
+se encuentra la función a evaluar, la idea principal del método es
+generar números aleatorios dentro de ese espacio y calcular la
+proporción de puntos que están dentro o fuera, por arriba o por debajo
+de la función y obtener así una aproximación del área cubierta. Esto
+puede ser utilizado para calcular integrales complejas, volúmenes
+complejos e incluso para hacer pronósticos.
+
+\subsection{Diseño del Experimento}
+
+Para el experimento se tomó como base el código de la
+\href{http://elisa.dyndns-web.com/teaching/comp/par/p5.html}{página
+  del curso}, donde tenemos la función $f(x)=\frac{1}{e^{x}+e^{-x}}$
+de la cual queremos resolver $\int_3^7f(x) dx$ y utilizaremos el
+método Monte-Carlo para aproximar el valor de su integral, podemos ver
+esta gráfica en la figura \ref{fig::figura1}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\linewidth]{fx}
+  \caption{Gráfica de la función $f(x)=\frac{1}{e^{x}+e^{-x}}$}
+  \label{fig::figura1} 
+\end{figure}
+
+La aproximación fue posible ya que la función
+$g(x)= \int_{\infty}^{-\infty}\frac{2}{\pi}f(x)dx$ es una distribución de
+probabilidad válida, es decir, la integral de esa función es igual a
+uno; por esto podemos crear números aleatorios basados en
+ella. Utilizamos estos valores para calcular el área entre los límites
+de nuestra integral, usando la suma de los valores entre nuestros
+límites derecho e izquierdo tendremos el valor aproximado del área,
+esto se puede ver en la figura \ref{fig::figura2}.  Ahora solo queda
+hacer la transformación de nuestra distribución de probabilidad a
+nuestra función $f(x)$.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.5\linewidth]{p5m}
+  \caption{Gráfica de la función $f(x)=\frac{2}{\pi(e^{x}+e^{-x})}$ y un área aproximada}
+  \label{fig::figura2} 
+\end{figure}
+
+Para comenzar la experimentación, se utilizó una computadora con las
+siguientes especificaciones, Procesador Intel Core i7-4790 CPU @
+3.6GHz $\times$ 8 y Memoria RAM de 24 GB. Utilizando solamente los
+cuatro núcleos físicos disponibles. Como el tamaño de la muestra nos
+da que tan delgadas son las barras que utilizaremos para calcular el
+área se varió el tamaño de la muestra $m$ para poder identificar cómo
+afecta esto a la precisión del cálculo de la integral, dado que se trabajó
+una implementación paralela, se paralelizó un número fijo de réplicas
+$r$, para calcular el promedio de todas ellas y así obtener el valor
+aproximado. Este procedimiento es similar a incrementar el tamaño de
+la muestra en $r$ dando el tamaño de la muestra por $m \times r$.
+\\ \\ Los tamaños de $m$ utilizados fueron 1,250, 2,500, 5,000,
+10,000, 25,000, 50,000, 125,000 y el valor de $r$ fue constante a 50,
+así que el total del tamaño de la muestra fueron 62,500, 125,000,
+250,000, 500,000, 1;250,000, 2;500,000, 6;250,000. El porcentaje de
+separación entre el valor calculado $vc$ y el valor real $vr$ obtenido
+de la página de \href{https://www.wolframalpha.com/input/?i=integrate++(1%2F(exp(x)%2Bexp(-x)))+from+3+to+7}{www.wolframalpha.com} se calculó a partir de la fórmula $ sep = \frac{vr-vc}{vr} \times 100$. El tiempo se tomó en milisegundos y se hicieron 30 réplicas
+  para cada muestra del experimento.
+  
+\subsection{Resultados}
+
+Al revisar los resultados del experimento pudimos confirmar lo
+esperado con respecto al tamaño de la muestra y el porcentaje de
+separación, como podemos ver en la figura \ref{fig::figura3}, ya que
+este disminuyó al aumentar el tamaño de la muestra, y no de una manera
+lineal, las variaciones disminuyeron conforme aumento el tamaño de la
+muestra ya que la aproximación fue más estable.  \\
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.7\linewidth]{bxplt_Gap_Tam}
+  \caption{Variación del porcentaje de separación con respecto al tamaño de la muestra }
+  \label{fig::figura3} 
+\end{figure}
+
+Con respecto al tiempo de ejecución, este aumentó con relación al tamaño de la muestra como se muestra en la figura \ref{fig::figura4}, de una manera exponencial y las variaciones aumentaron; es decir, con muestras más grandes las variaciones de tiempo entre réplicas aumentaron, esto debido al cálculo de si el valor del elemento de la muestra estaba o no en la región a calcular, que fue lo que se paralelizó para este experimento.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.7\linewidth]{bxplt_Time_Tam}
+  \caption{Variación del tiempo con respecto al tamaño de la muestra }
+  \label{fig::figura4} 
+\end{figure}
+
+\section{Extra Uno: Aproximación del valor de $\pi$}
+
+El primer aporte extra para este reporte fue aproximar el valor de $\pi$ por medio del método de Monte-Carlo, esta aproximación es muy común, pero no en una implementación paralela, así que se tomó como base el código sugerido en la \href{https://www.countbayesie.com/blog/2015/3/3/6-amazing-trick-with-monte-carlo-simulations}{implementación de Kurt}, donde se tiene un área que va desde -1 a 1 tanto en el eje x como el eje y, y se quiere aproximar el área del círculo y de ahí obtener el valor aproximado de $\pi$ como en la figura \ref{fig::figura5}. También se desea conocer la separación al valor exacto de la aproximación y el tiempo que tarda en realizar la aproximación conforme se varía la muestra.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.7\linewidth]{pi}
+  \caption{Ejemplo de una aproximación de $\pi$}
+  \label{fig::figura5} 
+\end{figure}
+
+
+\subsection{Diseño del Experimento}
+
+Para este experimento se utilizaron los mismos parámetros que el
+experimento anterior, se realizaron 30 réplicas y los mismos valores
+de muestra de 62,500, 125,000, 250,000, 500,000, 1;250,000, 2;500,000
+y 6;250,000 en el mismo equipo de cómputo. La paralelización se
+realizó en las muestras, se dividieron en 50 conjuntos de la misma
+cantidad de elementos que se realizaron en paralelo, después se
+promediaron los 50 valores para tener el valor aproximado con esa cantidad
+de muestras.
+
+\subsection{Resultados}
+
+Al igual que el experimento anterior, la separación del valor aproximado se redujo conforme aumentó el tamaño de la muestra como podemos ver en la figura \ref{fig::figura6}. De igual manera, conforme se incrementó el tamaño de la muestra, el valor de la aproximación fue más estable y las réplicas tendían a estar cerca de la mediana.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.7\linewidth]{bxplt_Gap_TamE1}
+  \caption{Variación del porcentaje de separación con respecto al tamaño de la muestra }
+  \label{fig::figura6} 
+\end{figure}
+
+Con respecto al tiempo, este se incrementó con relación al aumento del tamaño de la muestra como vemos en la figura \ref{fig::figura7}, la variación de los valores de las réplicas también varió conforme aumentó el tamaño de la muestra por las variaciones de los valores que están dentro del círculo y los que no estuvieron adentro.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.7\linewidth]{bxplt_Time_TamE1}
+  \caption{Variación del tiempo con respecto al tamaño de la muestra }
+  \label{fig::figura7} 
+\end{figure}
+
+%\section{Extra Dos: Pruebas estadísticas a las series sucesivas}
+
+\section{Conclusiones}
+
+Como se pudo apreciar en los experimentos, el método Monte-Carlos es muy eficiente con respecto a la aproximación de valores, ya que con tamaños de muestra que se puedan realizar en segundos podemos tener muy buenas aproximaciones y con la ayuda del cómputo paralelo podemos trabajar muestras más grandes y mejores aproximaciones.
+\end{document}

@@ -7,12 +7,11 @@ impr = FALSE
 r <- 0.1
 tmax <- 100
 replicas = 30
-exper = data.frame(rep = numeric(), time=numeric()  )
+exper = data.frame(rep = numeric(), time=numeric(),pi=numeric(), mi=numeric()  )
 
 digitos <- floor(log(tmax, 10)) + 1
-exper = data.frame(rep = numeric(), time=numeric()  )
 
-for(r in 1:replicas){
+for(rep in 1:replicas){
 
     inic = proc.time()
     agentes <- data.frame(x = double(), y = double(), dx = double(), dy = double(), estado  = character())
@@ -112,13 +111,14 @@ for(r in 1:replicas){
             graphics.off()
         }
     }
-    print(proc.time()-inic)
-    png(paste("p6e", r, ".png",sep=""), width=1800, height=900)
+    exper = rbind(exper, c(rep,(proc.time()- inic)[3]), pi, max(epidemia)*100/n)
+    colnames(exper)=c("rep","time")
+    png(paste("images/p6eo", rep, ".png",sep=""), width=1800, height=900)
     plot(1:length(epidemia), 100 * epidemia / n, pch=16 , col="firebrick2", ylim=c(0,100), xlab="Tiempo", ylab="Porcentaje")
     points(1:length(inmunes), 100 *inmunes / n, pch=17, col="goldenrod")
     points(1:length(saludables), 100 *saludables / n, pch=15, col="chartreuse3")
 
     graphics.off()
 }
-write.csv("datoseo.csv")
+write.csv(exper, "datoseo.csv")
 print(exper)

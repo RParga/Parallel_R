@@ -20,7 +20,7 @@ procesaContagio  <- function(i)
     if(estado == 0) {
         cercanos = agentes[which(agentes$estado == 1),]# && agentes$x>ap$x-r && agentes$x<ap$x+r && agentes$y>ap$y-r && agentes$y<ap$y+r),]            
         if(nrow(cercanos) > 0){
-            d = sqrt((rep(ap$x, nrow(cercanos))-cercanos$x)**2)+((rep(ap$y,nrow(cercanos))-cercanos$y)**2)
+            d = sqrt(((rep(ap$x, nrow(cercanos))-cercanos$x)**2)+((rep(ap$y,nrow(cercanos))-cercanos$y)**2))
             md = which(d<r)
             if(any(md > 0)){
                 dist = d[md]
@@ -41,7 +41,7 @@ procesaContagio  <- function(i)
     }
     return(estado)
 }
-for(r in 1:replicas){
+for(rep in 1:replicas){
     data = c(0, 1, 3)
     pc = pi
     pv = 0
@@ -116,12 +116,12 @@ for(r in 1:replicas){
         }
     }
 
-    exper = rbind(exper, c(r,proc.time()- inic, pi, max(epidemia)))
-    png(paste("p6ldbp", r, ".png",sep=""), width=1800, height=900)
+    exper = rbind(exper, c(rep,(proc.time()- inic)[3], pi, max(epidemia)))
+    png(paste("images/p6ldbp", rep, ".png",sep=""), width=1800, height=900)
     plot(1:length(epidemia), 100 * epidemia / n, pch=16 , col="firebrick2", ylim=c(0,100), xlab="Tiempo", ylab="Porcentaje")
     points(1:length(inmunes), 100 *inmunes / n, pch=17, col="goldenrod")
     points(1:length(saludables), 100 *saludables / n, pch=15, col="chartreuse3")
     graphics.off()
 }
-write.csv("datosldbp.csv")
+write.csv(exper,"datosldbp.csv")
 print(exper)
