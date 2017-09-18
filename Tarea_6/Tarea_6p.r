@@ -18,7 +18,7 @@ procesaContagio  <- function(i)
     ap = agentes[i,] #actual point
     estado = ap$estado
     if(estado == 0) {
-        cercanos = agentes[which(agentes$estado == 1),]# && agentes$x>ap$x-r && agentes$x<ap$x+r && agentes$y>ap$y-r && agentes$y<ap$y+r),]            
+        cercanos = agentes[which(agentes$estado == 1 & agentes$x>ap$x-r & agentes$x<ap$x+r & agentes$y>ap$y-r & agentes$y<ap$y+r),]            
         if(nrow(cercanos) > 0){
             d = sqrt(((rep(ap$x, nrow(cercanos))-cercanos$x)**2)+((rep(ap$y,nrow(cercanos))-cercanos$y)**2))
             md = which(d<r)
@@ -115,13 +115,13 @@ for(rep in 1:replicas){
             graphics.off()
         }
     }
-
-    exper = rbind(exper, c(rep,(proc.time()- inic)[3], pi, max(epidemia)))
+    exper = rbind(exper, c(rep,(proc.time()- inic)[3], pi, max(epidemia)*100/n))
     png(paste("images/p6ldbp", rep, ".png",sep=""), width=1800, height=900)
     plot(1:length(epidemia), 100 * epidemia / n, pch=16 , col="firebrick2", ylim=c(0,100), xlab="Tiempo", ylab="Porcentaje")
     points(1:length(inmunes), 100 *inmunes / n, pch=17, col="goldenrod")
     points(1:length(saludables), 100 *saludables / n, pch=15, col="chartreuse3")
     graphics.off()
 }
+colnames(exper) = c("rep", "time", "pi", "mi")
 write.csv(exper,"datosldbp.csv")
 print(exper)

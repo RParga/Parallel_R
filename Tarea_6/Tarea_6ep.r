@@ -1,5 +1,5 @@
 suppressMessages(library(parallel))
-suppressMessages(library(snow))
+#suppressMessages(library(snow))
 l <- 1.5
 n <- 50
 pi <- 0.05
@@ -46,6 +46,7 @@ contagiosFunc <- function(i){
 
 
 
+cluster = makeCluster(detectCores(logical=FALSE))
 for(rep in 1:replicas){
 #inic = proc.time()
 #agentes <- data.frame(x = double(), y = double(), dx = double(), dy = double(), estado  = character())
@@ -59,7 +60,6 @@ epidemia <- integer()
 inmunes <- integer()
 saludables <- integer()
 
-cluster = makeCluster(detectCores(logical=FALSE))
 for (tiempo in 1:tmax) {
     infectados <- dim(agentes[agentes$estado == 1,])[1]
     epidemia <- c(epidemia, infectados)
@@ -83,7 +83,7 @@ for (tiempo in 1:tmax) {
                                         #clusterExport(cluster, "contagios")
     #print(agentes$estado)
     contagios = parSapply(cluster, 1:n, contagiosFunc)
-    print(contagios)
+    #print(contagios)
 
     agentes$estado <- contagios
     agentes$x <- agentes$x + agentes$dx 

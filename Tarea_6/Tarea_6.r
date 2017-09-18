@@ -139,13 +139,13 @@ for(rep in 1:replicas){
             graphics.off()
         }
     }
-    exper = rbind(exper, c(rep,(proc.time()- inic)[3]), pi, max(epidemia)*100/n)
-    colnames(exper)=c("rep","time")
+    exper = rbind(exper, c(rep,(proc.time()- inic)[3], pi, max(epidemia)*100/n))
     png(paste("images/p6ldb", rep, ".png",sep=""), width=1200, height=600)
     plot(1:length(epidemia), 100 * epidemia / n, pch=16 , col="firebrick2", ylim=c(0,100), xlab="Tiempo", ylab="Porcentaje")
     points(1:length(inmunes), 100 *inmunes / n, pch=17, col="goldenrod")
     points(1:length(saludables), 100 *saludables / n, pch=15, col="chartreuse3")
     graphics.off()
 }
+colnames(exper) = c("rep", "time", "pi", "mi")
 write.csv(exper, "datosldb.csv")
 print(exper)

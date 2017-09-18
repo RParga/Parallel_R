@@ -111,7 +111,7 @@ for(rep in 1:replicas){
             graphics.off()
         }
     }
-    exper = rbind(exper, c(rep,(proc.time()- inic)[3]), pi, max(epidemia)*100/n)
+    exper = rbind(exper, c(rep,(proc.time()- inic)[3], pi, max(epidemia)*100/n))
     colnames(exper)=c("rep","time")
     png(paste("images/p6eo", rep, ".png",sep=""), width=1800, height=900)
     plot(1:length(epidemia), 100 * epidemia / n, pch=16 , col="firebrick2", ylim=c(0,100), xlab="Tiempo", ylab="Porcentaje")
@@ -120,5 +120,6 @@ for(rep in 1:replicas){
 
     graphics.off()
 }
+colnames(exper) = c("rep", "time", "pi", "mi")
 write.csv(exper, "datoseo.csv")
 print(exper)
