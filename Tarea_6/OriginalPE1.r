@@ -128,7 +128,7 @@ for(pv in pvs){
                 graphics.off()
             }
         }
-        exper = rbind(exper, c(rep,(proc.time()- inic)[3], pi, max(epidemia)/n*100) )
+        exper = rbind(exper, c(rep,(proc.time()- inic)[3], pv, max(epidemia)/n*100) )
         png(paste("images/p6epar", rep, ".png",sep=""), width=1800, height=900)
         plot(1:length(epidemia), 100 * epidemia / n, pch=16 , col="firebrick2", ylim=c(0,100), xlab="Tiempo", ylab="Porcentaje")
         points(1:length(inmunes), 100 *inmunes / n, pch=17, col="goldenrod")
@@ -137,7 +137,7 @@ for(pv in pvs){
         graphics.off()
     }
 }
-colnames(exper) = c("rep", "time", "pi", "mi")
+colnames(exper) = c("rep", "time", "pv", "mi")
 write.csv(exper,"datosepe1.csv")
 print(exper)
 
