@@ -1,12 +1,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-%  para un artÌculo en LaTeX en espaÒol.
+%  para un art√≠culo en LaTeX en espa√±ol.
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \documentclass[]{article}
 % Esto es para poder escribir acentos directamente:
 \usepackage[latin1]{inputenc}
-% Esto es para que el LaTeX sepa que el texto est√° en espa√±ol:
+% Esto es para que el LaTeX sepa que el texto est√É¬° en espa√É¬±ol:
 \usepackage[spanish]{babel}
 \decimalpoint
 %para cambiar los margenes del texto
@@ -19,9 +19,9 @@
 
 
 %--------------------------------------------------------------------------
-\title{Reporte pr·ctica seis: Sistemas multiagente}
-\author{JosÈ Anastacio Hern·ndez SaldaÒa\\
-  \small Posgrado de IngenierÌa de Sistemas\\
+\title{Reporte pr√°ctica seis: Sistemas multiagente}
+\author{Jos√© Anastacio Hern√°ndez Salda√±a\\
+  \small Posgrado de Ingenier√≠a de Sistemas\\
   \small 1186622\\ 
   \small jose.hernandezsld@uanl.edu.mx
 }
@@ -30,24 +30,24 @@
 
 \maketitle
 
-\abstract{Este es un reporte sobre la pr·ctica seis con respecto al
-  tema de sistemas multiagente que se realizÛ en la clase de
-  SimulaciÛn de sistemas, cÛmputo paralelo en R.}
+\abstract{Este es un reporte sobre la pr√°ctica seis con respecto al
+  tema de sistemas multiagente que se realiz√≥ en la clase de
+  Simulaci√≥n de sistemas, c√≥mputo paralelo en R.}
 
 
-\section{Tarea: ImplementaciÛn paralela de un sistea multiagente}
+\section{Tarea: Implementaci√≥n paralela de un sistea multiagente}
 
-Un sistema multiagente es un sistema computacional donde interact˙an
+Un sistema multiagente es un sistema computacional donde interact√∫an
 varios agentes dentro de un ambiente o entorno, los agentes realizan
 acciones en el ambiente y a partir del estado del ambiente el agente
-realiza alguna acciÛn. Este tipo de sistemas son descentralizados, es
-decir, los agentes no siguen Ûrdenes de una unidad central, sino que
-cada agente es autÛnomo.
+realiza alguna acci√≥n. Este tipo de sistemas son descentralizados, es
+decir, los agentes no siguen √≥rdenes de una unidad central, sino que
+cada agente es aut√≥nomo.
 
-En esta tarea se realizÛ una simulaciÛn de una epidemia de una
-cantidad $n$ de agentes, donde cada agente podrÌa estar en alguno de
+En esta tarea se realiz√≥ una simulaci√≥n de una epidemia de una
+cantidad $n$ de agentes, donde cada agente podr√≠a estar en alguno de
 los siguientes estados: sano, infectado e inmune. El agente estaba
-sano si no se habÌa contagiado al estar cerca de alg˙n otro agente
+sano si no se hab√≠a contagiado al estar cerca de alg√∫n otro agente
 infectado, si estaba a una distancia $d$ del infectado tal que era
 menor a un umbral $r$, hay una probabilidad $p_i = \frac{r-d}{r}$ de
 infectarse en otro caso $p_r= 0$, si el agente estaba infectado, tenia
@@ -60,13 +60,13 @@ dimensiones $l \times l$, el cual esta en forma de un torus o dona, ya
 que al exceder alguno de los bordes, el agente aparece en borde
 contrario.
 
-\subsection{DiseÒo del Experimento}
+\subsection{Dise√±o del Experimento}
 
-Para el experimento se tomÛ como base el cÛdigo de la
-\href{http://elisa.dyndns-web.com/teaching/comp/par/p6.html}{p·gina
-  del curso}, donde se encuentra la simulaciÛn ya programada con los
-siguientes par·metros, umbral de infecciÛn $r= 0.1$, probabilidad de
-recuperaciÛn $p_r=0.2$, con una dimensiÛn de $l=1.5$, se tienen una
+Para el experimento se tom√≥ como base el c√≥digo de la
+\href{http://elisa.dyndns-web.com/teaching/comp/par/p6.html}{p√°gina
+  del curso}, donde se encuentra la simulaci√≥n ya programada con los
+siguientes par√°metros, umbral de infecci√≥n $r= 0.1$, probabilidad de
+recuperaci√≥n $p_r=0.2$, con una dimensi√≥n de $l=1.5$, se tienen una
 cantidad de agentes de $n=50$, estos se creaban posiciones $x$, $y$
 con velocidades $dx$, $dy$ tomadas de una distribucion uniforme tal
 que $0 \leq x \leq l$ y $\frac{-l}{30} \leq dx \leq \frac{l}{30}$, de
@@ -74,38 +74,38 @@ manera similar para $y$ y $dy$. El estado inicial de los agentes era
 asignado con una probabilidad $\alpha_i =0.05$ de comenzar infectado y
 una probabilidad $1-\alpha_i$ de comenzar sano.
 
-Este cÛdigo no se encuentra paralelizado y cuenta con varias opciones
+Este c√≥digo no se encuentra paralelizado y cuenta con varias opciones
 para paralelizarse y optimizarse identificadas, que son las
 siguientes:
 \begin{enumerate}
-\item AsignaciÛn de estado inicial. \label{AEI} La asignaciÛn se hace
+\item Asignaci√≥n de estado inicial. \label{AEI} La asignaci√≥n se hace
   de manera iterativa para cada uno de los agentes puede hacerse de
   manera paralela.
-  \item C·lculo de la distancia de un agente y los agentes
-    cercanos. \label{CDA} El c·lculo de distancia en cada agente hacia
+  \item C√°lculo de la distancia de un agente y los agentes
+    cercanos. \label{CDA} El c√°lculo de distancia en cada agente hacia
     todos los demas puede hacerse de manera paralela y puede mejorarse
     si se reduce la cantidad de agentes a comparar.
-  \item AsignaciÛn de posiciones y velocidades iniciales. \label{APV}
-    Esta asignaciÛn tambiÈn se hace de manera iterativa para cada
-    agente, dando la opciÛn de paralelizarse.
+  \item Asignaci√≥n de posiciones y velocidades iniciales. \label{APV}
+    Esta asignaci√≥n tambi√©n se hace de manera iterativa para cada
+    agente, dando la opci√≥n de paralelizarse.
 \end{enumerate}
 
-Como el c·lculo \ref{CDA} se hace dentro del cÛdigo de la asignaciÛn
+Como el c√°lculo \ref{CDA} se hace dentro del c√≥digo de la asignaci√≥n
 \ref{AEI}, estas pueden tener problemas si ambas se paralelizan ya que
 paralelizar procedimientos paralelos los hace competir por los
-recursos del procesador, asi que se decidiÛ paralelizar la asignaciÛn
-de estados, y optimizar el c·lculo de la distancia. Otro enfoque
-tambien considerado fue utilizar un mÈtodo de linea de barrido para
-las asignaciones \ref{AEI}, \ref{APV} y que optimiza el c·lculo
+recursos del procesador, asi que se decidi√≥ paralelizar la asignaci√≥n
+de estados, y optimizar el c√°lculo de la distancia. Otro enfoque
+tambien considerado fue utilizar un m√©todo de linea de barrido para
+las asignaciones \ref{AEI}, \ref{APV} y que optimiza el c√°lculo
 \ref{CDA} ya que en cada iteracion de la linea de barrido considera
 solo aquellos agentes que se encuentran a una distancia $r$ de la
-linea, evitando calcular la distancia de agentes mas all· del
+linea, evitando calcular la distancia de agentes mas all√° del
 umbral. Aunque el algoritmo de linea de barrido puede paralelizarse en
-el c·lculo de la distancia \ref{CDA} no daria mucha mejora ya que la
-cantidad de agentes es pequeÒa y la paralilzacion de las asignaciones
+el c√°lculo de la distancia \ref{CDA} no daria mucha mejora ya que la
+cantidad de agentes es peque√±a y la paralilzacion de las asignaciones
 denpende de la iteracion anterior por lo que no podria paralelizarse.
 Pero tomando en cuenta el enfoque de linea de barrido puede hacerse
-una version paralela de este codigo sÌ en lugar de llevar un regitro
+una version paralela de este codigo s√≠ en lugar de llevar un regitro
 de quienes estan dentro de la linea de barrido e ir actualizandolo
 cada iteracion, puede para cada punto de la linea de barrido
 calcularse los vecinos cercanos.
@@ -118,45 +118,45 @@ Por lo que se tuvieron cuatro algoritmos para comparar, que se clasificaron de l
 \item \textb{LdB P:} Algoritmo basado en linea de barrido paralelizado 
 \end{enumerate}
 
-Se decidiÛ comparar los cuatro algoritmos para saber si utlizar un
+Se decidi√≥ comparar los cuatro algoritmos para saber si utlizar un
 buen algoritmo, como lo es el de linea de barrido, contra
 implementaciones paralelas como el algoritmo original paralelizado de
-la pr·ctica y la implementacion paralela basada en la linea de
+la pr√°ctica y la implementacion paralela basada en la linea de
 barrido, nos ofrece una ganancia significativa en tiempo y en que
-medida. Se tomÛ el algoritmo original como cota superior de lo que
-podrÌamos esperar del desempeÒo de los algoritmos, el cÛdigo de los
+medida. Se tom√≥ el algoritmo original como cota superior de lo que
+podr√≠amos esperar del desempe√±o de los algoritmos, el c√≥digo de los
 cuatro algoritmo esta dentro del
 \href{https://github.com/ppGodel/Parallel_R/tree/master/Tarea_6}{repositorio
   git} del curso.
 
 
-Para comenzar la experimentaciÛn, se utilizÛ una computadora con las
+Para comenzar la experimentaci√≥n, se utiliz√≥ una computadora con las
 siguientes especificaciones, Procesador Intel Core i7-4790 CPU @
 3.6GHz $\times$ 8 y memoria RAM de 24 GB utilizando solamente los
-cuatro n˙cleos fÌsicos disponibles. Para cada experimento se hicieron
-30 replicas con los par·metros utilizados en la pr·ctica. La compraciÛn se efectuo de manera transformada deacuerdo, por lo que  
+cuatro n√∫cleos f√≠sicos disponibles. Para cada experimento se hicieron
+30 replicas con los par√°metros utilizados en la pr√°ctica. La compraci√≥n se efectuo de manera transformada deacuerdo, por lo que  
 
 \subsection{Resultados}
 
-Al revisar los resultados de la experimentaciÛn, que estan graficados en la figura \ref{fig::figura1}, podemos ver como el algoritmo original nos da el mayor tiempo
+Al revisar los resultados de la experimentaci√≥n, que estan graficados en la figura \ref{fig::figura1}, podemos ver como el algoritmo original nos da el mayor tiempo, sin embargo, en los demas tiempo, tenermos 
 
 \begin{figure}[h!]
   \centering
   \includegraphics[width=0.5\linewidth]{}
-  \caption{ComparaciÛn de tiempor de los cuatro algoritmos}
+  \caption{Comparaci√≥n de tiempor de los cuatro algoritmos}
   \label{fig::figura1} 
 \end{figure}
 
 
-\section{Extra Uno: AproximaciÛn del valor de $\pi$}
+\section{Extra Uno: Aproximaci√≥n del valor de $\pi$}
 
 
-\subsection{DiseÒo del Experimento}
+\subsection{Dise√±o del Experimento}
 
 
 \subsection{Resultados}
 
-\section{Extra Dos: Pruebas estadÌsticas a las series sucesivas}
+\section{Extra Dos: Pruebas estad√≠sticas a las series sucesivas}
 
 \section{Conclusiones}
 
