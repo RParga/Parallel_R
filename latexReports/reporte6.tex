@@ -97,18 +97,18 @@ Como el cálculo \ref{CDA} se hace dentro del código de la asignación
 paralelizar procedimientos paralelos los hace competir por los
 recursos del procesador, así que se decidió paralelizar la asignación
 de estados, y optimizar el cálculo de la distancia. Otro enfoque
-también considerado fue utilizar un método de linea de barrido para
+también considerado fue utilizar un método de línea de barrido para
 las asignaciones \ref{AEI}, \ref{APV} y que optimiza el cálculo
-\ref{CDA} ya que en cada iteración de la linea de barrido considera
+\ref{CDA} ya que en cada iteración de la línea de barrido considera
 solo aquellos agentes que se encuentran a una distancia $r$ de la
-linea, evitando calcular la distancia de agentes más allá del
-umbral. Aunque el algoritmo de linea de barrido puede paralelizarse en
+línea, evitando calcular la distancia de agentes más allá del
+umbral. Aunque el algoritmo de línea de barrido puede paralelizarse en
 el cálculo de la distancia \ref{CDA} no daría mucha mejora ya que la
 cantidad de agentes es pequeña y la paralelización de las asignaciones
 depende de la iteración anterior por lo que no podría paralelizarse.
-Pero tomando en cuenta el enfoque de linea de barrido puede hacerse
-una versión paralela de este código sí en lugar de llevar un registro
-de quienes están dentro de la linea de barrido e ir actualizando
+Pero tomando en cuenta el enfoque de línea de barrido puede hacerse
+una versión paralela de este código si en lugar de llevar un registro
+de quienes están dentro de la línea de barrido e ir actualizando
 en cada iteración, puede para cada punto de la línea de barrido
 calcularse los vecinos cercanos.
 
@@ -117,15 +117,15 @@ clasificaron de la siguiente manera
 \begin{enumerate}
 \item \textbf{Original:} Algoritmo original
 \item \textbf{Original P:} Algoritmo original paralelizado
-\item \textbf{LdB:} Algoritmo de linea de barrido
-\item \textbf{LdB P:} Algoritmo basado en linea de barrido paralelizado 
+\item \textbf{LdB:} Algoritmo de línea de barrido
+\item \textbf{LdB P:} Algoritmo basado en línea de barrido paralelizado 
 \end{enumerate}
 
 
 Se decidió comparar los cuatro algoritmos para saber si utilizar un
-buen algoritmo, como lo es el de linea de barrido, contra
+buen algoritmo, como lo es el de línea de barrido, contra
 implementaciones paralelas como el algoritmo original paralelizado de
-la práctica y la implementación paralela basada en la linea de
+la práctica y la implementación paralela basada en la línea de
 barrido nos ofrece una ganancia significativa en tiempo y en que
 medida. Se tomó el algoritmo original como cota superior de lo que
 podríamos esperar del desempeño de los algoritmos, el código de los
@@ -159,10 +159,10 @@ algoritmo de línea de barrido paralelizado.
   \label{fig::figura1} 
 \end{figure}
 
-El resultado obtenido el algoritmo de linea de barrido y el algoritmo
-basado en la linea de barrido paralelizado fue interesante, ya que al
+El resultado obtenido el algoritmo de línea de barrido y el algoritmo
+basado en la línea de barrido paralelizado fue interesante, ya que al
 perder la lista de elementos que están en el barrido y tener que
-calcular los cercanos a cada elemento nos afecto en el tiempo del
+calcular los cercanos a cada elemento nos afectó en el tiempo del
 algoritmo.
 
 
@@ -187,8 +187,8 @@ con $p_i = 0.05$, por lo que la probabilidad de estar sano fue $p_s= 1
 
 \subsection{Resultados}
 
-El resultado obtenido de la experimentación mostró que si hay un
-efecto entre el procentaje de agentes vacunados desde el comienzo al
+El resultado obtenido de la experimentación mostró que sí hay un
+efecto entre el porcentaje de agentes vacunados desde el comienzo al
 irse incrementándose hasta llegar a tener cerca del 90\% de la
 población vacunada, esto se puede ver en la figura \ref{fig::figura2}. 
 
@@ -205,7 +205,7 @@ de agentes vacunada, la cantidad máxima de infectados es del cerca del
 
 \section{Extra Dos: Efecto de la probabilidad inicial de los infectados}
 
-La actividad extra dos consistió en examniar el efecto de la
+La actividad extra dos consistió en examinar el efecto de la
 probabilidad inicial de infectados $p_i$ al crear la población de agentes de
 la simulación y ver como esto afectaba a la cantidad máxima de
 infectados. 
@@ -224,7 +224,7 @@ utilizaron treinta réplicas para este experimento.
 \subsection{Resultados}
 
 El resultado obtenido de la experimentación como se puede ver en la
-figura \ref{fig::figura3}, que aunque si hay un efecto creciente entre
+figura \ref{fig::figura3}, que aunque sí hay un efecto creciente entre
 el porcentaje inicial de infectados de la población de agentes y la
 máxima cantidad de agentes infectados, esta rara vez fue menor al 50\%
 de los agentes susceptibles a ser infectados, por lo que el contagio
@@ -238,7 +238,7 @@ de población infectada.
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=0.7\linewidth]{ComparacionDeProbInfect}
-  \caption{Comparación de máxima cantidad de infectados y el porcentaje de vacunados iniciales}
+  \caption{Comparación de máximo porcentaje de infectados y el porcentaje de vacunados iniciales}
   \label{fig::figura3} 
 \end{figure}
 \section{Conclusiones}
