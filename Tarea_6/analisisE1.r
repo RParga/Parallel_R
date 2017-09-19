@@ -1,6 +1,6 @@
 datos = read.csv("datosepe1.csv")
 png("ComparacionDeProbVacInfect.png", width = 1200, height = 1200, units = "px", pointsize = 20)
 par(mar=c(6,6,4,2),cex.axis=1.5, cex.lab=1.8, cex.main=1.5)
-boxplot(datos$mi~datos$pv, ylim=c(0,100))
+boxplot(datos$mi~datos$pv, ylim=c(0,100),xlab="Porcentaje de agentes vacunados", ylab="Porcentaje máximo de infectados")
 #axis(side=1,at=c("1","2","3","4"), labels=c("Original","Original Paralelizado","Línea de barrido", "Línea de barrido paralelizdo"))
 #legend( title="Algoritmos",x="topright", inset=0,legend=c("Original","Original","Línea de barrido", "Línea de barrido paralelizdo"))
