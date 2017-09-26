@@ -1,5 +1,4 @@
 library(parallel)
-
 library(lattice) # lo mismo aplica con este paquete
 library(reshape2) # recuerda instalar paquetes antes de intentar su uso
 g <- function(x, y) { 
@@ -14,9 +13,21 @@ localsearch <- function(nr){
     tray = c(nr, 0, x,y,bestval)
     for (tiempo in 1:tmax) {
         d <- runif(1, 0, step)
-        op = rbind(c(max(bestpos[1] - d, low), bestpos[2]), c( min(bestpos[1] + d, high), bestpos[2]), c(bestpos[1], max(bestpos[2] - d, low)), c(bestpos[1], min(bestpos[2] + d,high)))
+        #op = rbind(c(max(bestpos[1] - d, low), bestpos[2])
+        #         , c( min(bestpos[1] + d, high), bestpos[2])
+        #         , c(bestpos[1], max(bestpos[2] - d, low))
+        #         , c(bestpos[1], min(bestpos[2] + d,high)))
+        op = rbind(c(max(bestpos[1] - d, low), bestpos[2]),
+                   c(min(bestpos[1] + d, high), bestpos[2]),
+                   c(bestpos[1], max(bestpos[2] - d, low)),
+                   c(bestpos[1], min(bestpos[2] + d, high))
+                  ,c(min(bestpos[1] + d, high), min(bestpos[2] + d, high))
+                  ,c(max(bestpos[1] - d, low), min(bestpos[2] + d, high))
+                  ,c(max(bestpos[1] - d, low), max(bestpos[2] - d, low))
+                  ,c(min(bestpos[1] + d, high), max(bestpos[2] - d, low))
+                   )
         posibles = -g(op[,1], op[,2])
-        npos = which( posibles == min(posibles) )
+        npos = which( posibles == min(posibles) )[1]
         nuevo = min(posibles) 
         if (nuevo < bestval) { # minimizamos
             bestpos <- op[npos,]
@@ -52,9 +63,9 @@ rs = data.frame(t(matrix(parSapply(cluster, 1:rep, localsearch), nrow=length(nom
 #rs = data.frame(t(matrix(parSapply(cluster, 1:rep, localsearch))))
 colnames(rs) = nombr
 
-lp = rs[ rs$paso== tmax,]
+lp = rs[rs$paso== tmax,]
 #bs = rs[bp,]
-bpp = rs[rs$z==min(rs$z),]$rep
+bpp = min(rs[rs$z==min(rs$z),]$rep)
 bp = rs[rs$rep== bpp,]
 png("p7_Tarea_1.png", width=1000, height=1000)
 levelplot(z~ v * w , data = d)
