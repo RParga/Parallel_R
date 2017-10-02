@@ -1,6 +1,7 @@
 library(testit) # para pruebas, recuerda instalar antes de usar
 k <- 10000
 n <- 1000000
+tempo = proc.time()[3]
 originales <- rnorm(k)
 cumulos <- originales - min(originales) + 1
 cumulos <- round(n * cumulos / sum(cumulos))
@@ -62,6 +63,7 @@ digitos <- floor(log(duracion, 10)) + 1
 for (paso in 1:duracion) {
     assert(sum(cumulos) == n)
     cumulos <- integer()
+    t1= proc.time()[3]
     for (i in 1:dim(freq)[1]) { # fase de rotura
         urna <- freq[i,]
         if (urna$tam > 1) { # no tiene caso romper si no se puede
@@ -70,6 +72,7 @@ for (paso in 1:duracion) {
             cumulos <- c(cumulos, rep(1, urna$num))
         }
     }
+    print(paste("r",proc.time()[3] - t1))
     assert(sum(cumulos) == n)
     assert(length(cumulos[cumulos == 0]) == 0) # que no haya vacios
     freq <- as.data.frame(table(cumulos)) # actualizar urnas
@@ -77,15 +80,18 @@ for (paso in 1:duracion) {
     freq$tam <- as.numeric(levels(freq$tam))[freq$tam]
     assert(sum(freq$num * freq$tam) == n)
     cumulos <- integer()
+    t1 = proc.time()[3]
     for (i in 1:dim(freq)[1]) { # fase de union
         urna <- freq[i,]
         cumulos <- c(cumulos, unirse(urna$tam, urna$num))
     }
+    print(paste("u",proc.time()[3] - t1))
     assert(sum(abs(cumulos)) == n)
     assert(length(cumulos[cumulos == 0]) == 0) # que no haya vacios
     juntarse <- -cumulos[cumulos < 0]
     cumulos <- cumulos[cumulos > 0]
     assert(sum(cumulos) + sum(juntarse) == n)
+    t1 = proc.time()[3]
     nt <- length(juntarse)
     if (nt > 0) {
         if (nt > 1) {
@@ -98,6 +104,7 @@ for (paso in 1:duracion) {
             cumulos <- c(cumulos, juntarse[nt])
         }
     }
+    print(paste("l",proc.time()[3] - t1))
     assert(sum(cumulos) == n)
     freq <- as.data.frame(table(cumulos))
     names(freq) <- c("tam", "num")
@@ -114,3 +121,6 @@ for (paso in 1:duracion) {
          ylim=c(0, 0.05), xlab="Tama\u{00f1}o", ylab="Frecuencia relativa")
     graphics.off()
 }
+
+tempo = proc.time()[3] - tempo
+print(tempo)
