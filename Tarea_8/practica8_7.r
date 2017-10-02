@@ -134,13 +134,14 @@ for(k in ks){
         }
         tiempos <- rbind(tiempos,c(replica,k,proc.time()[3] - tempo))
     }
+}
                                         #stopCluster(cluster)
-    colnames(tiempos)=c("Tiempo")
-    print(tiempos)
-    write.csv(tiempos, "tiempossec.csv")
+    #colnames(tiempos)=c("Tiempo")
+print(tiempos)
+write.csv(tiempos, "tiempossec.csv")
     #png(paste("tiemposec","line", ".png", sep=""), width=1200, height=900)
     #plot(tiempos, type="o")
     #graphics.off()
-    png(paste("tiemposec","bxplt", ".png", sep=""), width=1200, height=900)
+png(paste("tiemposec","bxplt", ".png", sep=""), width=1200, height=900)
 boxplot(tiempos$time~tiempos$k)
-    graphics.off()
+graphics.off()
