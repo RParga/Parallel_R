@@ -166,10 +166,11 @@ for(k in ks){
             }
         }
         tiempos <- rbind(tiempos,c(replica,k,proc.time()[3] - tempo))
+        print(paste(replica,k,proc.time()[3] - tempo))
     }
 }
 stopCluster(cluster)
-#colnames(tiempos)=c("Tiempo")
+colnames(tiempos)=c("replica","k","time")
 print(tiempos)
 write.csv(tiempos, "tiemposp.csv")
 #png(paste("tiempo","line", ".png", sep=""), width=1200, height=900)
