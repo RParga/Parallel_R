@@ -1,0 +1,181 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  para un artículo en LaTeX en español.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[]{article}
+% Esto es para poder escribir acentos directamente:
+\usepackage[latin1]{inputenc}
+% Esto es para que el LaTeX sepa que el texto estÃ¡ en espaÃ±ol:
+\usepackage[spanish]{babel}
+\decimalpoint
+%para cambiar los margenes del texto
+\usepackage[a4paper,left=3cm,right=2cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{hyperref}
+\usepackage{graphicx}
+% Paquetes de la AMS:
+%\usepackage{amsmath, amsthm, amsfonts,float}
+\graphicspath{ {../Tarea_8/images/} }
+\usepackage[parfill]{parskip}
+% para agrupar imagenes
+\usepackage{subcaption}
+
+%--------------------------------------------------------------------------
+\title{Reporte práctica ocho: Modelo de urnas}
+\author{José Anastacio Hernández Saldaña\\
+  \small Posgrado de Ingeniería de Sistemas\\
+  \small 1186622\\ 
+  \small jose.hernandezsld@uanl.edu.mx
+}
+
+\begin{document}
+
+\maketitle
+
+\abstract{Este es un reporte sobre la práctica ocho con respecto al
+  tema de modelo de urnas que se realizó en la clase de
+  Simulación de sistemas, cómputo paralelo en R.}
+
+%Paralelizacion
+\section{Tarea y Extra Uno: Paralelización de un modelo de urnas}
+
+Un modelo de urnas es aquel que trata de simular un contenedor con
+elementos, para calcular la probabilidad de extraer un elemento de la
+urna dada alguna característica del elemento; por ejemplo, podemos
+tener una urna con $b_b$ bolas color blanco y $b_a$ bolas color azul
+de donde se desea conocer la probabilidad de sacar una bola blanca.
+
+Para esta práctica se estudió un modelo donde se tienen $n$ partículas
+con $k$ diferentes tamaños existentes los cuales siguen una
+distribución normal, existen dos procesos que modifican sus tamaños,
+uno de división y otro de unión, cada partícula tiene una probabilidad
+$p_u$ de unirse a otra y una probabilidad $p_d$ de dividirse en 2
+partes, estas probabilidad están en función de su tamaño a partir de
+las fórmulas $p_u(x)=e^{\frac{-x}{c}}$ y $p_d(x) =
+\frac{1}{1+e^{\frac{c-x}{d}}}$ donde $c$ es la media y $d$ la
+desviación estándar de los tamaños de la partículas en la
+distribución. Estos procesos se realizan en cada iteración de la
+simulación, y se tiene una duración fija.
+
+\begin{figure}[h!]
+  \begin{subfigure}{\linewidth}
+  \centering
+    \includegraphics[width=0.3\linewidth]{p8_ct08}
+    \includegraphics[width=0.3\linewidth]{p8_t03}
+    \includegraphics[width=0.3\linewidth]{p8_ut03}
+  \end{subfigure}
+  \caption{Ejemplos de distribución de tamaños por proceso}
+  \label{fig::figura1} 
+\end{figure}
+
+Para el experimento se tomó como base el código de la
+\href{http://elisa.dyndns-web.com/teaching/comp/par/p8.html}{página
+  del curso}. Esta implementación del código es secuencial, el primer
+objetivo es paralelizar lo más que se pueda este código y para la
+actividad extra ver la comparación en tiempo de cada implementación
+para saber cual fue mejor.
+
+\subsection{Diseño del Experimento}
+
+Para la paralelización del código, se tenían tres posibles partes del
+código para aplicar la paralelización.
+\begin{enumerate}
+\item Rutina de cálculo y  división de partículas.\label{en::uno}
+\item Rutina del cálculo de cantidad de partículas a unir.\label{en::dos}
+\item Rutina de unión de partículas.\label{en::tres}
+\end{enumerate}
+Estas tres rutinas se realizan para cada partícula de un determinado
+conjunto y sin depender de alguna otra, por los que las hace adecuadas
+para paralelizar.
+
+En la rutina \ref{en::uno}, se optimizó la división de partículas,
+haciendo los cálculos por medio de vectores, para la rutina
+\ref{en::dos} se dejo igual y para la rutina \ref{en::tres} se
+paralelizó el proceso de unión ya que se identificó que erea el más
+tardado.
+
+Para comenzar la experimentación, se utilizó una computadora con las
+siguientes especificaciones, Procesador Intel Core i7-4790 CPU @
+3.6GHz $\times$ 8 y memoria RAM de 24 GB utilizando solamente los
+cuatro núcleos físicos disponibles. Tomando en cuenta los cambios
+anteriores, se diseño el experimento con los siguientes parámetros,
+los valores de $k$ utilizados fueron: 1 000, 5 000, 10 000, 15 000, 20
+000, 25 000, 50 000, y 100 000, los valores de $n$ eran
+proporcionales a $k$ tal que $n=30k$, se utilizaron 30 replicas para
+cada experimento con simulaciones de duración de 25 iteraciones. El
+código esta disponible en el
+\href{https://github.com/ppGodel/Parallel_R/tree/master/Tarea_8}{repositorio
+  git} del curso bajo el nombre de Tarea8.r.
+
+\subsection{Resultados}
+
+Los resultados de la experimentación los podemos ver en la figura
+\ref{fig::figura2} y en la figura \ref{fig::figura3}, donde el eje
+vertical nos indica el tiempo de ejecución en segundos y el eje
+horizontal el tamaño $k$. los resultados se dividieron en 2 gráficas
+para no perder detalle en la escala ya que para valores grandes de $k$
+partículas, el tiempo entre la implementación secuencial y la paralela
+es muy grande.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.9\linewidth]{boxplotComplete_1}
+  \caption{Primeros resultados donde tamaño $\leq 15000$}
+  \label{fig::figura2} 
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.9\linewidth]{boxplotComplete_2}
+  \caption{Segundos resultados donde tamaño $> 15000$}
+  \label{fig::figura3} 
+\end{figure}
+
+En estos resultados podemos ver que para valores de $k$ mayores a 10
+000 tenemos una mejora significativa para la implementación paralela,
+mientras que para valores menores a 10 000, tenemos que la
+implementación secuencial es más rápida
+
+Para poder comparar mejor cada uno de los resultados en cada uno de
+los niveles, se transformaron los datos, donde cada nivel era dividido
+por el máximo valor encontrado y tener una escala del cero al uno,
+donde el tiempo uno es el mayor tiempo que tomo una rutina para
+completar la simulación. Estos resultados los podemos ver en la figura
+\ref{fig::figura4} y aquí podemos apreciar de una manera clara como es
+la diferencia entre los 2 procedimientos ya que para los últimos
+valores de $k$ tenemos mejoras con tiempos 4 veces menores que el
+tiempo del algoritmo secuencial.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.9\linewidth]{boxplotComplete_3}
+  \caption{Resultados normalizados}
+  \label{fig::figura4} 
+\end{figure}
+
+Para corroborar el resultado obtenido se realizó una prueba Wilcoxon
+donde probaremos la hipótesis nula de la igualdad en la medias de los
+dos procedimeintos, donde se obtuvo un valor $p$ de $1.462 \times
+10^{-14}$ por lo que se rechaza la hipotesis nula de que las medias
+son iguales.
+
+%\section{Extra Dos: Recocido Simulado}
+
+
+
+%\subsection{Diseño del Experimento}
+
+
+%\subsection{Resultados}
+
+
+\section{Conclusiones}
+
+Se pudo observar las diferencias entre los procedimentos secuencial y
+paralelo, donde se puede apreciar como para valores pequeños de
+trabajo, la rutina secuencial es más rapida que la opción paralela, y
+a partir de un valor ambas muestran una transición de fase, de tal
+forma que la opcion paralela es mas eficiente que la opción
+secuencial.
+
+\end{document}

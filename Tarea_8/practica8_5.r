@@ -50,7 +50,7 @@ for (paso in 1:duracion) {
         urna <- freq[i,]
         pedazos <- c(pedazos, romperse(urna$tam, urna$num))
     }
-    tl <- paste(paso, "", sep<-"")
+    tl <- paste(paso, "", sep="")
     while (nchar(tl) < digitos) {
         tl <- paste("0", tl, sep="")
     }
@@ -60,7 +60,7 @@ for (paso in 1:duracion) {
     png(paste("p8_t", tl, ".png", sep=""), width=300, height=300)
     hist(pedazos, breaks=10, main=paste("Paso", paso, "con pura rotura"), 
          freq=FALSE, xlim=c(0, xmax), ylim=c(0, 0.05),
-         xlab="Tama\u{00f1}no", ylab="Frecuencia relativa")
+         xlab="Tama\u{00f1}o", ylab="Frecuencia relativa", cex.lab=1.3, cex.axis=1.3)
     graphics.off()
     freq <- as.data.frame(table(pedazos))
     names(freq) <- c("tam", "num")
