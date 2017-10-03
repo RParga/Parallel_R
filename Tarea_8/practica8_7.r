@@ -140,6 +140,7 @@ for(k in ks){
 
 colnames(tiempos)=c("replica","k","time")
 print(tiempos)
+colnames(tiempos)=c("replica","k","time")
 write.csv(tiempos, "tiempossec.csv")
     #png(paste("tiemposec","line", ".png", sep=""), width=1200, height=900)
     #plot(tiempos, type="o")
