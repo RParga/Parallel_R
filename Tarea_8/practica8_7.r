@@ -138,6 +138,7 @@ for(k in ks){
                                         #stopCluster(cluster)
     #colnames(tiempos)=c("Tiempo")
 print(tiempos)
+colnames(tiempos)=c("replica","k","time")
 write.csv(tiempos, "tiempossec.csv")
     #png(paste("tiemposec","line", ".png", sep=""), width=1200, height=900)
     #plot(tiempos, type="o")
