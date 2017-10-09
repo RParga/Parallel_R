@@ -38,8 +38,10 @@ fuerza <- function(i) {
     }
     return(c(fx, fy))
 }
-suppressMessages(library(doParallel))
-registerDoParallel(makeCluster(detectCores() - 1))
+#suppressMessages(library(doParallel))
+suppressMessages(library(parallel))
+#registerDoParallel(makeCluster(detectCores() - 1))
+cluster = makeCluster(detectCores(logical=FALSE))
 system("rm -f p9_t*.png") # borramos anteriores en el caso que lo hayamos corrido
 tmax <- 100
 digitos <- floor(log(tmax, 10)) + 1
@@ -52,10 +54,17 @@ plot(p$x, p$y, col=colores[p$g+6], pch=15, cex=1.5, xlim=c(-0.1, 1.1), ylim=c(-0
      main="Estado inicial", xlab="X", ylab="Y")
 graphics.off()
 for (iter in 1:tmax) {
-    f <- foreach(i = 1:n, .combine=c) %dopar% fuerza(i)
+    clusterExport(cluster, "p")    
+    clusterExport(cluster, "eps")
+    clusterExport(cluster, "n")
+    f <- data.frame(t(matrix(parSapply(cluster, 1:n, fuerza), nrow=2)))
+    colnames(f) = c("X","Y")
+    #f1 <- foreach(i = 1:n, .combine=c) %dopar% fuerza(i)
     delta <- 0.02 / max(abs(f)) # que nadie desplace una paso muy largo
-    p$x <- foreach(i = 1:n, .combine=c) %dopar% max(min(p[i,]$x + delta * f[c(TRUE, FALSE)][i], 1), 0)
-    p$y <- foreach(i = 1:n, .combine=c) %dopar% max(min(p[i,]$y + delta * f[c(FALSE, TRUE)][i], 1), 0)
+    p$x <- apply(matrix(p$x+delta*f$X,nrow=1),2, function(x){ return(ifelse(x>1,1,ifelse(x<0,0,x))) } )
+    #p$x <- foreach(i = 1:n, .combine=c) %dopar% max(min(p[i,]$x + delta * f[i,]$X, 1), 0)
+    p$y <- apply(matrix(p$y+delta*f$Y,nrow=1),2, function(x){ return(ifelse(x>1,1,ifelse(x<0,0,x))) } )
+    #p$y <- foreach(i = 1:n, .combine=c) %dopar% max(min(p[i,]$y + delta * f[i,]$Y, 1), 0)
     tl <- paste(iter, "", sep="")
     while (nchar(tl) < digitos) {
         tl <- paste("0", tl, sep="")
@@ -65,7 +74,7 @@ for (iter in 1:tmax) {
          main=paste("Paso", iter), xlab="X", ylab="Y")
     graphics.off()
 }
-stopImplicitCluster()
+stopCluster(cluster)
 
 #library(magick)
 
