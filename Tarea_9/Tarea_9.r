@@ -72,10 +72,29 @@ if(impr){
     while (nchar(tl) < digitos) {
         tl <- paste("0", tl, sep="")
     }
-    png(paste("p9_t", tl, ".png", sep=""))
-    plot(p$x, p$y, col=colores[p$g+6], pch=15, cex=1.5, xlim=c(-0.1, 1.1), ylim=c(-0.1, 1.1),
-         main="Estado inicial", xlab="X", ylab="Y")
-    graphics.off()
+    #png(paste("p9_t", tl, ".png", sep=""))
+    #plot(p$x, p$y, col=colores[p$g+6], pch=15, cex=1.5, xlim=c(-0.1, 1.1), ylim=c(-0.1, 1.1),
+#         main="Estado inicial", xlab="X", ylab="Y")
+    #graphics.off()
+    siz = 15
+    ggplot(p, aes(x=x, y=y,col=colores[p$g+6]))+
+            geom_point(aes(size = m))+
+            labs(size='masa',col='cargas')+
+            scale_color_manual(labels=seq(5,-5,-1),values=colores)+
+            guides(col= guide_legend(override.aes = list(size=3, stroke=1.5))) +
+            scale_size_continuous(breaks=seq(0,10,1),labels=seq(0,10,1))+
+            theme(axis.text.x = element_blank(),
+                  axis.ticks.x = element_blank(),
+                  axis.text.y = element_blank(),
+                  axis.ticks.y = element_blank(),
+                  axis.title.x = element_text(size=siz), 
+                  axis.title.y = element_text(size=siz,angle=0,vjust = 0.5),
+                  plot.title = element_text(size=siz+2,hjust = 0.5,face='bold'),
+                  legend.text=element_text(size=siz),
+                  legend.title = element_text(size=siz,face='bold'),
+                  legend.key.size = unit(1.5, 'lines'))+
+            ggtitle("Estado inicial") + ylim(-0.1, 1.1) + xlim(-0.1, 1.1)
+        ggsave(paste("p9_t", tl, ".png", sep=""))
 }
 for (iter in 1:tmax) {
     clusterExport(cluster, "p")    
@@ -110,7 +129,7 @@ for (iter in 1:tmax) {
                   legend.text=element_text(size=siz),
                   legend.title = element_text(size=siz,face='bold'),
                   legend.key.size = unit(1.5, 'lines'))+
-            ggtitle("Estado inicial")
+            ggtitle(paste("Paso", iter))+ ylim(-0.1, 1.1) + xlim(-0.1, 1.1)
         ggsave(paste("p9_t", tl, ".png", sep=""))
         #graphics.off()
         print(paste("iterr",tl))
@@ -120,7 +139,7 @@ stopCluster(cluster)
 
 
 if(impr){
-    system("convert -delay 50 -size 2100x2100 p9_t*.png -loop 0 p9.gif") # creamos animacion con ImageMagick
+    system("convert -delay 30 -size 2100x2100 p9_t*.png -loop 0 p9.gif") # creamos animacion con ImageMagick
     #system("rm -f p9_t*.png") # borramos anteriores en el caso que lo hayamos corrido
 }
 colnames(vv)= c("m","vx","vy")
