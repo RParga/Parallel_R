@@ -5,7 +5,7 @@ suppressMessages(library(parallel))
 
 n <- 50
 tmax <- 100
-mass = TRUE
+mass = FALSE
 impr = TRUE
 p <- data.frame(x = rnorm(n), y=rnorm(n), c=rnorm(n), m=rnorm(n))
 vv <- data.frame(m=numeric(),vx = numeric(), vy=numeric())
@@ -144,10 +144,12 @@ if(impr){
 }
 colnames(vv)= c("m","vx","vy")
 vv$vp = (vv$vx**2+vv$vy**2)**0.5
-write.csv(vv, "datos.csv")
+#write.csv(vv, "datos.csv")
 if(mass){
+    write.csv(vv, "datoswm.csv")
     png(paste("p9_comparacion_wm.png", sep=""))
 }else{
+    write.csv(vv, "datoswom.csv")
     png(paste("p9_comparacion_wom.png", sep=""))
 }
 boxplot(vv$vp~vv$m)
