@@ -123,18 +123,10 @@ for(repli in 1:replicas){
     #    }
     #}
 
-        tam <- dim(p)[1]
-        obj <- double()
-        fact <- integer()
-        for (i in 1:tam) {
-            obj <- c(obj, objetivo(unlist(p[i,]), valores))
-            fact <- c(fact, factible(unlist(p[i,]), pesos, capacidad))
-        }
-        probs = (obj/sum(obj))
         clusterExport(cluster, "p")
         clusterExport(cluster, "reproduccion")
         padres = data.frame(p1=numeric(),p2=numeric())#, piv=numeric())
-        padres = rbind(padres, t(sapply(1:rep, function(x){return(sample(1:tam,2,replace=FALSE,prob=probs))})))#,sample(2:(n-1),1)))})))
+        padres = rbind(padres, t(sapply(1:rep, function(x){return(sample(1:tam,2,replace=FALSE))})))#,sample(2:(n-1),1)))})))
         hijos = as.data.frame(matrix(unlist(parRapply(cluster,padres,function(x){(reproduccion(p[x[1],],p[x[2],],n))})),ncol=n,byrow=TRUE))
         p=rbind(p,hijos)
     
@@ -160,17 +152,17 @@ for(repli in 1:replicas){
         factibles <- p[p$fact == TRUE,]
         mejor <- max(factibles$obj)
         mejores <- c(mejores, mejor)
+        reptime = rbind(reptime,c(repli,tim,iter, (optimo - mejor) / optimo))
     }
     tim = proc.time()[3] - tim
     print(tim)
-    png(paste("t10e1_",repli,".png",sep=""), width=600, height=300)
+    png(paste("t10e2_",repli,".png",sep=""), width=600, height=300)
     plot(1:tmax, mejores, xlab="Paso", ylab="Mayor valor", type='l', ylim=c(0.95*min(mejores), 1.05*optimo))
     points(1:tmax, mejores, pch=15)
     abline(h=optimo, col="green", lwd=3)
     graphics.off()
     print(paste(mejor, (optimo - mejor) / optimo))
-    reptime = rbind(reptime,c(repli,tim, (optimo - mejor) / optimo))
 }
-colnames(reptime)= c("replica","time","gap")
+colnames(reptime)= c("replica","time","iter","gap")
 write.csv(reptime,"resultsE1.csv")
 print(reptime)
