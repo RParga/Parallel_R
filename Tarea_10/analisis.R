@@ -1,0 +1,16 @@
+r1 =read.csv('resultsParallel.csv')
+r2 =read.csv('resultsSecuential.csv')
+r1 =cbind('Sequencial', r1)
+r2 = cbind('Paralelo', r2)
+colnames(r1)=c('type','replica','time','gap')
+colnames(r2)=c('type','replica','time','gap')
+results = rbind(r1,r2)
+results$time=NULL
+colnames(results)=c('type','replica','time','gap')
+
+png(paste("bxplt_Gap_Tipo.png",sep=""))
+boxplot(results$time ~ results$type, xlab='Tipo', ylab="Tiempo")
+graphics.off()
+png(paste("bxplt_Tiempo_Tipo.png",sep=""))
+boxplot(results$gap ~ results$type, xlab='Tipo', ylab="Porcentaje de separación")
+graphics.off()
