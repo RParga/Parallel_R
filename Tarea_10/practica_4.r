@@ -96,6 +96,7 @@ pm <- 0.05
 rep <- 50
 tmax <- 50
 mejores <- double()
+tim = proc.time()[3]
 for (iter in 1:tmax) {
     p$obj <- NULL
     p$fact <- NULL
@@ -127,6 +128,8 @@ for (iter in 1:tmax) {
     mejor <- max(factibles$obj)
     mejores <- c(mejores, mejor)
 }
+tim = proc.time()[3] - tim
+print(tim)
 png("p10.png", width=600, height=300)
 plot(1:tmax, mejores, xlab="Paso", ylab="Mayor valor", type='l', ylim=c(0.95*min(mejores), 1.05*optimo))
 points(1:tmax, mejores, pch=15)
