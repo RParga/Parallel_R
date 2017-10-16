@@ -163,7 +163,7 @@ for(repli in 1:replicas){
     }
     tim = proc.time()[3] - tim
     print(tim)
-    png(paste("t10_",repli,".png",sep=""), width=600, height=300)
+    png(paste("t10e1_",repli,".png",sep=""), width=600, height=300)
     plot(1:tmax, mejores, xlab="Paso", ylab="Mayor valor", type='l', ylim=c(0.95*min(mejores), 1.05*optimo))
     points(1:tmax, mejores, pch=15)
     abline(h=optimo, col="green", lwd=3)
@@ -172,5 +172,5 @@ for(repli in 1:replicas){
     reptime = rbind(reptime,c(repli,tim, (optimo - mejor) / optimo))
 }
 colnames(reptime)= c("replica","time","gap")
-write.csv(reptime,"results.csv")
+write.csv(reptime,"resultsE1.csv")
 print(reptime)
