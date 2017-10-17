@@ -2,7 +2,7 @@ library(testit)
 library(parallel)
 
 replicas = 30
-reptime = data.frame(replicas=numeric(),time=numeric(),gap=numeric(), est=numeric())
+reptime = data.frame(replicas=numeric(),time=numeric(),gap=numeric())
 
 knapsack <- function(cap, peso, valor) {
     n <- length(peso)
@@ -96,13 +96,13 @@ for(repli in 1:replicas){
     optimo <- knapsack(capacidad, pesos, valores)
     init <- 200
     p <- poblacion.inicial(n, init)
+    tim = proc.time()[3]
     tam <- dim(p)[1]
     assert(tam == init)
     pm <- 0.05
     rep <- 50
     tmax <- 50
     mejores <- double()
-    tim = proc.time()[3]
     for (iter in 1:tmax) {
         p$obj <- NULL
         p$fact <- NULL
@@ -122,6 +122,7 @@ for(repli in 1:replicas){
     #        p <- rbind(p, mutacion(p[i,], n))
     #    }
     #}
+
         clusterExport(cluster, "p")
         clusterExport(cluster, "reproduccion")
         padres = data.frame(p1=numeric(),p2=numeric())#, piv=numeric())
@@ -154,17 +155,15 @@ for(repli in 1:replicas){
     }
     gap =(optimo-mejores)/optimo
     tim = proc.time()[3] - tim
-    aux = c(repli,tim, ( (optimo - mejor) / optimo), ( tmax-( sum(gap<=min(gap)+sd(gap)) ) ) )
-    print(aux)
-    reptime = rbind(reptime,  aux)
+    reptime = rbind(reptime,c(repli,time, (optimo - mejor) / optimo), (tmax-sum(gap<=min(gap)+sd(gap))) )
     print(tim)
-    png(paste("t10_",repli,".png",sep=""), width=600, height=300)
-    plot(1:tmax, gap, xlab="Paso", ylab="Separación al valor óptimo", type='l', ylim=c(0,1))
+    png(paste("t10e1_",repli,".png",sep=""), width=600, height=300)
+    plot(1:tmax, gap, xlab="Paso", ylab="Separación al valor óptimo", type='l', ylim=c(0.95*min(mejores), 1.05*optimo))
     points(1:tmax, mejores, pch=15)
     abline(h=optimo, col="green", lwd=3)
     graphics.off()
     print(paste(mejor, (optimo - mejor) / optimo))
 }
-colnames(reptime)= c("replica","time","gap", "est")
-write.csv(reptime,"resultswg.csv")
+colnames(reptime)= c("replica_","time","gap")
+write.csv(reptime,"resultsE1wg.csv")
 print(reptime)
