@@ -44,7 +44,7 @@ barplot(rowSums(results[,1:lt]), main="Acumulado por persona", xlab="Persona", y
 abline(h=80,xpd=FALSE, col="green")
 abline(h=50,xpd=FALSE, col="red")
 abline(h=100,xpd=FALSE, col="blue")
-legend(d[1]+2, 140, paste(1:d[1],nombr), cex = 0.8 )
+legend(d[1]+5, 140, paste(1:d[1],nombr), cex = 0.8 )
 graphics.off()
 
 
