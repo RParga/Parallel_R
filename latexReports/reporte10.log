@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2017.1.3)  17 OCT 2017 05:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2017.1.3)  17 OCT 2017 05:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -745,16 +745,12 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 302.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 302.
 Package rerunfilecheck Info: File `reporte10.out' has not changed.
 (rerunfilecheck)             Checksum: 1A649653C26415A13DB4436D98DC16C1;442.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 302.
  ) 
 Here is how much of TeX's memory you used:
  7540 strings out of 494946
  115579 string characters out of 6180982
- 212866 words of memory out of 5000000
+ 212895 words of memory out of 5000000
  10741 multiletter control sequences out of 15000+600000
  9152 words of font info for 32 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -773,7 +769,7 @@ pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></u
 sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
-Output written on reporte10.pdf (7 pages, 341800 bytes).
+Output written on reporte10.pdf (7 pages, 341795 bytes).
 PDF statistics:
  178 PDF objects out of 1000 (max. 8388607)
  133 compressed objects within 2 object streams
