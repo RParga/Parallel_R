@@ -3,6 +3,7 @@ library(parallel)
 
 replicas = 30
 reptime = data.frame(replicas=numeric(),time=numeric(),gap=numeric())
+repgap = data.frame(replicas=numeric(),iter=numeric(),gap=numeric())
 
 knapsack <- function(cap, peso, valor) {
     n <- length(peso)
@@ -152,9 +153,10 @@ for(repli in 1:replicas){
         factibles <- p[p$fact == TRUE,]
         mejor <- max(factibles$obj)
         mejores <- c(mejores, mejor)
-        reptime = rbind(reptime,c(repli,tim,iter, (optimo - mejor) / optimo))
+        repgap = rbind(repgap,c(repli,iter, (optimo - mejor) / optimo))
     }
     tim = proc.time()[3] - tim
+    reptime = rbind(reptime,c(repli,time, (optimo - mejor) / optimo))
     print(tim)
     png(paste("t10e2_",repli,".png",sep=""), width=600, height=300)
     plot(1:tmax, mejores, xlab="Paso", ylab="Mayor valor", type='l', ylim=c(0.95*min(mejores), 1.05*optimo))
@@ -163,6 +165,8 @@ for(repli in 1:replicas){
     graphics.off()
     print(paste(mejor, (optimo - mejor) / optimo))
 }
-colnames(reptime)= c("replica","time","iter","gap")
-write.csv(reptime,"resultsE1.csv")
+colnames(repgap)= c("replica","iter","gap")
+write.csv(reptime,"resultsE1_gap.csv")
+colnames(reptime)= c("replica_","time","gap")
+write.csv(reptime,"resultsE1_time.csv")
 print(reptime)
