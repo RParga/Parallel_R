@@ -154,7 +154,7 @@ for(repli in 1:replicas){
     }
     gap =(optimo-mejores)/optimo
     tim = proc.time()[3] - tim
-    reptime = rbind(reptime,c(repli,time, (optimo - mejor) / optimo), (tmax-sum(gap<=min(ar)+(sd(gap)/mean(gap)))) )
+    reptime = rbind(reptime,c(repli,time, (optimo - mejor) / optimo), (tmax-sum(gap<=min(gap)+sd(gap))) )
     print(tim)
     png(paste("t10_",repli,".png",sep=""), width=600, height=300)
     plot(1:tmax, gap, xlab="Paso", ylab="Separación al valor óptimo", type='l', ylim=c(0.95*min(mejores), 1.05*optimo))
