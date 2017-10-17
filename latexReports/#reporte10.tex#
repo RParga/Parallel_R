@@ -1,0 +1,231 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  para un artículo en LaTeX en español.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[]{article}
+% Esto es para poder escribir acentos directamente:
+\usepackage[latin1]{inputenc}
+% Esto es para que el LaTeX sepa que el texto estÃ¡ en espaÃ±ol:
+\usepackage[spanish]{babel}
+\decimalpoint
+%para cambiar los margenes del texto
+\usepackage[a4paper,left=3cm,right=2cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{hyperref}
+\usepackage{graphicx}
+% Paquetes de la AMS:
+%\usepackage{amsmath, amsthm, amsfonts,float}
+\graphicspath{ {../Tarea_10/images/} }
+\usepackage[parfill]{parskip}
+% para agrupar imagenes
+\usepackage{subcaption}
+
+%--------------------------------------------------------------------------
+\title{Reporte práctica diez: Algortimos genéticos}
+\author{José Anastacio Hernández Saldaña\\
+  \small Posgrado de Ingeniería de Sistemas\\
+  \small 1186622\\ 
+  \small jose.hernandezsld@uanl.edu.mx
+}
+
+\begin{document}
+
+\maketitle
+
+\abstract{Este es un reporte sobre la práctica diez con respecto al
+  tema de algoritmos genéticos que se realizó en la clase de
+  Simulación de sistemas, cómputo paralelo en R.}
+
+%Paralelizacion
+\section{Tarea: Paralelización del algoritmo genético}
+
+Para esta práctica se realizó una implentación de una algoritmo
+genético. Los algoritmos genéticos imitan la evolución biológica para
+resolver problemas de búsqueda y optimización. Trabajan con una
+población de individuos, cada uno de los cuales representan una
+solución factible para un problema determinado.
+
+Se simuló su aplicación en un problema de la mochila, conocido en
+ingles como \emph{Knapsack problem}, donde se tiene un contenedor de
+capacidad $C$ limitada y se tienen $N$ elementos que se pueden meter
+en el contenedor, cada elemento tiene un valor de beneficio $b_i$ y un
+valor de capacidad $c_i$ que ocupan en contenedor, se busca tener en
+el contenedor aquellos elementos que nos maximizan el beneficio
+$\max(\sum_{i\inN}x_ib_i)$, donde $x_i$ es la decisión de tener o no
+el elemento en el contenedor.
+
+Los algoritmos genéticos cuentan principalmente con 4 parámetros a
+tomar en cuenta para su implementacion:
+\begin{itemize} 
+	\item Tamaño de la población $T$
+	\item Cantidad de Generaciones $G$
+	\item Probabilidad de Cruce $P_c$
+	\item Probabilidad de Mutación $P_m$
+\end{itemize}
+
+El modelo estudiado para este práctia, el cual esta disponible en la
+\href{http://elisa.dyndns-web.com/teaching/comp/par/p10.html}{página
+  del curso}, tiene definidos los valores de parámetros siguientes:
+tamaño de la población fijo en $T=200$, cantidad de generaciones fija
+en $G=50$, probabilidad de cruce distribuida de manera uniforme
+$P_c=\frac{1}{N}$ y la probilidad de mutación fija $P_m=0.05$. Esta
+implementación esta hecha de manera secuencial, por lo que se
+modificará para tener una versión paralelizada.
+
+
+
+tienen $n$ partículas colocadas en un plano en el intervalo $[0,1]$
+siguiendo una distribución normal. Las partículas tienen $k$
+diferentes cargas posibles en el intervalo $[-5,5]$ los cuales siguen
+una distribución normal, cada partícula interacciona con el resto a
+partir de la carga que hay entre ellas, si es de atracción se acercan,
+de lo contrario se repelen, al final la suma de estas interacciones
+resulta en el movimiento final de la partícula, un ejemplo de la
+distribución inicial lo podemos ver la figura \ref{fig::figura1}.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.6\linewidth]{p9_000}
+  \caption{Ejemplo de una interacción de partículas iniciales $\leq 15000$}
+  \label{fig::figura1} 
+\end{figure}
+
+En el ejemplo que se tiene en la
+\href{http://elisa.dyndns-web.com/teaching/comp/par/p8.html}{página
+  del curso}, se cuenta con la simulación de este sistema pero no se
+considera un peso para las partículas. El objetivo de la tarea es
+asignar un valor de masa a las partículas para ser considerado a la
+hora de calcular la velocidad, para después estudiar si la masa
+influye en la velocidad de la partícula, lo cual se espera suceda así.
+
+\subsection{Diseño del Experimento}
+
+
+Se consideró la misma fórmula de fuerza que la que se manejó en la
+práctica, donde la fuerza es proporcional a la diferencia de las
+cargas e inversamente proporcional a la distancia entre ellas
+$f=\frac{q_1-q_2}{d}$. La nueva fórmula se uso añadiendo que la masa
+sea inversamente proporcional a la fuerza, pero para evitar que las
+velocidad sean muy pequeñas para valores mayores a uno y muy grandes
+para valores cercanos a cero, se tomó el máximo valor de masa entre el
+valor de la masa de la partícula actual
+$f=\frac{max(m)}{m_1}\frac{q_1-q_2}{d}$, teniendo que si la masa de la
+particula es cercana a la masa mayor tenemos un factor cercano 1 y
+conforme decrece el factor aumenta el valor de la fuerza $f$, se tomó
+el intervalo de masa de $[1,10]$ con valores enteros para evitar
+valores excesivamente grandes o pequeños.
+
+
+Para comenzar la experimentación, se utilizó una computadora con las
+siguientes especificaciones, Procesador Intel Core i7-4790 CPU @
+3.6GHz $\times$ 8 y memoria RAM de 24 GB utilizando solamente los
+cuatro núcleos físicos disponibles. Tomando en cuenta los cambios
+anteriores, se diseño el experimento con los parámetros ya
+mencionados, $n=50$, $k\in [-5,5]$ y con distribuciones de posición,
+carga y masa distribuidos de manera normal, se utilizaron 30 replicas
+para cada experimento con simulaciones de duración de 100
+iteraciones. El código esta disponible en el
+\href{https://github.com/ppGodel/Parallel_R/tree/master/Tarea_9}{repositorio
+  git} del curso bajo el nombre de Tarea9.r.
+
+\subsection{Resultados}
+
+Los resultados de la experimentación los podemos ver en la figura
+\ref{fig::figura2} y en la figura \ref{fig::figura3}, donde el eje
+vertical nos indica la velocidad de la partícula y el eje
+horizontal la masa de la partícula. 
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.6\linewidth]{p9_comparacion_wm}
+  \caption{Comparación de velocidades y masas cuando sí se toma en cuenta la masa}
+  \label{fig::figura2} 
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.6\linewidth]{p9_comparacion_wom}
+  \caption{Comparación de velocidades y masas cuando no se toma en cuenta la masa}
+  \label{fig::figura3} 
+\end{figure}
+
+En estos resultados de la figura \ref{fig::figura2} podemos ver que
+para valores de masa cercanos a 10 tenemos que la velocidad disminuye,
+mientras que para valores menores tenemos que la velocidad aumenta. En
+la figura \ref{fig::figura3} tenemos una distribución de masas y velocidades 
+donde los valores de velocidad parecen uniformes.
+
+Por último se realizo una prueba estadística para comprobar que la
+masa es factor en la velocidad, así que dados los 2 resultados
+anteriores, si la masa no es factor la media de las velocidades sería
+la misma para ambos casos, para comprobarlo se realizo una análisis de
+la medias. Se probó que los residuales de los errores fueran normales,
+la prueba Shapiro nos mostró que no seguían una distribución normal
+con un valor $p$ de $2.2 \times 10^{-16}$ y se corroboró graficando el
+modelo lineal y el error como se ve en la figura
+\ref{fig::figura4}. Con este resultado, lo siguiente fue realizar la
+prueba no paramétrica Wilcoxon y vemos que no las medias no son
+iguales ya que se obtuvo un valor $p$ de $2.2 \times 10^{-16}$, por lo
+que se rechazó la hipótesis nula de que las medias son iguales,
+aceptando que sí hay una influencia de la masa en la velocidad de la
+partícula.
+
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.6\linewidth]{qqresiduales_datos}
+  \caption{Comparación de los residuales}
+  \label{fig::figura4} 
+\end{figure}
+
+
+\section{Extra Uno: Agregar radio a las partículas, en función de su masa}
+
+Tomando como base el experimento anterior, se cambio la manera de
+visualizar los resultados, se utilizó la librería sugerida de ggplot2
+para crear las gráficas, como se tienen 10 valores de masa, se crearon
+10 valores de tamaño para la visualización, además de tomar en cuenta
+el valor de la masa para las velocidades.
+
+\subsection{Resultados}
+
+En la figura \ref{fig::figura5} podemos ver algunas pasos de una
+simulación realizada, se siguieron los mismo parámetros del
+experimento pasado en torno la cantidad de partículas, los valores de
+las cargas y los valores de las masas, se puede ver una animación de
+este proceso en el
+\href{https://github.com/ppGodel/Parallel_R/tree/master/Tarea_9/images/p9wm.gif}{repositorio
+  git} del curso.
+
+\begin{figure}[h!]
+  \begin{subfigure}{\linewidth}
+  \centering
+    \includegraphics[width=0.4\linewidth]{p9_t000}
+    \includegraphics[width=0.4\linewidth]{p9_t020}
+  \end{subfigure}
+  \begin{subfigure}{\linewidth}
+  \centering
+    \includegraphics[width=0.4\linewidth]{p9_t040}
+    \includegraphics[width=0.4\linewidth]{p9_t060}
+  \end{subfigure}
+  \begin{subfigure}{\linewidth}
+  \centering
+    \includegraphics[width=0.4\linewidth]{p9_t080}
+    \includegraphics[width=0.4\linewidth]{p9_t100}
+  \end{subfigure}
+  \caption{Diferentes pasos en el proceso de simulación de la interacción}
+  \label{fig::figura5} 
+\end{figure}
+
+
+\section{Conclusiones}
+
+Se pudo observar la interacción entre las partículas de acuerdo a su
+carga y se masa, así como corroborar por métodos estadísticos esta
+interacción, también se  utilizó una librería para poder
+visualizar la simulación de tal manera que fuera sencillo ver las
+masas y la carga de la partícula, por último vemos como una
+implementación paralela es útil en una simulación multiagente ya
+que nos ayuda a tener menores tiempos en la simulación.
+
+\end{document}

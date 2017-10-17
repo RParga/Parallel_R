@@ -159,9 +159,9 @@ for(repli in 1:replicas){
     reptime = rbind(reptime,  aux)
     print(tim)
     png(paste("t10_",repli,".png",sep=""), width=600, height=300)
-    plot(1:tmax, gap, xlab="Paso", ylab="Separación al valor óptimo", type='l', ylim=c(0,1))
-    points(1:tmax, mejores, pch=15)
-    abline(h=optimo, col="green", lwd=3)
+    plot(1:tmax, gap, xlab="Paso", ylab="Separación al valor óptimo", type='o', ylim=c(0, 0.3))
+    #points(1:tmax, mejores, pch=15)
+    abline(h=(min(gap)+sd(gap)), col="blue", lwd=3)
     graphics.off()
     print(paste(mejor, (optimo - mejor) / optimo))
 }
