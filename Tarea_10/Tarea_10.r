@@ -2,8 +2,8 @@ library(testit)
 library(parallel)
 
 replicas = 30
-reptime = data.frame(replicas=numeric(),time=numeric(),gap=numeric())
-repgap = data.frame(replicas=numeric(),iter=numeric(),gap=numeric())
+reptime = data.frame(replicas=numeric(),time=numeric(),gap=numeric(), est=numeric())
+
 knapsack <- function(cap, peso, valor) {
     n <- length(peso)
     pt <- sum(peso) 
@@ -151,20 +151,18 @@ for(repli in 1:replicas){
         factibles <- p[p$fact == TRUE,]
         mejor <- max(factibles$obj)
         mejores <- c(mejores, mejor)
-        repgap = rbind(repgap,c(repli,iter, (optimo - mejor) / optimo))
     }
+    gap =(optimo-mejores)/optimo
     tim = proc.time()[3] - tim
-    reptime = rbind(reptime,c(repli,time, (optimo - mejor) / optimo))
+    reptime = rbind(reptime,c(repli,time, (optimo - mejor) / optimo), (tmax-sum(gap<=min(ar)+(sd(gap)/mean(gap)))) )
     print(tim)
     png(paste("t10_",repli,".png",sep=""), width=600, height=300)
-    plot(1:tmax, mejores, xlab="Paso", ylab="Mayor valor", type='l', ylim=c(0.95*min(mejores), 1.05*optimo))
+    plot(1:tmax, gap, xlab="Paso", ylab="Separación al valor óptimo", type='l', ylim=c(0.95*min(mejores), 1.05*optimo))
     points(1:tmax, mejores, pch=15)
     abline(h=optimo, col="green", lwd=3)
     graphics.off()
     print(paste(mejor, (optimo - mejor) / optimo))
 }
-colnames(repgap)= c("replica","iter","gap")
-write.csv(reptime,"resultsE1_gap.csv")
 colnames(reptime)= c("replica","time","gap")
-write.csv(reptime,"results_time.csv")
+write.csv(reptime,"resultswg.csv")
 print(reptime)
