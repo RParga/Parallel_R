@@ -15,6 +15,60 @@ png(paste("bxplt_Tiempo_TipoE1.png",sep=""))
 boxplot(results$gap ~ results$type, xlab='Tipo', ylab="Porcentaje de separación")
 graphics.off()
 png(paste("bxplt_Estabilidad_TipoE1.png",sep=""))
-boxplot(results$est ~ results$type, xlab='Tipo', ylab="Número Iteración")
+boxplot(results$est ~ results$type, xlab='Tipo', ylab="Número generación")
 graphics.off()
+
+
+linmod = lm(gap~type, data=results)
+residuales = resid(linmod)
+
+png(file=paste("residuales_rpg.png", sep=""))
+hist(residuales)
+graphics.off()
+
+png(file=paste("qqresiduales_rpg.png", sep=""))
+qqnorm(residuales,col=rgb(0,1,0,0.5), ylab='Quantiles', xlab='Quantiles teóricos')
+qqline(residuales,col="red")
+graphics.off()
+
+st = shapiro.test(residuales)
+print(st)
+anovg = aov(linmod)
+summary(anovg)
+
+
+linmod = lm(time~type, data=results)
+residuales = resid(linmod)
+
+png(file=paste("residuales_rpt.png", sep=""))
+hist(residuales)
+graphics.off()
+
+png(file=paste("qqresiduales_rpt.png", sep=""))
+qqnorm(residuales,col=rgb(0,1,0,0.5))
+qqline(residuales,col="red")
+graphics.off()
+
+st = shapiro.test(residuales)
+print(st)
+anovg = aov(linmod)
+summary(anovg)
+
+
+linmod = lm(est~type, data=results)
+residuales = resid(linmod)
+
+png(file=paste("residuales_rpe.png", sep=""))
+hist(residuales)
+graphics.off()
+
+png(file=paste("qqresiduales_rpe.png", sep=""))
+qqnorm(residuales,col=rgb(0,1,0,0.5))
+qqline(residuales,col="red")
+graphics.off()
+
+st = shapiro.test(residuales)
+print(st)
+kru = kruskal.test(est~type, data=results)
+print(kru)
 
