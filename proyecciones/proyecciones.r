@@ -34,7 +34,7 @@ par(xpd = T, mar = par()$mar + c(0,0,0,7))
 boxplot(t(results[,1:lt]), main="Variaciones por Persona", xlab="Persona", ylab="Puntos")
 points(colMeans(t(results[,1:lt])), pch=4)
 abline(h=6.6,xpd=FALSE, col="red")
-legend(20.5, 10, paste(1:d[1],nombr), cex = 0.8, )
+legend(d[1]+4.5, 10, paste(1:d[1],nombr), cex = 0.8, )
 graphics.off()
 
 
@@ -44,7 +44,7 @@ barplot(rowSums(results[,1:lt]), main="Acumulado por persona", xlab="Persona", y
 abline(h=80,xpd=FALSE, col="green")
 abline(h=50,xpd=FALSE, col="red")
 abline(h=100,xpd=FALSE, col="blue")
-legend(d[1]+2, 140, paste(1:d[1],nombr), cex = 0.8 )
+legend(d[1]+4.5, 140, paste(1:d[1],nombr), cex = 0.8 )
 graphics.off()
 
 
