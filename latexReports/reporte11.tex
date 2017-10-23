@@ -1,0 +1,302 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  para un artículo en LaTeX en español.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[]{article}
+% Esto es para poder escribir acentos directamente:
+\usepackage[latin1]{inputenc}
+% Esto es para que el LaTeX sepa que el texto estÃ¡ en espaÃ±ol:
+\usepackage[spanish]{babel}
+\decimalpoint
+%para cambiar los margenes del texto
+\usepackage[a4paper,left=3cm,right=2cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{hyperref}
+\usepackage{graphicx}
+% Paquetes de la AMS:
+%\usepackage{amsmath, amsthm, amsfonts,float}
+\graphicspath{ {../Tarea_10/images/} }
+\usepackage[parfill]{parskip}
+% para agrupar imagenes
+\usepackage{subcaption}
+
+%--------------------------------------------------------------------------
+\title{Reporte práctica once: Frentes de Pareto}
+\author{José Anastacio Hernández Saldaña\\
+  \small Posgrado de Ingeniería de Sistemas\\
+  \small 1186622\\ 
+  \small jose.hernandezsld@uanl.edu.mx
+}
+
+\begin{document}
+
+\maketitle
+
+\abstract{Este es un reporte sobre la práctica once con respecto al
+  tema de frentes de pareto que se realizó en la clase de
+  Simulación de sistemas, cómputo paralelo en R.}
+
+%Paralelizacion
+\section{Tarea: Paralelización de un frente de pareto}
+
+Para esta práctica se realizó una implementación de un frente de
+Pareto. Los algoritmos genéticos imitan la evolución biológica para
+resolver problemas de búsqueda y optimización. Trabajan con una
+población de individuos, cada uno de los cuales representa una
+solución factible para un problema determinado.
+
+Se simuló su aplicación en un problema de la mochila, conocido en
+ingles como \emph{Knapsack problem}, donde se tiene un contenedor de
+capacidad $C$ limitada y se tienen $N$ elementos que se pueden meter
+en el contenedor, cada elemento tiene un valor de beneficio $b_i$ y un
+valor de capacidad $c_i$ que ocupan en contenedor, se busca tener en
+el contenedor aquellos elementos que nos maximizan el beneficio
+$\max(\sum_{i \in N} x_i b_i )$, donde $x_i$ es la decisión de tener o no
+el elemento en el contenedor sin exceder la capacidad $C$.
+
+Los algoritmos genéticos cuentan principalmente con 4 parámetros a
+tomar en cuenta para su implementación:
+\begin{itemize} 
+\item Tamaño de la población $T$
+\item Cantidad de Generaciones $G$
+\item Probabilidad de Cruce $P_c$
+\item Probabilidad de Mutación $P_m$
+\end{itemize}
+
+El modelo estudiado para esta práctica, el cual esta disponible en la
+\href{http://elisa.dyndns-web.com/teaching/comp/par/p10.html}{página
+  del curso}, tiene definidos los valores de parámetros siguientes:
+tamaño de la población fijo en $T=200$, cantidad de generaciones fija
+en $G=50$, probabilidad de cruce distribuida de manera uniforme
+$P_c=\frac{1}{T}$ y la probabilidad de mutación fija $P_m=0.05$. Esta
+implementación esta hecha de manera secuencial, por lo que se
+modificará para tener una versión paralelizada.
+
+\subsection{Diseño del Experimento}
+
+Dentro del código, se encontraron los siguientes procedimientos del
+algoritmo que son candidatos a ser paralelizados:
+\begin{enumerate} 
+\item El procedimiento de selección de cruce y el
+  cruce. \label{en::uno}
+\item El procedimiento de selección de mutación y la
+  mutación. \label{en::dos}
+\item El procedimiento de cálculo de la función objetivo y
+  factibilidad. \label{en::tres}
+\end{enumerate}
+
+Se optó por paralelizar los procedimientos \ref{en::uno} y
+\ref{en::dos}. En el procedimiento \ref{en::uno} se optimizó la
+selección del los elementos a cruzar por medio de vectores y se
+paralelizó el procedimiento de cruce, para el procedimiento
+\ref{en::dos} se realizó tanto la selección de los elementos a mutar y
+el procedimiento de mutación en la misma paralelización. Para los
+procedimientos de \ref{en::tres} se decidió utilizarlos de manera
+secuencial.
+
+Como esta paralelización no modifica el algoritmo genético de tal
+manera que de mejores resultados, sino que podrá hacer el mismo
+procedimiento en menos tiempo, se espera que el tiempo sea menor pero
+que no haya una diferencia significativa en el valor de las soluciones
+óptimas encontradas. Para medir la calidad de las soluciones
+entregadas por el algoritmo genético se utilizó una función que
+calcula el valor óptimo $vo$ para el problema y se calculó el
+porcentaje de separación de las soluciones actuales $va_i$ a ese valor
+de la siguiente manera $g_i = \frac{vo - va_i}{vo}$.
+
+Buscando estos resultados se realizó el experimento con 30 replicas
+con los parámetros ya mencionados, se utilizó una computadora con las
+siguientes especificaciones: Procesador Intel Core i7-4790 CPU @
+3.6GHz $\times$ 8 y memoria RAM de 24 GB utilizando solamente los
+cuatro núcleos físicos disponibles. El código esta disponible en el
+\href{https://github.com/ppGodel/Parallel_R/tree/master/Tarea_10}{repositorio
+  git} del curso bajo el nombre de Tarea10.r.
+
+\subsection{Resultados}
+
+Los primeros resultados a revisar fueron los resultados del porcentaje
+de separación y así tener la certeza de que el código realizado no
+afectó el resultado del algoritmo. En la figura \ref{fig::figura1}
+podemos ver la diferencia en el porcentaje de separación para los dos
+tipos de algoritmos.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.6\linewidth]{bxplt_Gap_Tipo}
+  \caption{Comparación entre el porcentaje de separación y el tipo de algoritmo.}
+  \label{fig::figura1} 
+\end{figure}
+
+Se realizó una análisis de la variación de la media para corroborar
+que las medias son iguales, primero se comprobó por medio de una
+prueba de Shapiro-Wilk que los datos seguían una distribución normal
+\ref{fig::figura2}, de donde se obtuvo el valor $p=0.17$ por lo que se
+acepto la hipótesis nula de que seguían una distribución normal, con
+esto se realizó una prueba de análisis de varianza, donde se obtuvo el valor $p=0.756$
+aceptando la hipótesis nula de que las media eran iguales, con esto se
+comprobó que los procedimientos daban resultados similares y no se
+afecto su funcionamiento.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.6\linewidth]{qqresiduales_spg}
+  \caption{Comparación de los residuales del porcentaje de separación y el tipo de algoritmo.}
+  \label{fig::figura2} 
+\end{figure}
+
+El resultado de la comparación del tiempo se puede observar en la
+figura \ref{fig::figura3} donde se puede apreciar una diferencia
+significativa en el tiempo que toma en ejecutarse el algoritmo de poco
+más de la mitad del tiempo ahorrado.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.6\linewidth]{bxplt_Tiempo_Tipo}
+  \caption{Comparación el tiempo de ejecución y el tipo de algoritmo.}
+  \label{fig::figura3} 
+\end{figure}
+
+
+Con estos resultados se obtuvieron soluciones con una separación
+similar al valor óptimo en menos tiempo que era lo esperado para este
+experimento.
+
+\section{Extra Uno: Agregar procedimiento de selección por ruleta para la reproducción}
+
+Tomando como base el experimento anterior, se modificó el procedimiento
+de selección por ruleta para la reproducción, ya que en la sección
+anterior se realizó el cruce de las soluciones al azar a partir de
+una distribución uniforme. Ahora se tomará en cuenta el valor de su
+función objetivo $va$ para asignar su probabilidad de selección, esto se
+realizó sumando los valores de las soluciones y dividiendo cada valor
+de solución entre el valor de la suma $p_c= \frac{va}{\sum_{i \in T}(va_i)}$.
+
+Se utilizaron los mismos parámetros del experimento anterior en el
+mismo equipo, solo se agregó una métrica más para medir la estabilidad
+al acercarse al mejor valor, tomando el número de la primer generación
+$ge$ donde el valor de la separación al ultimo valor obtenido por el
+algoritmo es menor al último valor más la desviación estándar
+$\min_{j \in G}(g_j) - sd_{j \in G}(g_j)$, donde $g_j$ es el menor
+porcentaje de separación obtenido en cada generación. Este valor nos
+indica cuando el proceso se estabilizó con respecto al último valor
+obtenido y así medir en que generación se encuentra cerca del mejor
+valor que va a obtener.
+
+\subsection{Resultados}
+
+Ahora se comenzó comparando los tiempos obtenidos en función del tipo
+de algoritmo utilizado como se puede ver en la figura
+\ref{fig::figura4}. Se aprecia que si hay un incremento en
+el tiempo de ejecución del algoritmo con selección de ruleta, esto
+debido al cálculo de las probabilidades de selección.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.6\linewidth]{bxplt_Tiempo_TipoE1}
+  \caption{Comparación el tiempo de ejecución y el tipo de algoritmo}
+  \label{fig::figura4} 
+\end{figure}
+
+
+El siguiente resultado fue la comparación entre el porcentaje de
+separación y el tipo de algoritmo usado, como se puede apreciar en la
+figura \ref{fig::figura5}, no se ve una diferencia significativa en
+las medias de los valores. 
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.6\linewidth]{bxplt_Gap_TipoE1}
+  \caption{Comparación entre el porcentaje de separación y el tipo de algoritmo.}
+  \label{fig::figura5} 
+\end{figure}
+
+Para corroborar el resultado anterior se realizó una análisis de la
+variación de la media, primero revisando si los residuos siguen una
+distribución normal \ref{fig::figura6}, al realizar la prueba de
+Shapiro-Wilk se obtuvo el valor $p=0.796$ por lo que se aceptó la
+hipótesis nula de que los residuales siguen una distribución
+normal. Realizando por consiguiente un análisis de varianza, de donde
+se obtuvo un valor $p=0.791$ aceptando la hipótesis nula de que las
+medias son iguales. Con esto se puede establecer que no hay un efecto
+significativo en el porcentaje de separación alcanzado por el algoritmo
+al utilizar el procedimiento de selección por ruleta.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.6\linewidth]{qqresiduales_rpg}
+  \caption{Comparación de los residuales del porcentaje de separación y el tipo de algoritmo.}
+  \label{fig::figura6} 
+\end{figure}
+
+Por último, el resultado de la generación donde queda cerca del mejor
+valor obtenido. En la figura \ref{fig::figura7} se puede ver como se
+va acercando el valor de la separación entre el valor obtenido y el
+valor óptimo a cero, y algunos valores que están cercanos y marcan la
+estabilización del valor de la solución.
+
+\begin{figure}[h!]
+  \begin{subfigure}{\linewidth}
+  \centering
+    \includegraphics[width=0.4\linewidth]{t10_10}
+    \includegraphics[width=0.4\linewidth]{t10e1_10}
+  \end{subfigure}
+  \begin{subfigure}{\linewidth}
+  \centering
+    \includegraphics[width=0.4\linewidth]{t10_20}
+    \includegraphics[width=0.4\linewidth]{t10e1_20}
+  \end{subfigure}
+  \begin{subfigure}{\linewidth}
+  \centering
+    \includegraphics[width=0.4\linewidth]{t10_30}
+    \includegraphics[width=0.4\linewidth]{t10e1_30}
+  \end{subfigure}
+  \caption{Líneas de seguimiento de la separación al valor óptimo, la
+    línea azul señala los valores menores a un valor de desviación
+    estándar del mejor valor obtenido las gráficas de la izquierda son
+    los de tipo paralelo sin ruleta, del lado derecho son usando
+    ruleta de selección.}
+  \label{fig::figura7} 
+\end{figure}
+
+En la figura \ref{fig::figura8} vemos la comparación entre los dos
+algoritmos, y tampoco se encontró diferencia significativa en los
+valores de las medias. 
+
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.6\linewidth]{bxplt_Estabilidad_TipoE1}
+  \caption{Comparación entre la generación de estabilización y el tipo de algoritmo.}
+  \label{fig::figura8} 
+\end{figure}
+
+De igual manera se realizó una análisis de la variación de la media,
+primero revisando si los residuos siguen una distribución normal
+\ref{fig::figura9}, al realizar la prueba de Shapiro-Wilk se obtuvo el
+valor $p=0.0149$ por lo que se rechazo la hipótesis nula de que los
+residuales siguen una distribución normal. Así que se realizaron
+pruebas no paramétrica para comparar los valores de las medias por
+medio de la prueba Kruskal-Wallis, de donde se obtuvo el valor $p=
+0.276$ con que se aceptó la hipótesis nula de que las medias son
+iguales, corroborando lo que se vio en la figura \ref{fig::figura8} de
+que tampoco hay una cambio en el tiempo al que comienza a
+estabilizarse el valor resultado del algoritmo.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.6\linewidth]{qqresiduales_rpe}
+  \caption{Comparación de los residuales la generación de estabilización y el tipo de algoritmo.}
+  \label{fig::figura9} 
+\end{figure}
+
+\section{Conclusiones}
+
+Se pudo observar el beneficio de la paralelización del algoritmo
+genético en comparación a una implementación secuencial y se comparo
+también con una versión de selección por ruleta, se pudo observar el
+impacto en el tiempo de ejecución al agregar la selección y que para
+nuestros parámetros no haya mostrado una diferencia significativa,
+quedando por explorar los efectos de variar los parámetros del
+algoritmo para calibrarlos y alcanzar mejores soluciones.
+
+\end{document}
