@@ -39,15 +39,15 @@ vc <- 4 #número de variables
 md <- 3 #máximo grado
 tc <- 5 #número de terminos
 #k <- 2 #cantidad de funciones objetivo
-replicas <- 3
-ns <- 200#c(50 , 100, 200, 400, 800)
-ks = 2#c(2,3,4,5,6)
-impr = TRUE
+replicas <- 30
+ns <- c(50 , 100, 200, 400, 800)
+ks = c(2,3,4,5,6)
+impr = FALSE
 paral=TRUE
 results = data.frame(replicas=numeric(), ks=numeric(), ns=numeric(), time=numeric(), pnd=numeric())
 for(k in ks){
-    for(rep in 1:replicas){
-        for(n in ns){
+    for(n in ns){
+            for(rep in 1:replicas){
             tim= proc.time()[3]
             obj <- list()
             for (i in 1:k) { # se crean las k funciones de manera aleatoria
@@ -63,26 +63,7 @@ for(k in ks){
                     val[i, j] <- eval(obj[[j]], sol[i,], tc)
                 }
             }
-            if(impr){
-                                        #cambiar para k elementos
-                mejor1 <- which.max(sign[1] * val[,1]) #se obtiene el mejor valor de funcion 1
-                mejor2 <- which.max(sign[2] * val[,2]) # se obtiene el mejor valor de funcion 2
-                cual <- c("max", "min")
-                xl <- paste("Primer objetivo (", cual[minim[1] + 1], ")", sep="")
-                yl <- paste("Segundo objetivo (", cual[minim[2] + 1], ")", sep="")
-                png("p11_init.png")
-                plot(val[,1], val[,2], xlab=xl, ylab=yl, main="Ejemplo bidimensional")
-                graphics.off()
-                png("p11_mejores.png")
-                plot(val[,1], val[,2], xlab=paste(xl, "mejor con cuadro azul"),
-                     ylab=paste(yl,"mejor con bolita naranja"),
-                     main="Ejemplo bidimensional")
-                points(val[mejor1, 1], val[mejor1, 2], col="blue", pch=15, cex=1.5)
-                points(val[mejor2, 1], val[mejor2, 2], col="orange", pch=16, cex=1.5)
-                graphics.off()
-            }
-                                        #frente de pareto
-                                        #conjunto de los no dominados
+            
             no.dom <- logical()
             dominadores <- integer()
             
@@ -94,26 +75,26 @@ for(k in ks){
                 clusterExport(cluster, "k")
                 clusterExport(cluster, "i")
                 clusterExport(cluster, "n")
-                d = (parSapply(cluster, 1:n, function(j){
-                    for (j in 1:n) { #se compara contra TODAS las demas soluciones
+                d = (parSapply(cluster, 1:n, function(i){
                         dp <- logical()
                         for (j in 1:n) {
                             dp <- c(dp, domin.by(sign * val[i,], sign * val[j,], k))
                         }
                         cuantos <- sum(dp)
                         return(c(cuantos,cuantos==0))
-                    }
-                    return(cuantos)
                 }))                
                 dominadores = d[1,]
                 no.dom = as.logical(d[2,])
                 rm(d)
             }else{
                 for (i in 1:n) { #para casa solución
-                d <- logical() #vector de los dominados
+                    d <- logical() #vector de los dominados
                     for (j in 1:n) { #se compara contra TODAS las demas soluciones
                         d <- c(d, domin.by(sign * val[i,], sign * val[j,], k)) #se establece si para cada k hay una mejora o no 
                     }
+                    cuantos <- sum(d)
+                    dominadores <- c(dominadores, cuantos)
+                    no.dom <- c(no.dom, cuantos == 0) # nadie le domina
                 }
             }
             #print("CDF")
@@ -125,7 +106,7 @@ for(k in ks){
             #no.dom <- c(no.dom, cuantos == 0) # se agrega si nadie le domina
             #print(no.dom)
             frente <- subset(val, no.dom) # solamente las no dominadas
-            print(frente)
+            #print(frente)
         
             #if(impr){
             #    png("p11_frente.png")
@@ -149,7 +130,7 @@ for(k in ks){
             #    ggtitle("Cantidad de soluciones dominantes")
             #    graphics.off()
             #}
-            results = rbind(results, c(replica=rep, NE=k, NS=n, T=proc.time()[3]-tim, P=dim(frente)[1]*100/n ))
+            results = rbind(results, c( NE=k, NS=n, replica=rep, T=proc.time()[3]-tim, P=dim(frente)[1]*100/n ))
         }
     }
 }

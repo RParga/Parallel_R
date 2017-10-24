@@ -79,8 +79,8 @@ for (i in 1:n) { #para casa solución
 }
 frente <- subset(val, no.dom) # solamente las no dominadas
 png("p11_frente.png")
-plot(val[,1], val[,2], xlab=paste(xl, "mejor con cuadro azul"),
-     ylab=paste(yl,"mejor con bolita naranja"),
+plot(val[,1], val[,2], xlab="f(x)",
+     ylab="g(x)",
      main="Ejemplo bidimensional")
 points(frente[,1], frente[,2], col="green", pch=16, cex=1.5)
 graphics.off()
