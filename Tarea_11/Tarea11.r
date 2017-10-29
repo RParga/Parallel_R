@@ -41,7 +41,7 @@ tc <- 5 #número de terminos
 #k <- 2 #cantidad de funciones objetivo
 replicas <- 3
 ns <- 200#c(50 , 100, 200, 400, 800)
-ks = 2#c(2,3,4,5,6)
+ks = 7#c(2,3,4,5,6)
 impr = TRUE
 paral=TRUE
 results = data.frame(replicas=numeric(), ks=numeric(), ns=numeric(), time=numeric(), pnd=numeric())
