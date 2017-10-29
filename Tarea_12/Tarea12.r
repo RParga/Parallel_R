@@ -22,7 +22,7 @@ modelos[modelos=='g'] <- 0.92
 modelos[modelos=='b'] <- 0.002
 
 replicas=30
-pll=TRUE
+pll=FALSE
 
 tipo="Secuencial"
 if(pll){
