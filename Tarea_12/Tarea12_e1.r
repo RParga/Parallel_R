@@ -16,13 +16,13 @@ decimal <- function(bits, l) {
     return(valor)
 }
  
-modelos <- read.csv("digitos.modelo", sep=" ", header=FALSE, stringsAsFactors=F)
-modelos[modelos=='n'] <- 0.995
-modelos[modelos=='g'] <- 0.92
-modelos[modelos=='b'] <- 0.002
+#modelos <- read.csv("digitos.modelo", sep=" ", header=FALSE, stringsAsFactors=F)
+#modelos[modelos=='n'] <- 0.995
+#modelos[modelos=='g'] <- 0.92
+#modelos[modelos=='b'] <- 0.002
 
 replicas=30
-pll=FALSE
+pll=TRUE
 
 tipo="Secuencial"
 if(pll){
@@ -42,15 +42,17 @@ digitos <- 0:tope
 k <- length(digitos)
 n <- floor(log(k-1, 2)) + 1
 result = data.frame(R=numeric(),M=numeric(), T=numeric(), P=numeric())
-thi = 3
+thin = 3
 for(test in tests){
-    for(rep in 1:replicas){
         for(t1 in 0:thin){
             for(t2 in 0:thin){
                 for(t3 in 0:thin){
-                    modelos[modelos=='n'] <- 0.995 * t1/thin
-                    modelos[modelos=='g'] <- 0.92 * t2/thin
-                    modelos[modelos=='b'] <- 0.002 * t3/thin
+                    for(rep in 1:replicas){
+                    modelos <- read.csv("digitos.modelo", sep=" ", header=FALSE, stringsAsFactors=F)
+                    modelos[modelos=='n'] <- (0.995 * t1/thin)
+                    modelos[modelos=='g'] <- (0.92 * t2/thin)
+                    modelos[modelos=='b'] <- (0.002 * t3/thin)
+                    #print(modelos)
 
         
                     tasa <- 0.15
