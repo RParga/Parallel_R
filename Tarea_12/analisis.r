@@ -1,51 +1,17 @@
 datap=read.csv("datos_Paralelo_T12_1.csv", stringsAsFactors=F)
 datas=read.csv("datos_Secuencial_T12_1.csv", stringsAsFactors=F)
+datap$X=NULL
+datas$X=NULL
+datas=cbind("Secuencial", datas)
+datap=cbind("Paralelo", datap)
+colnames(datap)=c('Y','R','M','T','P')
+colnames(datas)=c('Y','R','M','T','P')
+results = rbind(datap,datas)
 
-r1$X=NULL
-r2$X=NULL
-colnames(r1)=c('type','replica','time','gap')
-colnames(r2)=c('type','replica','time','gap')
-results = rbind(r1,r2)
-
-png(paste("bxplt_Tiempo_Tipo.png",sep=""))
-boxplot(results$time ~ results$type, xlab='Tipo', ylab="Tiempo")
+png(paste("bxplt_Tiempo_TipoM.png",sep=""),width=960, height=480)
+boxplot(results$T ~ results$Y+as.factor(results$M), xlab='Tipo', ylab="Tiempo")
 graphics.off()
-png(paste("bxplt_Gap_Tipo.png",sep=""))
-boxplot(results$gap ~ results$type, xlab='Tipo', ylab="Porcentaje de separación")
-graphics.off()
-
-
-linmod = lm(gap~type, data=results)
-residuales = resid(linmod)
-
-png(file=paste("residuales_spg.png", sep=""))
-hist(residuales)
+png(paste("bxplt_P_TipoM.png",sep=""),width=960, height=480)
+boxplot(results$P ~ results$Y+as.factor(results$M), xlab='Tipo', ylab="Porcentaje de separación")
 graphics.off()
 
-png(file=paste("qqresiduales_spg.png", sep=""))
-qqnorm(residuales,col=rgb(0,1,0,0.5), ylab='Quantiles', xlab='Quantiles teóricos')
-qqline(residuales,col="red")
-graphics.off()
-
-st = shapiro.test(residuales)
-print(st)
-anovg = aov(linmod)
-summary(anovg)
-
-
-linmod = lm(time~type, data=results)
-residuales = resid(linmod)
-
-png(file=paste("residuales_spt.png", sep=""))
-hist(residuales)
-graphics.off()
-
-png(file=paste("qqresiduales_spt.png", sep=""))
-qqnorm(residuales,col=rgb(0,1,0,0.5), ylab='Quantiles', xlab='Quantiles teóricos'))
-qqline(residuales,col="red")
-graphics.off()
-
-st = shapiro.test(residuales)
-print(st)
-anovg = aov(linmod)
-summary(anovg)
