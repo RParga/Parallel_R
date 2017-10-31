@@ -19,7 +19,7 @@
 \usepackage[parfill]{parskip}
 
 %--------------------------------------------------------------------------
-\title{Reporte práctica siete: Búsqueda Local}
+\title{Reporte práctica doce: Redes neuronales}
 \author{José Anastacio Hernández Saldaña\\
   \small Posgrado de Ingeniería de Sistemas\\
   \small 1186622\\ 
@@ -38,187 +38,241 @@
 \section{Tarea: Paralelizar la red neuronal}
 
 Las redes neuronales son un modelo computacional de la simulación de
-una neurona en un cerebro biologico. Las neuronas responden a
-estimulos y si la cantidad de estímulos pasa de cierto umbral la
+una neurona en un cerebro biológico. Las neuronas responden a
+estímulos y si la cantidad de estímulos pasa de cierto umbral, la
 neurona se activa generando una respuesta o salida. Las neuronas
-artificiales se conectan a entradas, donde cada entrada entrada tiene
+artificiales se conectan a entradas, donde cada entrada tiene
 un valor de peso de importancia y de acuerdo a una función de
-activación que considera las entradas la neurona artificial se activa
+activación que considera las entradas, la neurona artificial se activa
 y genera una respuesta. De esta manera las neuronas artificiales
 pueden reaccionar a patrones, donde si se ajustan los pesos de las
 entradas las neuronas artificiales pueden simular aprendizaje.
 
-Para esta práctica se busca paralelizar el código de la
+Para esta práctica se paralelizará el código de la
 \href{http://elisa.dyndns-web.com/teaching/comp/par/p12.html}{página
-  del curso} donde se busca que una red neuronal aprenda los digitos del cero al nueve dibujados en una cuadrícula de $5\times 3$, se cuenta con el modelo de los digitos, donde cada cuadro si esta activada tiene un valor verdadero, y falso si esta descativada. este modelo de cuadricula   
+  del curso} donde se busca que una red neuronal aprenda los dígitos
+del cero al nueve dibujados en una cuadrícula de $5\times 3$, se
+cuenta con el modelo de los dígitos, donde cada cuadro está activado
+si tiene un valor verdadero, y falso si está desactivado. Para el
+entrenamiento y prueba de la red se tiene un modelo de cuadrícula que
+marca las probabilidades de que el cuadro esté activado o no, de
+acuerdo a la posible escritura del dígito. Se tienen tres posibles
+valores, la probabilidad de que un cuadro blanco esté activado es de
+$PB=0.002$, la probabilidad de que un cuadro gris se active es de
+$PG=0.92$, y la probabilidad de que un cuadro negro se active es de
+$PN=0.995$. En la figura \ref{fig::figura1} podemos
+ver un ejemplo del modelado.
 
-
-Para esta práctica se estudió la función
-$g(x,y)= (x + 0.5)^4 - 30 x^2 - 20  x + (y + 0.5)^4 - 30  y^2 - 20  y$ dentro del dominio $x
-\in [-6,5]$ y $y \in [-6,5]$ y se busca encontrar los valores de $x$ y $y$
-que maximizan el valor de $g$, en la figura \ref{fig::figura1} podemos
-ver una representación en tres dimensiones de esta función..
 \begin{figure}[ht!]
   \centering
-  \includegraphics[width=0.6\linewidth]{p7_2d}
-  \caption{Gráfica en tres dimensiones de $g(x,y)$}
+  \includegraphics[width=0.4\linewidth]{p12g}
+  \caption{Ejemplos de modelado}
   \label{fig::figura1} 
 \end{figure}
 
 \subsection{Diseño del Experimento}
 
-Para el experimento se tomó como base el código de la
-\href{http://elisa.dyndns-web.com/teaching/comp/par/p7.html}{página
-  del curso}, donde se encuentra la búsqueda local para maximizar la
-función ya programada. esta búsqueda local es una búsqueda voraz o
-\emph{greedy} , es decir, dado un valor de $x$ y $y$ busca un mejor
-valor dentro de un conjunto valores $x$ y $y$ vecinos, si alguno de
-los vecinos al ser evaluado con la función $g$ nos da un valor mayor
-lo toma como solución candidata y busca dentro de los vecinos de ese
-nuevo valor, esto lo repite hasta no encontrar mejores valores hacia
-los cuales desplazarse.
+Para el experimento se buscó paralelizar el código de la red neuronal,
+el cual consta de dos fases, una fase de entrenamiento y otra de
+prueba, donde se espera que la red neuronal categorice adecuadamente
+los números que se le presentan.
 
+Las redes neuronales tienen una dependencia en su fase de
+entrenamiento, ya que cada iteración depende del ajuste hecho a la
+neurona en iteraciones anteriores, por lo que no se podrá paralelizar este
+proceso y solo se paralelizó la fase de prueba.
 
-Uno de los principales problemas de este tipo de búsqueda local es que
-fácilmente puede converger a un óptimo local, es decir, una cota
-superior para un intervalo contenido en el dominio. Dado que toda cota es
-un óptimo local son necesarios métodos que nos ayuden a guiar la
-búsqueda para evitar óptimos locales. Por lo que se decidió utilizar
-esta búsqueda desde varios puntos generados al azar dentro del
-dominio, esto para tener una diversidad de valores iniciales y con la
-ayuda de la búsqueda local explorar el espacio de soluciones. Este
-método es conocido como un método multiarranque; como cada búsqueda
-es independiente a las demás, se decidió paralelizar este procedimiento.
-
-Al estar trabajando con una función tridimensional, es necesario
-utilizar representaciones de dos dimensiones que faciliten la
-visualización del proceso de búsqueda, por lo que se utilizó una
-gráfica de contorno de superficie, para la representación y poder
-trazar algunos caminos de la búsqueda señalando los inicios y fines,
-podemos observar un ejemplo de este tipo de gráfica en la figura
-\ref{fig::figura2}.
-\begin{figure}[ht!]
-  \centering
-  \includegraphics[width=0.7\linewidth]{p7_flat_2}
-  \caption{Gráfica de contorno de superficie de $g(x,y)$}
-  \label{fig::figura2} 
-\end{figure}
-
-Como podemos observar, el valor de $g(x,y)$ se aprecia a partir de la
-diferencia de color dentro de la gráfica, donde las regiones rosas con
-las zonas con menor valor de $g$ y las azules con un mayor valor.
-
-Para comenzar la experimentación, se utilizó una computadora con las
+Para la experimentación, se utilizó una computadora con las
 siguientes especificaciones, Procesador Intel Core i7-4790 CPU @
-3.6GHz $\times$ 8 y memoria RAM de 24 GB utilizando solamente los
-cuatro núcleos físicos disponibles. Se tomó el valor máximo obtenido de la página de
-\href{https://www.wolframalpha.com/input/?i=max((x+%2B+0.5)%5E4+-+30+*+x%5E2+-+20+*+x+%2B+(y+%2B+0.5)%5E4+-+30+*+y%5E2+-+20+*+y)+over+%5B-6,5%5D}{Wolframalpha}
-dentro el intervalo del dominio, el valor encuentrado fue $g(x=5,y=5) \approx 130.12$,
-con esta información, se puede calcular la separación entre el valor encontrado
-con respecto al máximo a partir de la  fórmula $ sep = \frac{vr-vc}{vr} \times 100$.
+3.6GHz $\times$ 8 y memoria RAM de 24 GB, utilizando solamente los
+cuatro núcleos físicos disponibles. 
 
-Se utilizaron los siguientes parámetros para la experimentación, el
-multiarranque fue de 100 replicas, con una distancia para la elección
-de vecinos de 0.3 unidades, el tiempo máximo de cada búsqueda fue de
-100 pasos, el código esta disponible en el
-\href{https://github.com/ppGodel/Parallel_R/tree/master/Tarea_6}{repositorio
+Se utilizaron los siguientes parámetros para la experimentación, se
+realizaron 30 réplicas y se utilizaron tamaños de prueba de 300, 600 y
+1200 iteraciones para ver la interacción del tamaño con los tiempos de
+ejecución, los códigos están disponibles en el
+\href{https://github.com/ppGodel/Parallel_R/tree/master/Tarea_12}{repositorio
   git} del curso.
 
 \subsection{Resultados}
 
 Al revisar los resultados de la experimentación, que están graficados
-en la figura \ref{fig::figura3}, podemos apreciar algunas trayectorias
-en rojo, que representan caminatas que no alcanzaron el optimo global
-y nos permite ver la trayectoria que tomó la búsqueda, los puntos
-verdes son las coordenadas donde terminaron cada uno de las 100
-caminatas y como podemos apreciar, convergieron en cada uno de los
-ocho óptimos locales disponibles en el dominio, en azul podemos ver la
-trayectoria que siguió búsqueda que alcanzo el optimo global.
+en la figura \ref{fig::figura2}, se puede ver los resultados del
+porcentaje de aciertos para cada tipo de procedimiento y cómo aunque
+se aumente el tamaño de prueba, esto no afecta la clasificación de los
+dígitos por parte de la red neuronal.
 
 \begin{figure}[ht!]
   \centering
-  \includegraphics[width=0.7\linewidth]{p7_Tarea_1}
-  \caption{Resultado de trayectorias del método multiarranque}
+  \includegraphics[width=0.9\linewidth]{bxplt_P_TipoM}
+  \caption{Gráfica del porcentaje de aciertos con los tipos y tamaños de muestras}
+  \label{fig::figura2} 
+\end{figure}
+
+En cambio, para el resultado de tiempo de la figura \ref{fig::figura3}
+podemos apreciar que sí hay una mejora conforme aumenta el tamaño de
+la muestra, incluso se ve que en la muestra de tamaño de 300 la
+versión secuencial es más rápida que la versión paralela y conforme
+aumenta el tamaño, la versión paralela tarda menos en clasificar los
+dígitos.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.9\linewidth]{bxplt_Tiempo_TipoM}
+  \caption{Gráfica del tiempo de ejecución con los tipos y tamaños de muestras}
   \label{fig::figura3} 
 \end{figure}
 
-El valor de la separación fue cero, por lo que se encontró el optimo
-global, en el punto encontrado en wolframalpha, es importante apreciar
-que tardó solo 13 iteraciones para llegar al valor óptimo y que el
-lugar del inicio influye hacia que optimo local converge la búsqueda.
+Estos resultados muestran el beneficio de la paralelización en el
+tiempo de ejecución de la red neuronal, sin que esto afecte el
+desempeño de la cantidad de aciertos de la red neuronal.
 
 
-\section{Extra Dos: Recocido Simulado}
+\section{Extra Uno: Desempeño de la red en función de las probabilidades del modelo de generación}
 
-Para el extra dos de esta tarea se cambiara la estrategia para escapar
-de óptimos locales utilizando el método de recocido simulado. El cual
-esta basado en en el proceso de cristalización de metales calientes al
-enfriarse, donde las moléculas pasan de un estado de mucha energía a
-uno de menor energía.
-
-Este método funciona con un valor de temperatura$T$ que tiene un valor
-inicial $g(x,y)$, al realizar la búsqueda de un vecino, esta se hace
-de la siguiente manera, se elige una solución vecina al azar
-$g(x',y')$ y se revisa si esta solución ofrece una mejora comparada
-con el mejor valor obtenido hasta el momento, de ser asi, se toma ese
-valor para continuar la búsqueda en sus vecinos, si el vecino elegido
-no es mejor, se calculara un delta $\delta = g(x,y) - g(x',y')$ tal
-que como este valor es negativo al no ofrecer mejora, se permitiría
-aceptar buscar dentro de los vecinos de ese punto si al obtener un
-valor aleatorio de una distribución uniforme de [0,1] este valor es
-mayor al calculado por la probabilidad obtenida por la distribución
-$e^{\frac{\delta}{T}}$, al aceptar este valor que no mejora el valor
-de la búsqueda, hace que el valor de temperatura disminuya en
-proporción a un valor $\varepsilon$ tal que $0\leq \varepsilon < 1$
-por lo que esta flexibilidad de aceptar valores no mejores es lo que
-nos permite escapar de óptimos locales dentro del dominio.
-
-
+Ahora se estudiará el efecto de las probabilidades asignadas en el
+modelo de representación de los dígitos en función del porcentaje de
+aciertos que la red registra.
 
 \subsection{Diseño del Experimento}
 
-Los parámetros utilizados fueron los mismos que los del experimento
-anterior, la diferencia es en los parámetros del recocido simulado, se
-tomaron los valores de temperatura $T = 90$ y $\varepsilon = 0.9$.
+Teniendo las 3 Probabilidades $PN$,$PG$, y $PB$ se dividirán en 4
+factores que corresponden a un porcentaje del valor inicial sugerido
+en la práctica, esto para ver las interacciones que hay entre las
+variaciones. Los factores son los siguientes:
+
+\begin{itemize}
+\item[N] con un $0     \%$ del porcentaje original a que el cuadro se active.
+\item[B] con un $33.33 \%$ del porcentaje original a que el cuadro se active.
+\item[M] con un $66.66 \%$ del porcentaje original a que el cuadro se active.
+\item[A] con un $100   \%$ del porcentaje original a que el cuadro se active.
+\end{itemize}
+
+Utilizando estos factores se podrá apreciar el desempeño de la red
+neuronal cuando los datos de entrenamiento y prueba se muestran de
+manera parcial, esto dificultará la clasificación de los dígitos.
+
+Los parámetros utilizados para el experimento fueron los cuatro
+factores en las tres probabilidades con 30 réplicas cada uno.
 
 \subsection{Resultados}
 
-El resultado obtenido de la experimentación se puede ver en la figura
-\ref{fig::figura4} donde se puede apreciar como las trayectorias ya no
-van directamente hacia el óptimo local y explorar el espacio de
-soluciones, esto es notorio en el valor óptimo encontrado marcado con
-azul, ya que por la posición donde inicio, usando una búsqueda local
-como la realizada en el punto anterior, hubiera convergido hacia el
-optimo local cercano al punto $(5,0)$ pero debido a que pudo moverse
-por otras regiones es que pudo converger hacia el óptimo global.
+El resultado obtenido de la experimentación se puede ver en las
+figuras \ref{fig::figura4}, \ref{fig::figura5}, \ref{fig::figura6}, y
+\ref{fig::figura7} donde se puede ver para cada valor de $PN$ el
+comportamiento de $PG$ y $PB$ con sus interacciones.
+
 
 \begin{figure}[ht!]
   \centering
-  \includegraphics[width=0.7\linewidth]{p7_Tarea_1_E2}
-  \caption{Resultado de trayectorias del método recocido simulado}
+  \includegraphics[width=0.9\linewidth]{bxplt_P_PSN}
+  \caption{Interacciones de las probabilidades cuando $PN=N$}
   \label{fig::figura4} 
 \end{figure}
 
-Por otra parte es importante señalar que a diferencia del método
-multiarranque, las terminaciones de las búsquedas no convergían todas
-en alguno de los óptimos locales del dominio, sino que terminaban
-cerca de alguno de ellos, esto debido a que el valor de temperatura aún
-era alto al momento de terminar las iteraciones máximas permitidas, de
-tener una temperatura más baja, las búsquedas comenzarían a converger
-hacia los óptimos locales ya que comienzan a comportarse como
-búsquedas voraces, pero dejan de explorar el espacio de soluciones.
 
-Además, la cantidad de iteraciones necesarias para encontrar el valor
-óptimo es superior a la requerida por el multiarranque, esto debido al
-valor de temperatura que al permitir valores no mejores, hace que la
-búsqueda demore más en converger hacia un óptimo local.
+En la figura \ref{fig::figura4} están los resultados obtenidos al
+tener $PN=N$ con el incremento generado al subir $PG$ y $PB$. Con
+estos valores de probabilidad donde las casillas negras están
+ausentes, vemos que la probabilidad de aciertos es baja, ya que es
+poca la información con la que cuenta la red para entrenarse y
+clasificar.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.9\linewidth]{bxplt_P_PSB}
+  \caption{Interacciones de las probabilidades cuando $PN=B$}
+  \label{fig::figura5} 
+\end{figure}
+
+En la figura \ref{fig::figura5} están los resultados obtenidos al
+tener $PN=B$ con el incremento generado al subir $PG$ y $PB$. Con
+estos valores de probabilidad donde las casillas negras tienen baja
+probabilidad de aparecer, la probabilidad de aciertos se incrementa con
+relación al caso anterior, aunque sigue siendo una probabilidad de
+acierto baja.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.9\linewidth]{bxplt_P_PSM}
+  \caption{Interacciones de las probabilidades cuando $PN=M$}
+  \label{fig::figura6} 
+\end{figure}
+
+En la figura \ref{fig::figura6} están los resultados obtenidos al
+tener $PN=M$ con el incremento generado al subir $PG$ y $PB$. Con
+estos valores de probabilidad donde las casillas negras tienen una
+probabilidad de aparecer media, la probabilidad de aciertos se
+incrementa también con relación al caso anterior, pero sigue siendo
+una probabilidad de acierto baja.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.9\linewidth]{bxplt_P_PSA}
+  \caption{Interacciones de las probabilidades cuando $PN=A$}
+  \label{fig::figura7} 
+\end{figure}
+
+En la figura \ref{fig::figura7} están los resultados obtenidos al
+tener $PN=A$ con el incremento generado al subir $PG$ y $PB$. Con
+estos valores de probabilidad donde las casillas negras tienen una
+alta probabilidad de aparecer, la probabilidad de aciertos se
+incrementó considerablemente con relación al caso anterior, marcando
+una transición de fase, ya que ahora la red neuronal puede clasificar
+mejor. El caso donde es muy notable, es cuando $PN=A$ con
+$PG=N$ ya que al estar casi siempre presentes solo los dígitos negros,
+pueden ser fácilmente identificados.
+
+\section{Extra Dos: Desempeño de la red con dígitos extendidos}
+
+Ahora se estudiará el desempeño de la red neuronal cuando se agregan
+más dígitos. Además de los dígitos del cero al nueve,
+se incluirán 12 más. Esto para apreciar el comportamiento de la red
+cuando se tienen más valores de entrada.
+
+\subsection{Diseño del Experimento}
+
+Para el experimento se agregaron las primeras 12 letras del alfabeto
+como se ve en la figura \ref{fig::figura8}, este incremento hizo
+necesario agregar una neurona más, ya que cada neurona identifica el
+valor que corresponde a una posición de la representación binaria del
+número. Con cinco neuronas se puede categorizar hasta $2^5$ valores.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.3\linewidth]{p122g}
+  \caption{Caracteres agregados}
+  \label{fig::figura8} 
+\end{figure}
+
+Con el objetivo de ver el comportamiento de la red al subir la
+cantidad de caracteres, se incrementó de tres en tres el tamaño hasta
+llegar a los 22 caracteres. Se espera que el porcentaje de aciertos
+disminuya, por lo que también se probó incrementando la cantidad de
+iteraciones de la fase de entrenamiento con los valores de 5,000,
+10,000, y 15,000. Como en los experimentos anteriores, se realizaron 30
+réplicas por experimento.
+
+\subsection{Resultados}
+
+En la gráfica de la figura\ref{fig::figura9}, podemos ver cómo
+disminuyó el desempeño de la red conforme aumentó la cantidad de
+caracteres como se esperaba, pero es interesante ver que aunque se
+aumentó la cantidad de iteraciones de entrenamiento, no se ve una
+diferencia significativa en el desempeño de la red.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.9\linewidth]{bxplt_P_CHE5000}
+  \caption{Desempeño de la red neuronal al incrementar la cantidad de caracteres}
+  \label{fig::figura9} 
+\end{figure}
+
+Esto es porque la cantidad de neuronas para la cantidad de dígitos
+posibles es mayor y hay más similitudes entre los dígitos. 
 
 \section{Conclusiones}
 
-Se pudo observar las diferencias entre dos métodos de búsqueda, además
-de paralelizar en ambas el múltiple inicio de las valores iniciales
-favoreciendo a la rapidez de los resultados, se pudieron observar los
-efectos del recocido simulado y conocer opciones de visualización para
-gráficas en tres dimensiones.
+Se lograron observar las diferencias entre el desempeño de la red neuronal paralelizada y secuencial, además se mostró cómo afectan las formas de los dígitos en el resultado de la red, al variar las probabilidades que afectan a los cuadros. Por último, se vio cómo el desempeño de la red es afectado con respecto a la cantidad de datos en la entrada y la cantidad de iteraciones de entrenamiento.
 
 \end{document}
